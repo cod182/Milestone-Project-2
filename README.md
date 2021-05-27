@@ -17,16 +17,15 @@ A deployed link to the site can be found [here](https://cod182.github.io/Milesto
 
 ## User Story
 
-- The end user is someone who is looking for a campsite to stay at, near a specific location.
-- The site will be aimed at the anyone looking to travel within the UK.
-- The site will mainly be accessed on mobile/tablet devices due to ease of acces while travelling but will also be disgned for desktop.
+The end user is someone who is looking for a campsite to stay at, near a specific location. The site will be aimed at the anyone looking to travel within the UK. The site will mainly be accessed on mobile/tablet devices due to ease of acces while travelling but will also be disgned for desktop.
 
+The end user will want to be able to find their nearest campsite quickly and get informatino on it. All information will need to be clearly displayed and easy to read. The colour scheme of the site will be bright with splashes of colour matching a wild/nature theme.
 
 ## Strategy
 
 ### User Needs
 - The user needs the site to be accessible mainly on mobile device but equally on tablets and desktops.
-- Information must be easy to access, clearly displayed and easy to digest.
+- Information must be easy to access, clearly displayed and easy to digest. Font to be used is Roboto and colours will be white and green
 - Easily understand how the site works with a simple search bar and easy to find information
 - Be able to search for a location and have all campsites in the area displayed
 - Be able to click on a campsite to receive more information about the site (Services, location, opening times, website)
@@ -37,7 +36,7 @@ A deployed link to the site can be found [here](https://cod182.github.io/Milesto
 
 ### Business Vision
 
-The business vision is to help people locate an appropriate to book when looking for a campsite for their travells.
+The business vision is to help people locate an appropriate campsite to book when looking either during or before their travels.
 
 
 ## Scope
