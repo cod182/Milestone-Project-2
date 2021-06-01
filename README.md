@@ -19,7 +19,7 @@ A deployed link to the site can be found [here](https://cod182.github.io/Milesto
 
 The end user is someone who is looking for a campsite to stay at, near a specific location. The site will be aimed at the anyone looking to travel within the UK. The site will mainly be accessed on mobile/tablet devices due to ease of acces while travelling but will also be disgned for desktop.
 
-The end user will want to be able to find their nearest campsite quickly and get informatino on it. All information will need to be clearly displayed and easy to read. The colour scheme of the site will be bright with splashes of colour matching a wild/nature theme.
+The end user will want to be able to find their nearest campsite quickly and get informatino on it. All information will need to be clearly displayed and easy to read. 
 
 ## Strategy
 
@@ -51,12 +51,17 @@ The business vision is to help people locate an appropriate campsite to book whe
 
 ### Wireframes
 
-- [XS >576px](assets/images/wireframes/_576px.png)
-- [SM ≥616px](assets/images/wireframes/≥616.png)
-- [MD ≥768px](assets/images/wireframes/≥616.png)
-- [LG ≥992px](assets/images/wireframes/≥992px.png)
-- [XXL ≥1400px](assets/images/wireframes/≥1440px.png)
+- [Mobile >576px](assets/images/wireframes/_576px.png)
+- [Mobile ≥616px](assets/images/wireframes/≥616.png)
+- [Tablet ≥768px](assets/images/wireframes/≥616.png)
+- [Desktop ≥992px](assets/images/wireframes/≥992px.png)
+- [Desktop ≥1400px](assets/images/wireframes/≥1440px.png)
 
+### Colour Scheme
+
+The colour scheme of the site will be bright with splashes of colour matching a wild/nature theme.
+
+![Preivew](assets/images/wireframes/color-scheme.png)
 
 ## Surface
 
