@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Colours */
+
+.green {
+    color: #4fbc6f;
+}
+
+.dark-green {
+    color: #3c4a3e;
+}
+
+.beige {
+    color: #9FAFA1;
+}
+
+.light-blue {
+    color: #00BAFE;
+}
+
+.blue {
+    color: #0085C5;
+}
+
+/* Fonts */
+
+.roboto {
+    font-family: Roboto, 'sans-serif';
+}
+
+.bold {
+    font-weight: bolder;
+}
+
+#logo {
+    height: 80px;
+    margin-right: 170px;
+}
+
+#brand-title {
+    text-align: center;
+    margin: 0 auto;
+    font-family: Roberto, 'sans-serif';
+    font-weight: bolder;
+}
+
+.navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 0 !important;
+    align-items: center;
+}
+
+.nav-link {
+    color: #4fbc6f !important;
+}
+
+.nav-link:hover,
+.nav-link:focus,
+.nav-link:active,
+.nav-link:active:focus {
+    color: white !important;
+}
+
+#greeting-box {
+    height: 80vh;
+    width: 100vw;
+    margin: 0 auto;
+}
+
+.search-area {
+    text-align: center;
+}
+
+#search-box {
+    width: 80vw;
+    height: 80px;
+    margin: 35vh auto;
+    color: black;
+    font-family: Roboto, 'sans-serif';
+    text-transform: uppercase;
+    color: black;
+    font-size: 40px;
+    text-align: center;
+    border-radius: 50px;
+}
+
+#search-box:focus-visible {
+    outline: none;
+}
+
+::placeholder {
+    font-family: Roboto, 'sans-serif';
+    text-transform: uppercase;
+    color: grey;
+    font-size: 40px;
+    text-align: center;
+    margin: auto;
+}
+
+#map {
+    height: 50%;
+    border-radius: 16px;
+    margin: 1vh !important;
+  }
+
+#search-results {
+    border-radius: 16px;
+    margin: 1vh !important;
+}
+#about {
+    background-color:#9FAFA1 ;
+    border-radius: 30px;
+    min-height: 30vh;
+    width: 99%;
+    margin: 2vh auto 2vh auto;
+    padding: 1%;
+}
+
+.about-heading {
+    text-align: center;
+    font-size: 40px;
+
+}
+
+.about-text {
+    text-align: center;
+}
+
+#footer {
+    height: 10vh;
+    background-color: teal;
+}
+
+.facebook-link {
+    font-size: 50px;
+    text-align: center;
+}
+
+.facebook-link a {
+    color: white;
+}
