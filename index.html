@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campzilla - Home</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script defer src="assets/js/myscript.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#"><img id="logo" src="assets/images/logo.png" alt="CampZilla Logo"></a>
+              <h1 id="brand-title" class="light-blue">CampZilla</h1>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link green bold" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link green bold" href="#about">About</a>
+                  </li>
+                  <li>
+                    <a href="" class="nav-link green bold">Contact Us</a>
+                  </li>
+              </div>
+            </div>
+          </nav>
+    </header>
+
+    <section id="greeting-box" class="container-fluid">
+        <div class="row">
+            <div class="col-12 search-area">
+                <input type="text" id="search-box" placeholder="where are we going?">
+            </div>
+        </div> 
+    </section>
+    <section id="map"></section>
+
+    <section id="search-reults"></section>
+
+    <section id="about" class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="about-heading light-blue roboto bold">About</h2>
+          <p class="about-text light-blue">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam totam, distinctio, tenetur sint atque qui eligendi eum id quia minima sed perspiciatis et. Minus ex vel reiciendis voluptate assumenda hic.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <footer id="footer" class="container-fluid">
+        <div class="row m-0">
+            <div class="col-4 facebook-link">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+    <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFWvlFQPLLfeSx4VPUU_VjyjCnaMlD8Gw&libraries=places&callback=initMap">
+    </script>
+    <script src="https://kit.fontawesome.com/5351067769.js" crossorigin="anonymous"></script>
+</body>
+</html>
