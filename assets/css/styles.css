@@ -42,6 +42,23 @@ html, body {
     font-weight: bolder;
 }
 
+/* Buttons */
+
+.btn-blue {
+    color: #000 !important;
+    font-weight: bold !important;
+    border-color: #00BAFE !important;
+    background-color: #00BAFE !important;
+    margin: 5px auto;
+}
+
+.navbar {
+    background-image: url(../images/modal-banner.png) !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-y:top;
+}
+
 #logo {
     height: 80px;
     margin-right: 170px;
@@ -52,6 +69,9 @@ html, body {
     margin: 0 auto;
     font-family: Roberto, 'sans-serif';
     font-weight: bolder;
+    font-size: 50px;
+    background-color: rgb(255 255 255 / 85%);
+    border-radius: 20px;
 }
 
 .navbar-collapse {
@@ -60,15 +80,21 @@ html, body {
     align-items: center;
 }
 
+.navbar-nav {
+    background-color: rgb(255 255 255 / 85%);
+    border-radius: 20px;
+}
+
 .nav-link {
     color: #4fbc6f !important;
+    font-size: larger;
 }
 
 .nav-link:hover,
 .nav-link:focus,
 .nav-link:active,
 .nav-link:active:focus {
-    color: white !important;
+    color: black !important;
 }
 
 #greeting-box {
@@ -150,14 +176,35 @@ html, body {
     color: white;
 }
 
+.modal-header {
+    background-image: url(../images/modal-banner.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50px 50px 0 0 !important;
+}
+
 .modal-content {
-    background-color: #4fbc6f !important;
+
     border-radius: 50px !important;
 }
 
 .modal-title {
     margin: 0 auto;
     font-size: xx-large;
+    background-color: rgb(255 255 255 / 85%);
+    border-radius: 20px;
+}
+
+.btn-close {
+    background-color: rgb(255 255 255 / 85%) !important;
+    border-radius: 20px !important;
+    opacity: 1 !important;
+}
+
+.btn-close:hover {
+    transition: ease-in-out;
+    background-color: rgb(158 158 158 / 85%) !important;
 }
 
 .contact-label {
