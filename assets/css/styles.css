@@ -28,6 +28,10 @@ html, body {
     color: #0085C5;
 }
 
+.white {
+    color: white;
+}
+
 /* Fonts */
 
 .roboto {
@@ -94,7 +98,7 @@ html, body {
     outline: none;
 }
 
-::placeholder {
+#search-box::placeholder {
     font-family: Roboto, 'sans-serif';
     text-transform: uppercase;
     color: grey;
@@ -114,7 +118,7 @@ html, body {
     margin: 1vh !important;
 }
 #about {
-    background-color:#9FAFA1 ;
+    background-color:#399845 ;
     border-radius: 30px;
     min-height: 30vh;
     width: 99%;
@@ -144,4 +148,36 @@ html, body {
 
 .facebook-link a {
     color: white;
+}
+
+.modal-content {
+    background-color: #4fbc6f !important;
+    border-radius: 50px !important;
+}
+
+.modal-title {
+    margin: 0 auto;
+    font-size: xx-large;
+}
+
+.contact-label {
+    font-size: x-large;
+    font-family: 'Roboto', 'sans-serif';
+    width: 25%;
+    color: darkslategrey;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.contact-input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    min-width: 74%;
+}
+
+.contact-message {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    min-width: 74%;
+    min-height: 40%;
 }

@@ -27,7 +27,7 @@
                     <a class="nav-link green bold" href="#about">About</a>
                   </li>
                   <li>
-                    <a href="" class="nav-link green bold">Contact Us</a>
+                    <a href="" class="nav-link green bold" data-bs-toggle="modal" data-bs-target="#contactUsModal">Contact Us</a>
                   </li>
               </div>
             </div>
@@ -48,8 +48,8 @@
     <section id="about" class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <h2 class="about-heading light-blue roboto bold">About</h2>
-          <p class="about-text light-blue">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam totam, distinctio, tenetur sint atque qui eligendi eum id quia minima sed perspiciatis et. Minus ex vel reiciendis voluptate assumenda hic.</p>
+          <h2 class="about-heading white roboto bold">About</h2>
+          <p class="about-text white">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam totam, distinctio, tenetur sint atque qui eligendi eum id quia minima sed perspiciatis et. Minus ex vel reiciendis voluptate assumenda hic.</p>
         </div>
       </div>
 
@@ -62,6 +62,44 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modal from bootstrap as start point-->
+<div class="modal fade" id="contactUsModal" tabindex="-1" aria-labelledby="contactUsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title white roboto" id="contactUsModalLabel">Get in touch!</h5>
+        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="POST">
+          <div>
+            <label class="contact-label" for="contact-reason">Reason:</label>
+            <input class="contact-input" list="reason-choice" id="contact-reason" name="reason" placeholder="Reason for Contacting...">
+            <datalist id="reason-choice">
+              <option value="General Enquiry"></option>
+              <option value="Missing Data"></option>
+              <option value="Website Issue"></option>
+            </datalist>
+          </div>
+          <div>
+            <label class="contact-label" for="contact-name">Name:</label>
+            <input class="contact-input" type="text" id="contact-name" name="name" placeholder="Enter Name Here...">
+          </div>
+          <div>
+            <label class="contact-label" for="contact-email">Email:</label>
+            <input class="contact-input" type="email" id="contact-email" name="email" placeholder="Enter Email Here...">
+          </div>
+          <div>
+            <label class="contact-label" for="contact-message">Message:</label>
+            <textarea class="contact-message"  cols="10" rows="5" id="contact-message" name="message" placeholder="Enter Message Here..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-warning">Send Message!</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script
