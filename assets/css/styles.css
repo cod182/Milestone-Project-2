@@ -52,6 +52,35 @@ html, body {
     margin: 5px auto;
 }
 
+.btn-blue:hover,
+.btn-blue:focus,
+.btn-blue:active,
+.btn-blue:active:focus {
+    border-color: #0083b3 !important;
+    background-color: #0083b3 !important;
+    color: white !important;
+}
+
+.btn-close {
+    background-color: rgb(255 255 255 / 85%) !important;
+    border-radius: 20px !important;
+    opacity: 1 !important;
+}
+
+.btn-close:hover {
+    transition: ease-in-out;
+    background-color: rgb(158 158 158 / 85%) !important;
+}
+
+.btn-info {
+    max-height: 30px;
+    max-width: 100px;
+    margin: auto;
+    padding: 0 2px 0 2px !important;
+    font-weight: 400 !important;
+    font-size: small !important;
+}
+
 /* Media Queries */
 
 @media screen and (max-width:441px) {
@@ -90,9 +119,6 @@ html, body {
 
 #logo {
     max-height: 90px;
-    transition: ease-in-out;
-    -moz-transition: ease-in-out;
-    -webkit-transition: ease-in-out;
 }
 
 #brand-title {
@@ -150,7 +176,6 @@ html, body {
     background-size:contain;
     background-position-y:0vmax;
     background-position-x: center;
-    transition: ease-in-out;
     width: 80vw;
     height: 80px;
     margin: 35vh auto;
@@ -176,16 +201,30 @@ html, body {
     margin: auto;
 }
 
-#map {
-    height: 50%;
-    border-radius: 16px;
-    margin: 1vh !important;
-  }
-
 #search-results {
     border-radius: 16px;
-    margin: 1vh !important;
+    margin: 0 auto!important;
 }
+
+.result-box {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 5px;
+    font-family: roboto, 'sans-serif';
+    margin: 10px auto;
+}
+
+.result-label {
+    font-size: min(13px);
+    font-weight: bold;
+}
+
+.result-data {
+    font-size: min(12px);
+    padding-right: 2px;
+}
+
 #about {
     background-color:#399845 ;
     border-radius: 30px;
@@ -224,7 +263,10 @@ html, body {
 
 #footer {
     height: 10vh;
-    background-color: teal;
+    background-image: url(../images/modal-banner.png);
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .facebook-link {
@@ -254,17 +296,6 @@ html, body {
     font-size: xx-large;
     background-color: rgb(255 255 255 / 85%);
     border-radius: 20px;
-}
-
-.btn-close {
-    background-color: rgb(255 255 255 / 85%) !important;
-    border-radius: 20px !important;
-    opacity: 1 !important;
-}
-
-.btn-close:hover {
-    transition: ease-in-out;
-    background-color: rgb(158 158 158 / 85%) !important;
 }
 
 .contact-label {
