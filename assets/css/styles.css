@@ -90,6 +90,9 @@ html, body {
 
 #logo {
     max-height: 90px;
+    transition: ease-in-out;
+    -moz-transition: ease-in-out;
+    -webkit-transition: ease-in-out;
 }
 
 #brand-title {
@@ -147,13 +150,12 @@ html, body {
     background-size:contain;
     background-position-y:0vmax;
     background-position-x: center;
+    transition: ease-in-out;
     width: 80vw;
     height: 80px;
     margin: 35vh auto;
-    color: black;
     font-family: Roboto, 'sans-serif';
     text-transform: uppercase;
-    color: black;
     font-size: min(5vw, 40px);
     text-align: center;
     border-radius: 50px;
@@ -214,9 +216,10 @@ html, body {
 }
 
 .about-text {
-    margin-top: 2vh;
+    margin-top: 4vh;
     margin-bottom: 2vh;
     text-align: center;
+    font-size: x-large;
 }
 
 #footer {
