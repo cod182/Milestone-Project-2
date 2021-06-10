@@ -174,7 +174,7 @@ html, body {
     text-align: center;
 }
 
-#search-box {
+.search-box-before {
     background-image: url(../images/search-bg.png) !important;
     background-repeat: repeat-x;
     background-size:contain;
@@ -190,17 +190,46 @@ html, body {
     border-radius: 50px;
 }
 
+.search-box-after {
+    background-image: url(../images/search-bg.png) !important;
+    background-repeat: repeat-x;
+    background-size:contain;
+    background-position-y:0vmax;
+    background-position-x: center;
+    width: 30vw;
+    height: 30px;
+    margin: 2vh auto;
+    font-family: Roboto, 'sans-serif';
+    text-transform: uppercase;
+    font-size: min(1vw, 40px);
+    text-align: center;
+    border-radius: 50px;
+}
 
 
-#search-box:focus-visible {
+
+.search-box-before:focus-visible {
     outline: none;
 }
 
-#search-box::placeholder {
+.search-box-after:focus-visible {
+    outline: none;
+}
+
+.search-box-before::placeholder {
     font-family: Roboto, 'sans-serif';
     text-transform: uppercase;
     color: grey;
     font-size: min(5vw, 40px);
+    text-align: center;
+    margin: auto;
+}
+
+.search-box-after::placeholder {
+    font-family: Roboto, 'sans-serif';
+    text-transform: uppercase;
+    color: grey;
+    font-size: min(1vw, 40px);
     text-align: center;
     margin: auto;
 }
