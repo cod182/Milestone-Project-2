@@ -10,10 +10,11 @@ function sendEmail(contactForm) {
             console.log('SUCSESS',response)
             document.getElementById('contact-submit').remove();
             document.getElementById('message-status').innerHTML =`<p class='blue bold'><em>Message Sent!</em></p>`;
+            setTimeout(function(){ document.getElementById('modal-close').click() }, 2000);
         },
         function(error) {
             console.log('FAILED', error)
-            document.getElementById('message-status').innerHTML =`<p class='red bold'>Error! Please try again.<p>`;
+            document.getElementById('message-status').innerHTML =`<p class='red bold'><em>Error! Please try again.</em></p>`;
 
         });
     return false;
