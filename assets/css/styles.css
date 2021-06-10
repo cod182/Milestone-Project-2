@@ -32,6 +32,10 @@ html, body {
     color: white;
 }
 
+.red {
+    color: crimson;
+}
+
 /* Fonts */
 
 .roboto {
@@ -207,7 +211,6 @@ html, body {
 }
 
 .result-box {
-    width: 100%;
     border: 1px solid black;
     border-radius: 20px;
     padding: 20px !important;
@@ -326,4 +329,9 @@ html, body {
     margin-bottom: 5px;
     min-width: 74%;
     min-height: 40%;
+}
+
+#map {
+    width: 100vw;
+    height: 450px;
 }
