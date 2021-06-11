@@ -202,17 +202,15 @@ html, body {
     background-size:contain;
     background-position-y:bottom;
     background-position-x: center;
-    width: 50vw;
+    width: 60vw;
     height: 30px;
     margin: 2vh auto;
     font-family: Roboto, 'sans-serif';
     text-transform: uppercase;
-    font-size:calc(10px + 1.5vw);
+    font-size:medium;
     text-align: center;
     border-radius: 50px;
 }
-
-
 
 .search-box-before:focus-visible {
     outline: none;
@@ -235,9 +233,14 @@ html, body {
     font-family: Roboto, 'sans-serif';
     text-transform: uppercase;
     color: grey;
-    font-size:calc(10px + 1.5vw);
+    font-size:medium;
     text-align: center;
     margin: auto;
+}
+
+.map {
+    width: 100vw;
+    height: 450px;
 }
 
 .search-results-after {
@@ -290,7 +293,7 @@ html, body {
 
 .about-heading {
     text-align: center;
-    font-size:calc(20px + 1.5vw);
+    font-size:calc(20px + 1vw);
     margin: 2vh auto 2vh auto;
     background-color: rgb(255 255 255 / 85%);
     border-radius: 20px;
@@ -366,9 +369,4 @@ html, body {
     margin-bottom: 5px;
     min-width: 74%;
     min-height: 40%;
-}
-
-.map {
-    width: 100vw;
-    height: 450px;
 }

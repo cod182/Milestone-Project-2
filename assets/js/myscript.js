@@ -63,20 +63,26 @@ const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
 const mapContain = document.getElementById('map');
 let firstTime = true;
+
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
     if (event.key === "Enter") { // If key up is Enter then...
-        searchBox.classList.remove('search-box-before'); //Remove class from searchBox
-        searchBox.classList.add('search-box-after'); //Add class to searchBox
-        greetSec.classList.remove('greeting-box-before'); //Remove class from greetSex
-        greetSec.classList.add('greeting-box-after'); //Add class to greetSec
-        mapContain.classList.add('map'); //Add class to mapContain
         if (firstTime) { // If this this the first run, run the below code
+            classChange(); //Run function to add classed
             addMapEl(); //Run function to add the map
             addResults(); //Run function to add results to the map
             firstTime = false;
         }
     }
 });
+
+//Function to add and remove classed to prepare document for map and search results
+function classChange(){
+    searchBox.classList.remove('search-box-before'); //Remove class from searchBox
+    searchBox.classList.add('search-box-after'); //Add class to searchBox
+    greetSec.classList.remove('greeting-box-before'); //Remove class from greetSec
+    greetSec.classList.add('greeting-box-after'); //Add class to greetSec
+    mapContain.classList.add('map'); //Add class to mapContain
+}
 
 //Initilisting the Here Map in section map
 function addMapEl() {
