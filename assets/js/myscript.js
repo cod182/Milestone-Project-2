@@ -1,8 +1,8 @@
-// const apiKey = 'cAo6Cjf5wlcux7gJjPODw_tNNN5lglP7Ayka-t9R7J4';
-// const restApi = 'pu2_DtcuggeDNRL5hMMI3C8IVP0Sd5fx9AqefGKcT4c';
-// const appId = 'viVz45yDq8PgWQBJT5fE';
-// const accKey = 'viVz45yDq8PgWQBJT5fE';
-// const oAuth = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyMzMyNzc2OSwiZXhwIjoxNjIzNDE0MTY5LCJraWQiOiJqMSJ9';
+const apiKey = 'cAo6Cjf5wlcux7gJjPODw_tNNN5lglP7Ayka-t9R7J4'; //Here Maps Api Key
+const restApi = 'pu2_DtcuggeDNRL5hMMI3C8IVP0Sd5fx9AqefGKcT4c'; //Here Maps REST Api Key
+const appId = 'viVz45yDq8PgWQBJT5fE'; //Here Maps App ID
+const oAuth = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyMzMyNzc2OSwiZXhwIjoxNjIzNDE0MTY5LCJraWQiOiJqMSJ9'; ///Here Maps Token (only lasts 24hrs)
+
 // /**
 //  * @param  {H.Map} map      A HERE Map instance within the application
 //  */
@@ -51,53 +51,52 @@
 
  
 
-//   if (navigator.geolocation) {
-//       navigator.geolocation.getCurrentPosition(position => {
-//         map.setCenter({
-//             lat: position.coords.latitude,
-//             lng: position.coords.longitude
-//         });
-//         map.setZoom(12);
-//     });
-     
-//   };
+  
 
-//   /**
-//    * Boilerplate map initialization code starts below:
-//    */
+
   
-//   //Step 1: initialize communication with the platform
-//   // In your own code, replace variable window.apikey with your own apikey
-//   var platform = new H.service.Platform({
-//     apikey: apiKey
-//   });
-//   var defaultLayers = platform.createDefaultLayers();
-  
-//   //Step 2: initialize a map - this map is centered over Europe
-//   var map = new H.Map(document.getElementById('map'),
-//     defaultLayers.vector.normal.map,{
-//     center: {lat:50, lng:5},
-//     zoom: 4,
-//     pixelRatio: window.devicePixelRatio || 1
-//   });
-//   // add a resize listener to make sure that the map occupies the whole container
-//   window.addEventListener('resize', () => map.getViewPort().resize());
-  
-//   //Step 3: make the map interactive
-//   // MapEvents enables the event system
-//   // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
-//   var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-  
-//   // Create the default UI components
-//   var ui = H.ui.UI.createDefault(map, defaultLayers);
 
 
 
-//When enter is pressed, the search box shrinks
+//When enter is pressed, the search box shrinks and the map us added
 const searchBox = document.getElementById('search-box');
-searchBox.addEventListener("keyup", function(event) {
-    if (event.key === "Enter") {
-        searchBox.classList.remove('search-box-before');
-        searchBox.classList.add('search-box-after');
+const greetSec = document.getElementById('greeting-box');
+const mapContain = document.getElementById('map');
+let firstTime = true;
+searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
+    if (event.key === "Enter") { // If key up is Enter then...
+        searchBox.classList.remove('search-box-before'); //Remove class from searchBox
+        searchBox.classList.add('search-box-after'); //Add class to searchBox
+        greetSec.classList.remove('greeting-box-before'); //Remove class from greetSex
+        greetSec.classList.add('greeting-box-after'); //Add class to greetSec
+        mapContain.classList.add('map'); //Add class to mapContain
+        if (firstTime) { // If this this the first run, run the below code
+            addMapEl(); //Run function to add the map
+            addResults(); //Run function to add results to the map
+            firstTime = false;
+        }
     }
 });
+
+//Initilisting the Here Map in section map
+function addMapEl() {
+    const platform = new H.service.Platform({ //New instance of Here Map
+        apikey: apiKey //setting API key
+      });
+      const defaultLayers = platform.createDefaultLayers();
+      const map = new H.Map(document.getElementById('map'),
+        defaultLayers.vector.normal.map,{
+        center: {lat:50, lng:5},
+        zoom: 4,
+        pixelRatio: window.devicePixelRatio || 1
+      });
+      window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
+      const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+      const ui = H.ui.UI.createDefault(map, defaultLayers);
+};
+
+// When called adds the class to the search results section
+function addResults() {
+    const resultsContain = document.getElementById('search-results');
+    resultsContain.classList.add('search-results-after');
+};
