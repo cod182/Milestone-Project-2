@@ -119,6 +119,7 @@ html, body {
     background-repeat: no-repeat;
     background-size: cover;
     background-position-y:top;
+    height: 14vh;
 }
 
 #logo {
@@ -166,7 +167,7 @@ html, body {
 }
 
 .greeting-box-before {
-    height: 100vh;
+    height: 86vh;
     width: 100vw;
     margin: 0 auto;
 }
