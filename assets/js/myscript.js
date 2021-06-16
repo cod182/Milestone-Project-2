@@ -21,7 +21,6 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
             firstTime = false;
         };
     getData(event) //Run function to get search results
-    addResults(event); //Run function to add results to the map
     }
     
 });
@@ -65,7 +64,7 @@ function getData(){
 // Get the Latitude and Londitude of the search
 function getLatLng(search){
     const urlGeo = 'https://geocode.search.hereapi.com/v1/geocode?q=';
-    const urlComp = urlGeo + search; //combining the api url with the search term
+    const urlComp = urlGeo + search + '&in=countryCode:GBR'; //combining the api url with the search term and limiting to GBR
     
     var xhr = new XMLHttpRequest();
     xhr.open("GET", urlComp);
@@ -88,7 +87,7 @@ function getLatLng(search){
 
 function discoverSearch(coords) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
-    const url = urlOrg + 'campsite' + '&in=circle:' + coords + ';r=100000';
+    const url = urlOrg + 'campsite' + '&in=circle:' + coords + ';r=16093';
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url);
@@ -100,14 +99,11 @@ function discoverSearch(coords) {
         if (xhr.readyState === 4) {
         console.log(xhr.status);
         console.log(JSON.parse(xhr.responseText));
-
-        const data = JSON.parse(xhr.responseText);
-
-
+        const results = JSON.parse(xhr.responseText);
+        addResults(results); //Run function to add results to the map
         }};
-    
     xhr.send();
-}
+};
 
 function getCoords(data) {
         let searchLatLng = []; //Lat & Lng of search stored in an array here
@@ -117,9 +113,9 @@ function getCoords(data) {
         searchLatLng.push(lng);
         const coords = searchLatLng.toString();
         discoverSearch(coords);
-}
+};
 
 
-function addResults() {
-
+function addResults(results) {
+    
 };
