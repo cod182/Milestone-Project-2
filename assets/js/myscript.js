@@ -53,3 +53,73 @@ function addMapEl() {
       const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
       const ui = H.ui.UI.createDefault(map, defaultLayers);
 };
+
+
+// Boiler Plate Code created with postman.co
+function getData(){
+    const search = searchBox.value; //Gets the value of the search
+    getLatLng(search);
+};
+
+
+// Get the Latitude and Londitude of the search
+function getLatLng(search){
+    const urlGeo = 'https://geocode.search.hereapi.com/v1/geocode?q=';
+    const urlComp = urlGeo + search; //combining the api url with the search term
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", urlComp);
+    
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Authorization", "Bearer eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyMzgzMzczOCwiZXhwIjoxNjIzOTIwMTM4LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLnlqSC1FQ1NlT1hXSUw2UU5fVm9BeXcub0tNVGZuVUxRRWVQU0xROTZvejN0MnRkZGkzM1J6N01BWWRfbjRrdXdtSlhyaG9nUXJIZDUwOTNPSTdGZjJPSUd6Tzdud0g3TXdmZmFlVEg2SHRfTkxsWHFtUUI0MGRnMHFpbkdLY0tSc3o1Ul9WWlZlU1UybWxxYzcyRnVpOUhyLU0xSUh0RVhCUXJacWJ2M0RxT2FBLjlXWTVUajU2QTBrOGxlUldLenNITHcyQ1JZdjBlV2RIREEydVdqbTlZa0U.ZJ6mMIOu-H35SzlH0NJ6A0kCDtDkjoUvxkLBRhIUxu8_xqCFw1MEOO3EiM-29Ej-YJTcSk_MFY5ZOi7d-6iaQcirSJh-hrP2WtRa1pqNumjs1k2ItpZ4ODbYEfY2xnV0xDyX7D0t7gK1-QKNANw1lyvIcDLMKLlW5JOmL9IQ0QohDkHuKnBdPESTPYr2xK1cIb6CgsW_YkT9mmIRrVx5yZHN2GGtxDksxe5GPgx_MnFj6AfnR3Bovt9eMVHzmwZB8Kozbt-QyF-0vmDGkn-JpmHoiEn98fjaWFSJFRtj0x4e5ZJfIzf2c-TUbuU6ASotsKldzXmjz0eNzzcNhROPPw");
+    
+    xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+            console.log(xhr.status);
+            console.log(JSON.parse(xhr.responseText));
+            const data = JSON.parse(xhr.responseText);
+            getCoords(data);
+            };
+    };
+    xhr.send();
+};
+
+
+
+function discoverSearch(coords) {
+    const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
+    const url = urlOrg + 'campsite' + '&in=circle:' + coords + ';r=100000';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Authorization", "Bearer eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyMzgzMzczOCwiZXhwIjoxNjIzOTIwMTM4LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLnlqSC1FQ1NlT1hXSUw2UU5fVm9BeXcub0tNVGZuVUxRRWVQU0xROTZvejN0MnRkZGkzM1J6N01BWWRfbjRrdXdtSlhyaG9nUXJIZDUwOTNPSTdGZjJPSUd6Tzdud0g3TXdmZmFlVEg2SHRfTkxsWHFtUUI0MGRnMHFpbkdLY0tSc3o1Ul9WWlZlU1UybWxxYzcyRnVpOUhyLU0xSUh0RVhCUXJacWJ2M0RxT2FBLjlXWTVUajU2QTBrOGxlUldLenNITHcyQ1JZdjBlV2RIREEydVdqbTlZa0U.ZJ6mMIOu-H35SzlH0NJ6A0kCDtDkjoUvxkLBRhIUxu8_xqCFw1MEOO3EiM-29Ej-YJTcSk_MFY5ZOi7d-6iaQcirSJh-hrP2WtRa1pqNumjs1k2ItpZ4ODbYEfY2xnV0xDyX7D0t7gK1-QKNANw1lyvIcDLMKLlW5JOmL9IQ0QohDkHuKnBdPESTPYr2xK1cIb6CgsW_YkT9mmIRrVx5yZHN2GGtxDksxe5GPgx_MnFj6AfnR3Bovt9eMVHzmwZB8Kozbt-QyF-0vmDGkn-JpmHoiEn98fjaWFSJFRtj0x4e5ZJfIzf2c-TUbuU6ASotsKldzXmjz0eNzzcNhROPPw");
+    
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+        console.log(xhr.status);
+        console.log(JSON.parse(xhr.responseText));
+
+        const data = JSON.parse(xhr.responseText);
+
+
+        }};
+    
+    xhr.send();
+}
+
+function getCoords(data) {
+        let searchLatLng = []; //Lat & Lng of search stored in an array here
+        const lat = data.items[0].position.lat;
+        const lng = data.items[0].position.lng;
+        searchLatLng.push(lat);
+        searchLatLng.push(lng);
+        const coords = searchLatLng.toString();
+        discoverSearch(coords);
+}
+
+
+function addResults() {
+
+};
