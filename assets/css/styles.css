@@ -256,7 +256,6 @@ html, body {
     padding: 20px !important;
     font-family: roboto, 'sans-serif';
     margin: 10px auto;
-    width: 33% !important;
 }
 
 .result-row {
@@ -270,6 +269,10 @@ html, body {
 .result-label {
     font-size: min(13px);
     font-weight: bold;
+}
+
+.result-data-container {
+    padding-top:4px;
 }
 
 .result-data {

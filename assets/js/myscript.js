@@ -130,7 +130,7 @@ function addResultToPage (result) {
     resultDiv.classList.add('col-md-4');
     resultDiv.classList.add('result-box');
     const phone = getPhone (result);
-    console.log(phone);
+    const hours = getHours(result);
     resultDiv.innerHTML = `
                 <div class="result-title-container">
                     <h2 class="blue bold result-row">${result.title}</h2>
@@ -140,7 +140,7 @@ function addResultToPage (result) {
                     <div class="col-3 result-row">
                         <p class="result-label">Distance:</p>
                     </div>
-                    <div class="col-9">
+                    <div class="col-9 result-data-container">
                         <p class="result-data">${result.distance * .001} Km</p>
                     </div>
                 </div>
@@ -148,7 +148,7 @@ function addResultToPage (result) {
                 <div class="col-3 result-row">
                     <p class="result-label">Address:</p>
                 </div>
-                <div class="col-9">
+                <div class="col-9 result-data-container">
                     <p class="result-data result-address">${result.title}</p>
                     <p class="result-data result-address">${result.address.district}</p>
                     <p class="result-data result-address">${result.address.county}</p>
@@ -159,7 +159,7 @@ function addResultToPage (result) {
                     <div class="col-3 result-row">
                         <p class="result-label">Phone:</p>
                     </div>
-                    <div class="col-9">
+                    <div class="col-9 result-data-container">
                         <p class="result-data">${phone}</p>
                     </div>
                 </div>
@@ -167,8 +167,8 @@ function addResultToPage (result) {
                     <div class="col-3 result-row">
                         <p class="result-label">Opening Hours:</p>
                     </div>
-                    <div class="col-9">
-                        <p class="result-data">${result.openingHours}</p>
+                    <div class="col-9 result-data-container">
+                        <p class="result-data">${hours}</p>
                     </div>
                 </div>
             </div>
@@ -195,4 +195,13 @@ function getPhone(result) {
         } else {
             return `<i class="fas fa-phone-slash"></i>`;
         };
+};
+
+function getHours(result) {
+    if(result.openingHours){
+        //return result.openingHours[0].text
+        return `<span>${result.openingHours[0].text}</span/`;
+    } else {
+        return `<i class="fas fa-phone"></i><span class="result-data">- Call to confirm</span>`;
+    }
 };
