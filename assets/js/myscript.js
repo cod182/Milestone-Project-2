@@ -4,15 +4,17 @@ const hereClientId = 'viVz45yDq8PgWQBJT5fE';
 const hereAccessKeyId = 'Xd0fC9GEvWMZ6Kq4DVH3gQ';
 const hereAccessKeySecret = '9LLdVKvpXrRoxTYD251yXbUBjmf5bRRcDlZdkDPqSoNvaq3QN5-r8dh5EON99cLD9g538k7Cz3cOA0UVOE9mkA';
 const hereTokenEndpointUrl = 'https://account.api.here.com/oauth2/token';
+const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyMzkyMDI0MywiZXhwIjoxNjI0MDA2NjQzLCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLmlxTUthNEFmdEw3OTN2TlVpN1g5YXcuMVhEY2ZSUlZDMWE5QjczNUthbjhsbm5OQXQzWU1hX2lxOC16aFpkYWtPclROQUJZMTY2ZlZOZHI5bmhOaW1RYldHXzF5eHF1bnVDMm9SallXQk81U1dqNzNUT1BXSmpIRXB5ZTM1ejNQN1djakI2dXRtODlEYzh1VWVIa1JWNDNDN1VFRlZDZmViSWFwT25PU2F4UzdnLlF6Nnh5bkEyMTFoRXBjdUdqcUlUWWxkTGFrTUdxQlZUbjkxNmxvWmZyR2s.AJtYckbIMU5OzRE-r7GuduMJ-q6DUgXUExTSftRqIQzXpRm_ORmnn0I_OBe3hHwHOOTM4BfyDBi7G2d4He0rY-zHhpmAH9drP0EggYcATpTZy3SJz_hdIzUfLoW4rCbMFO0uHU44HndxMEqCOAtytcaZbFaof9BPvQg8NUfkKpSsbVDeu9tU8J1tMtf-e89YyCWg5qJfcbqhg7HSbO7cTRDW7Q262KJsYmmVh94vz_0KdmYDb4_Wze77Vpt1F546M0HD5wNa4tKdm42nudbeuhmpbrbLyylUdMemMgLRYa5ayifOIXlDNQDom2qEfT1QUv8NQ4aLrKfNTRjmmw8oRw';
+
 // @param  {H.Map} map // A HERE Map instance within the application
 
-//When enter is pressed, the search box shrinks and the map is added
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
 const mapContain = document.getElementById('map');
 const resultsContain = document.getElementById('search-results');
 let firstTime = true;
 
+//When enter is pressed, the search box shrinks, the map is added and getData runs
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
     if (event.key === "Enter") { // If key up is Enter then...
         if (firstTime) { // If this this the first run, run the below code
@@ -20,6 +22,7 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
             addMapEl(); //Run function to add the map
             firstTime = false;
         };
+        resultsContain.innerHTML = "";
     getData(event) //Run function to get search results
     }
     
@@ -70,7 +73,7 @@ function getLatLng(search){
     xhr.open("GET", urlComp);
     
     xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyMzgzMzczOCwiZXhwIjoxNjIzOTIwMTM4LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLnlqSC1FQ1NlT1hXSUw2UU5fVm9BeXcub0tNVGZuVUxRRWVQU0xROTZvejN0MnRkZGkzM1J6N01BWWRfbjRrdXdtSlhyaG9nUXJIZDUwOTNPSTdGZjJPSUd6Tzdud0g3TXdmZmFlVEg2SHRfTkxsWHFtUUI0MGRnMHFpbkdLY0tSc3o1Ul9WWlZlU1UybWxxYzcyRnVpOUhyLU0xSUh0RVhCUXJacWJ2M0RxT2FBLjlXWTVUajU2QTBrOGxlUldLenNITHcyQ1JZdjBlV2RIREEydVdqbTlZa0U.ZJ6mMIOu-H35SzlH0NJ6A0kCDtDkjoUvxkLBRhIUxu8_xqCFw1MEOO3EiM-29Ej-YJTcSk_MFY5ZOi7d-6iaQcirSJh-hrP2WtRa1pqNumjs1k2ItpZ4ODbYEfY2xnV0xDyX7D0t7gK1-QKNANw1lyvIcDLMKLlW5JOmL9IQ0QohDkHuKnBdPESTPYr2xK1cIb6CgsW_YkT9mmIRrVx5yZHN2GGtxDksxe5GPgx_MnFj6AfnR3Bovt9eMVHzmwZB8Kozbt-QyF-0vmDGkn-JpmHoiEn98fjaWFSJFRtj0x4e5ZJfIzf2c-TUbuU6ASotsKldzXmjz0eNzzcNhROPPw");
+    xhr.setRequestHeader("Authorization", "Bearer " + bearerToken);
     
     xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
@@ -83,8 +86,18 @@ function getLatLng(search){
     xhr.send();
 };
 
+// Puts the coordinates into a string and starts the discoverSearch function
+function getCoords(data) {
+    let searchLatLng = []; //Lat & Lng of search stored in an array here
+    const lat = data.items[0].position.lat;
+    const lng = data.items[0].position.lng;
+    searchLatLng.push(lat);
+    searchLatLng.push(lng);
+    const coords = searchLatLng.toString();
+    discoverSearch(coords); //run discover function taking coords
+};
 
-
+// Runs a search to API using coords
 function discoverSearch(coords) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
     const url = urlOrg + 'campsite' + '&in=circle:' + coords + ';r=16093';
@@ -93,29 +106,30 @@ function discoverSearch(coords) {
     xhr.open("GET", url);
     
     xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyMzgzMzczOCwiZXhwIjoxNjIzOTIwMTM4LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLnlqSC1FQ1NlT1hXSUw2UU5fVm9BeXcub0tNVGZuVUxRRWVQU0xROTZvejN0MnRkZGkzM1J6N01BWWRfbjRrdXdtSlhyaG9nUXJIZDUwOTNPSTdGZjJPSUd6Tzdud0g3TXdmZmFlVEg2SHRfTkxsWHFtUUI0MGRnMHFpbkdLY0tSc3o1Ul9WWlZlU1UybWxxYzcyRnVpOUhyLU0xSUh0RVhCUXJacWJ2M0RxT2FBLjlXWTVUajU2QTBrOGxlUldLenNITHcyQ1JZdjBlV2RIREEydVdqbTlZa0U.ZJ6mMIOu-H35SzlH0NJ6A0kCDtDkjoUvxkLBRhIUxu8_xqCFw1MEOO3EiM-29Ej-YJTcSk_MFY5ZOi7d-6iaQcirSJh-hrP2WtRa1pqNumjs1k2ItpZ4ODbYEfY2xnV0xDyX7D0t7gK1-QKNANw1lyvIcDLMKLlW5JOmL9IQ0QohDkHuKnBdPESTPYr2xK1cIb6CgsW_YkT9mmIRrVx5yZHN2GGtxDksxe5GPgx_MnFj6AfnR3Bovt9eMVHzmwZB8Kozbt-QyF-0vmDGkn-JpmHoiEn98fjaWFSJFRtj0x4e5ZJfIzf2c-TUbuU6ASotsKldzXmjz0eNzzcNhROPPw");
+    xhr.setRequestHeader("Authorization", "Bearer " + bearerToken);
     
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
         console.log(xhr.status);
         console.log(JSON.parse(xhr.responseText));
-        const results = JSON.parse(xhr.responseText);
-        addResults(results); //Run function to add results to the map
+        const results = JSON.parse(xhr.responseText).items;
+        addResults(results); //Run function to add results to the search results area
         }};
     xhr.send();
 };
 
-function getCoords(data) {
-        let searchLatLng = []; //Lat & Lng of search stored in an array here
-        const lat = data.items[0].position.lat;
-        const lng = data.items[0].position.lng;
-        searchLatLng.push(lat);
-        searchLatLng.push(lng);
-        const coords = searchLatLng.toString();
-        discoverSearch(coords);
+function addResults(results, i) {
+    results.forEach(function(result){
+        addResultToPage(result);
+        console.log(result)
+    })
 };
 
+function addResultToPage (result) {
+    let resultDiv = document.createElement('div');
+    resultDiv.classList.add('col-md-4');
+    resultDiv.classList.add('result-box');
 
-function addResults(results) {
-    
-};
+    resultDiv.innerHTML;
+    resultsContain.appendChild(resultDiv);
+    };

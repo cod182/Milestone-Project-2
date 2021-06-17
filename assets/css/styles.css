@@ -242,6 +242,7 @@ html, body {
 .map {
     width: 100vw;
     height: 450px;
+    margin-bottom: 10px;
 }
 
 .search-results-after {
@@ -255,11 +256,16 @@ html, body {
     padding: 20px !important;
     font-family: roboto, 'sans-serif';
     margin: 10px auto;
+    width: 33% !important;
 }
 
 .result-row {
     padding: 0 !important;
 }
+
+.result-title-container {
+    min-height:10vh;
+};
 
 .result-label {
     font-size: min(13px);
@@ -269,6 +275,10 @@ html, body {
 .result-data {
     font-size: min(12px);
     margin-left: 10px;
+}
+
+.result-address {
+    margin-bottom: 0!important;
 }
 
 .result-modal {
