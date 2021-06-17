@@ -129,7 +129,70 @@ function addResultToPage (result) {
     let resultDiv = document.createElement('div');
     resultDiv.classList.add('col-md-4');
     resultDiv.classList.add('result-box');
-
-    resultDiv.innerHTML;
+    const phone = getPhone (result);
+    console.log(phone);
+    resultDiv.innerHTML = `
+                <div class="result-title-container">
+                    <h2 class="blue bold result-row">${result.title}</h2>
+                </div>
+            <div class="col-9">
+                <div class="row">
+                    <div class="col-3 result-row">
+                        <p class="result-label">Distance:</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="result-data">${result.distance * .001} Km</p>
+                    </div>
+                </div>
+                <div class="row">
+                <div class="col-3 result-row">
+                    <p class="result-label">Address:</p>
+                </div>
+                <div class="col-9">
+                    <p class="result-data result-address">${result.title}</p>
+                    <p class="result-data result-address">${result.address.district}</p>
+                    <p class="result-data result-address">${result.address.county}</p>
+                    <p class="result-data">${result.address.postalCode}</p>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 result-row">
+                        <p class="result-label">Phone:</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="result-data">${phone}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 result-row">
+                        <p class="result-label">Opening Hours:</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="result-data">${result.openingHours}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="weather"></div>
+            </div>
+                <div class="row">
+                <div class="col-md-5 result-row">
+                    <button class="btn btn-blue btn-info" data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
+                </div>
+                </div>
+    `;
     resultsContain.appendChild(resultDiv);
     };
+
+// Gets the phone numer if it exists, if it does, shows no phone icon
+function getPhone(result) {
+        if(result.contacts) {
+            if (result.contacts[0].phone){
+                return result.contacts[0].phone[0].value;
+            } else if (result.contacts[0].mobile) {
+                return result.contacts[0].mobile[0].value;
+            }
+        } else {
+            return `<i class="fas fa-phone-slash"></i>`;
+        };
+};
