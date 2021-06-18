@@ -4,26 +4,31 @@ const hereClientId = 'viVz45yDq8PgWQBJT5fE';
 const hereAccessKeyId = 'Xd0fC9GEvWMZ6Kq4DVH3gQ';
 const hereAccessKeySecret = '9LLdVKvpXrRoxTYD251yXbUBjmf5bRRcDlZdkDPqSoNvaq3QN5-r8dh5EON99cLD9g538k7Cz3cOA0UVOE9mkA';
 const hereTokenEndpointUrl = 'https://account.api.here.com/oauth2/token';
-const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyMzkyMDI0MywiZXhwIjoxNjI0MDA2NjQzLCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLmlxTUthNEFmdEw3OTN2TlVpN1g5YXcuMVhEY2ZSUlZDMWE5QjczNUthbjhsbm5OQXQzWU1hX2lxOC16aFpkYWtPclROQUJZMTY2ZlZOZHI5bmhOaW1RYldHXzF5eHF1bnVDMm9SallXQk81U1dqNzNUT1BXSmpIRXB5ZTM1ejNQN1djakI2dXRtODlEYzh1VWVIa1JWNDNDN1VFRlZDZmViSWFwT25PU2F4UzdnLlF6Nnh5bkEyMTFoRXBjdUdqcUlUWWxkTGFrTUdxQlZUbjkxNmxvWmZyR2s.AJtYckbIMU5OzRE-r7GuduMJ-q6DUgXUExTSftRqIQzXpRm_ORmnn0I_OBe3hHwHOOTM4BfyDBi7G2d4He0rY-zHhpmAH9drP0EggYcATpTZy3SJz_hdIzUfLoW4rCbMFO0uHU44HndxMEqCOAtytcaZbFaof9BPvQg8NUfkKpSsbVDeu9tU8J1tMtf-e89YyCWg5qJfcbqhg7HSbO7cTRDW7Q262KJsYmmVh94vz_0KdmYDb4_Wze77Vpt1F546M0HD5wNa4tKdm42nudbeuhmpbrbLyylUdMemMgLRYa5ayifOIXlDNQDom2qEfT1QUv8NQ4aLrKfNTRjmmw8oRw';
-
-// @param  {H.Map} map // A HERE Map instance within the application
+const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDAwODIxOCwiZXhwIjoxNjI0MDk0NjE4LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLnRxX0xZdmUwejUxd1NMdm03RnFWSkEua09KZlk3Qy13SmJfQ3N2c2VLQzREcWh5c1VUdjdPbUJwOVA3eW5YRld1TE1qbUNkbDNyVDZnM2tRRWFrNHlZX1JqbG9XOEZGb1ctSkRXY3I1dnhkLWNibUYyU1hEZ1dOc2dzc3hjcFo2RGhodFFIZWdDT21SVXFBTU9Id2JoRHgzb01NZXdibUwtRkRGeGJWR0trLWpRLldkaUhhbk93VUN5OFh0RlB1NF8yc0xRZUNnNzNfZDk1OGVmcktVQS1pQ0U.uL6Lh5yTLJG8AHNUcAZzwWAH14Yvx4ys854SHM6FDFXPen2Nyykfgj-Rx0mLqU6nRr2waiFa6G3lYCm-VrigUtJrmdZziZl4OK_OpLBCCftyFTgBE9ZN1oeTdwb4m9uACAyb627Dvbx75FwbOZh_Saw1aN4KfXkAxN9n9hErPbQpGK1-jCQcw0Fi1lPHcTk9GvIzmnRveiQqJmx3sEDLG5ChQD1enj-R9tiMgpluevoXGDglkgb0nCFUXCHIkBs5Mkc3YI-y2dZc_iXByiZzkSdirJ8ML5bETrzsHHP3s52WLPkdKMNt9xYep3U9Q8-wjNyq0PjmeUx8iMgkJndZFA';
 
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
+const mapContainer = document.getElementById('map-container')
 const mapContain = document.getElementById('map');
 const resultsContain = document.getElementById('search-results');
+let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
+let runMap = true;
+
+
+
 
 //When enter is pressed, the search box shrinks, the map is added and getData runs
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
     if (event.key === "Enter") { // If key up is Enter then...
         if (firstTime) { // If this this the first run, run the below code
             classChange(); //Run function to add classed
-            addMapEl(); //Run function to add the map
             firstTime = false;
         };
-        resultsContain.innerHTML = "";
-    getData(event) //Run function to get search results
+        searchLatLng = []; //Set array to empty
+        resultsContain.innerHTML = ""; //Set String empty
+        mapContainer.innerHTML = ""; //Set String empty
+        getData(event) //Run function to get search results
     }
     
 });
@@ -34,13 +39,19 @@ function classChange(){
     searchBox.classList.add('search-box-after'); //Add class to searchBox
     greetSec.classList.remove('greeting-box-before'); //Remove class from greetSec
     greetSec.classList.add('greeting-box-after'); //Add class to greetSec
-    mapContain.classList.add('map'); //Add class to mapContain
+    // mapContain.classList.add('map'); //Add class to mapContain
     resultsContain.classList.add('search-results-after'); // Adds the class to the search results section
 
 }
 
 //Initilisting the Here Map in section map
 function addMapEl() {
+    let mapDiv = document.createElement('div'); //Create a new div called resultDiv
+    mapContainer.appendChild(mapDiv); //Appends resultDiv as a child of resultsContain
+    mapDiv.id ='map';
+    mapDiv.classList.add('map');
+    
+
     const platform = new H.service.Platform({ //New instance of Here Map
         apikey: hereApiKey //setting API key
       });
@@ -54,6 +65,8 @@ function addMapEl() {
       window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
       const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
       const ui = H.ui.UI.createDefault(map, defaultLayers);
+
+      moveMapToLocation(map)
 };
 
 
@@ -88,19 +101,20 @@ function getLatLng(search){
 
 // Puts the coordinates into a string and starts the discoverSearch function
 function getCoords(data) {
-    let searchLatLng = []; //Lat & Lng of search stored in an array here
     const lat = data.items[0].position.lat;
     const lng = data.items[0].position.lng;
     searchLatLng.push(lat);
     searchLatLng.push(lng);
-    const coords = searchLatLng.toString();
+    coords = searchLatLng.toString();
     discoverSearch(coords); //run discover function taking coords
+    addMapEl()
 };
+
 
 // Runs a search to API using coords
 function discoverSearch(coords) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
-    const url = urlOrg + 'campsite' + '&in=circle:' + coords + ';r=16093';
+    const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=16093';
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url);
@@ -122,15 +136,18 @@ function addResults(results, i) {
     results.forEach(function(result){
         addResultToPage(result);
         console.log(result)
+        addMapMarker(result);
     })
 };
 
 function addResultToPage (result) {
-    let resultDiv = document.createElement('div');
-    resultDiv.classList.add('col-md-4');
-    resultDiv.classList.add('result-box');
-    const phone = getPhone (result);
-    const hours = getHours(result);
+    let resultDiv = document.createElement('div'); //Create a new div called resultDiv
+    resultDiv.classList.add('col-md-4'); //Adds the class to the div
+    resultDiv.classList.add('result-box'); //Adds the class to the div
+    const phone = getPhone (result); //Gets the contact number of the location
+    const hours = getHours(result); //Gets the hours the location is open
+    const distance = getDistance(result); //Gets the distance to location in KM
+
     resultDiv.innerHTML = `
                 <div class="result-title-container">
                     <h2 class="blue bold result-row">${result.title}</h2>
@@ -141,7 +158,7 @@ function addResultToPage (result) {
                         <p class="result-label">Distance:</p>
                     </div>
                     <div class="col-9 result-data-container">
-                        <p class="result-data">${result.distance * .001} Km</p>
+                        <p class="result-data">${distance} Km</p>
                     </div>
                 </div>
                 <div class="row">
@@ -181,10 +198,10 @@ function addResultToPage (result) {
                 </div>
                 </div>
     `;
-    resultsContain.appendChild(resultDiv);
+    resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
     };
 
-// Gets the phone numer if it exists, if it does, shows no phone icon
+// Gets the phone numer if it exists, if it doesn't, shows no phone icon
 function getPhone(result) {
         if(result.contacts) {
             if (result.contacts[0].phone){
@@ -197,11 +214,38 @@ function getPhone(result) {
         };
 };
 
+//Gets the hours the location is open, if none available, asks to call
 function getHours(result) {
     if(result.openingHours){
-        //return result.openingHours[0].text
-        return `<span>${result.openingHours[0].text}</span/`;
+        return result.openingHours[0].text
     } else {
         return `<i class="fas fa-phone"></i><span class="result-data">- Call to confirm</span>`;
     }
 };
+
+//Converts the distance in miles to KM to 1dp and returns it
+function getDistance(result) {
+    const rawDist = result.distance
+    const dist = rawDist * 0.001;
+    return dist.toFixed(1);
+}
+ //Move the center of the map to specified locatioin
+function moveMapToLocation(map){
+    const lat = searchLatLng[0].toString(); //sets latitude from searhLatLng array
+    const lng = searchLatLng[1].toString(); //sets longitude from searhLatLng array
+
+    map.setCenter({ //Sets the Lat & Lng of the map
+        lat: lat, 
+        lng: lng
+    });
+    map.setZoom(12); //Sets the Zoom level of the map
+  };
+
+function addMapMarker(result, map) {
+    const lat = result.position.lat;
+    const lng = result.position.lng;
+    console.log(map, lat)
+
+    const marker = new H.map.Marker({lat:lat, lng:lng});
+    // map.addObject(marker);
+}
