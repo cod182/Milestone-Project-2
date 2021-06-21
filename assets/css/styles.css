@@ -119,6 +119,7 @@ html, body {
     background-repeat: no-repeat;
     background-size: cover;
     background-position-y:top;
+    height: 14vh;
 }
 
 #logo {
@@ -150,6 +151,7 @@ html, body {
 .navbar-nav {
     background-color: rgb(255 255 255 / 85%);
     border-radius: 20px;
+    padding-left: 10px !important;
 }
 
 .nav-link {
@@ -164,8 +166,13 @@ html, body {
     color: black !important;
 }
 
-#greeting-box {
-    height: 80vh;
+.greeting-box-before {
+    height: 86vh;
+    width: 100vw;
+    margin: 0 auto;
+}
+
+.greeting-box-after {
     width: 100vw;
     margin: 0 auto;
 }
@@ -174,38 +181,70 @@ html, body {
     text-align: center;
 }
 
-#search-box {
+.search-box-before {
     background-image: url(../images/search-bg.png) !important;
     background-repeat: repeat-x;
     background-size:contain;
-    background-position-y:0vmax;
+    background-position-y:bottom;
     background-position-x: center;
     width: 80vw;
     height: 80px;
     margin: 35vh auto;
     font-family: Roboto, 'sans-serif';
     text-transform: uppercase;
-    font-size: min(5vw, 40px);
+    font-size:calc(10px + 1.5vw);
     text-align: center;
     border-radius: 50px;
 }
 
+.search-box-after {
+    background-image: url(../images/search-bg.png) !important;
+    background-repeat: repeat-x;
+    background-size:contain;
+    background-position-y:bottom;
+    background-position-x: center;
+    width: 60vw;
+    height: 30px;
+    margin: 2vh auto;
+    font-family: Roboto, 'sans-serif';
+    text-transform: uppercase;
+    font-size:medium;
+    text-align: center;
+    border-radius: 50px;
+}
 
-
-#search-box:focus-visible {
+.search-box-before:focus-visible {
     outline: none;
 }
 
-#search-box::placeholder {
+.search-box-after:focus-visible {
+    outline: none;
+}
+
+.search-box-before::placeholder {
     font-family: Roboto, 'sans-serif';
     text-transform: uppercase;
     color: grey;
-    font-size: min(5vw, 40px);
+    font-size:calc(10px + 1.5vw);
     text-align: center;
     margin: auto;
 }
 
-#search-results {
+.search-box-after::placeholder {
+    font-family: Roboto, 'sans-serif';
+    text-transform: uppercase;
+    color: grey;
+    font-size:medium;
+    text-align: center;
+    margin: auto;
+}
+
+.map {
+    width: 100vw;
+    height: 450px;
+}
+
+.search-results-after {
     border-radius: 16px;
     margin: 0 auto!important;
 }
@@ -255,10 +294,12 @@ html, body {
 
 .about-heading {
     text-align: center;
-    font-size: min(5vw, 40px);
+    font-size:calc(20px + 1vw);
     margin: 2vh auto 2vh auto;
     background-color: rgb(255 255 255 / 85%);
     border-radius: 20px;
+    width: fit-content;
+    padding: inherit;;
 }
 
 .about-content {
@@ -269,7 +310,7 @@ html, body {
     margin-top: 4vh;
     margin-bottom: 2vh;
     text-align: center;
-    font-size: x-large;
+    font-size:calc(10px + 1.5vw);
 }
 
 #footer {
@@ -329,9 +370,4 @@ html, body {
     margin-bottom: 5px;
     min-width: 74%;
     min-height: 40%;
-}
-
-#map {
-    width: 100vw;
-    height: 450px;
 }
