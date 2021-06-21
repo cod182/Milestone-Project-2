@@ -19,7 +19,7 @@ A deployed link to the site can be found [here](https://cod182.github.io/Milesto
 
 The end user is someone who is looking for a campsite to stay at, near a specific location. The site will be aimed at the anyone looking to travel within the UK. The site will mainly be accessed on mobile/tablet devices due to ease of acces while travelling but will also be disgned for desktop.
 
-The end user will want to be able to find their nearest campsite quickly and get informatino on it. All information will need to be clearly displayed and easy to read. The colour scheme of the site will be bright with splashes of colour matching a wild/nature theme.
+The end user will want to be able to find their nearest campsite quickly and get informatino on it. All information will need to be clearly displayed and easy to read. 
 
 ## Strategy
 
@@ -41,33 +41,50 @@ The business vision is to help people locate an appropriate campsite to book whe
 
 ## Scope
 
+- The site will include an about section detailing what the site does and what a user can gain from it.
+- It will be easy to enact a search and read the results.
 
 
 ## Structure
 
-
+- The site will be simply laid out and minimalistic, only covering one page.
+- Extra information will be displayed in modals when a user clicks on the relevant link.
+- The dynamic will be a map and a search reults section.
+- Extra informatino from search results will be displayed in a modal.
+- The page will flow as follows: Navigation bar, greeting search input, about section.
+- Once a search is run, the greeting seach input will shrink and move higher up the page being replace with a full width map. A search results section will then display below the map and the about section below that.
+- The extra information on the search reults will be displayed in a modal when clicked on.
 
 ## Skeleton
 
 ### Wireframes
 
-- [XS >576px](assets/images/wireframes/_576px.png)
-- [SM ≥616px](assets/images/wireframes/≥616.png)
-- [MD ≥768px](assets/images/wireframes/≥616.png)
-- [LG ≥992px](assets/images/wireframes/≥992px.png)
-- [XXL ≥1400px](assets/images/wireframes/≥1440px.png)
+- [Mobile >576px](assets/images/wireframes/_576px.png)
+- [Mobile ≥616px](assets/images/wireframes/≥616.png)
+- [Tablet ≥768px](assets/images/wireframes/≥616.png)
+- [Desktop ≥992px](assets/images/wireframes/≥992px.png)
+- [Desktop ≥1400px](assets/images/wireframes/≥1440px.png)
 
 
 ## Surface
 
+The site will be a single page with dynamic content
 
 ### Home
 
-
+The user will be presented with a navagation bar and a searc box greeting on initial load. Futhur down the page will be an about section.
+Once a user enacts a search, the search box will shrink and move to the top of the page with a full width map replacing it, showing relevant map location.
+Below the map a search reults section will appear, giving limited information on each of the results shown on the map.
+When a search results is clicked on, a more information modal will appear.
 
 
 ## Visual Design
 	
+The colour scheme of the site will be bright with splashes of colour matching a wild/nature theme.
+
+![Preivew](assets/images/wireframes/color-scheme.png)
+
+The fonts to be user are roboto
 
 ## Features
 
@@ -107,6 +124,7 @@ The project is hosted in GitHub and built in GitPod.
 
 The desployed site is hosted on GitHub Pages and can be viewd here : https://cod182.github.io/Milestone-Project-2/
 This was executed by:
+- Go to https://github.com/cod182
 - Got to the Milestone-project-2 Repo
 - Clicking on Settings
 - Clicking on Pages
