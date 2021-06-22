@@ -4,18 +4,24 @@ const hereClientId = 'viVz45yDq8PgWQBJT5fE';
 const hereAccessKeyId = 'Xd0fC9GEvWMZ6Kq4DVH3gQ';
 const hereAccessKeySecret = '9LLdVKvpXrRoxTYD251yXbUBjmf5bRRcDlZdkDPqSoNvaq3QN5-r8dh5EON99cLD9g538k7Cz3cOA0UVOE9mkA';
 const hereTokenEndpointUrl = 'https://account.api.here.com/oauth2/token';
-const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDAwODIxOCwiZXhwIjoxNjI0MDk0NjE4LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLnRxX0xZdmUwejUxd1NMdm03RnFWSkEua09KZlk3Qy13SmJfQ3N2c2VLQzREcWh5c1VUdjdPbUJwOVA3eW5YRld1TE1qbUNkbDNyVDZnM2tRRWFrNHlZX1JqbG9XOEZGb1ctSkRXY3I1dnhkLWNibUYyU1hEZ1dOc2dzc3hjcFo2RGhodFFIZWdDT21SVXFBTU9Id2JoRHgzb01NZXdibUwtRkRGeGJWR0trLWpRLldkaUhhbk93VUN5OFh0RlB1NF8yc0xRZUNnNzNfZDk1OGVmcktVQS1pQ0U.uL6Lh5yTLJG8AHNUcAZzwWAH14Yvx4ys854SHM6FDFXPen2Nyykfgj-Rx0mLqU6nRr2waiFa6G3lYCm-VrigUtJrmdZziZl4OK_OpLBCCftyFTgBE9ZN1oeTdwb4m9uACAyb627Dvbx75FwbOZh_Saw1aN4KfXkAxN9n9hErPbQpGK1-jCQcw0Fi1lPHcTk9GvIzmnRveiQqJmx3sEDLG5ChQD1enj-R9tiMgpluevoXGDglkgb0nCFUXCHIkBs5Mkc3YI-y2dZc_iXByiZzkSdirJ8ML5bETrzsHHP3s52WLPkdKMNt9xYep3U9Q8-wjNyq0PjmeUx8iMgkJndZFA';
+const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDM1MDU0NSwiZXhwIjoxNjI0NDM2OTQ1LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLmVkRHBEQmVrWGFPR1lub19XM2xlOEEuS3dmOTc0WVVvMVh2bUVUX3AtZXVzeE4xbEtwaVlzSjBpSVg0RXVxTko5cHlsYmZET2hEcFZQSjRhYlNva2E0ZlhLck9kd0hFTnlHMEtuOE9QMDRrN2pIU2dSVWg0MVRqaTlxRkFnTHE4VzhoRlFXNktNWDJCQklxV0dXT0l5V1QxWWpLeG82YW1xSjhrQUhQXzh6TkNnLi1kMXotOGFVNHpBeF85WVllUXVBSjlmVUYzU2kybXlhLW42UWhoeHU4dGM.qikQJdiCU6jDIhMDdkmMheD2hB94Y9RXRruFuemw8ZMHgGEVbezRJgi4iQ-VE2l0Ob7Ur1cotVRyW9FYEEZd1PLciY8gOv4UnQY4013apsV-PST6ZHMOsekCRimOv8Jj10aXIv3SGt6v2O5u1vOYJeGtV0lxFRMp0_-bD1LWo8cjWoj_oUgpnSA84LfAndJcBi2iFJL036O9Jjh2f_1D9dzAXpSh0fL1iblsfGDilaNVP0OwpVKXXG7mMHHeszKpA-3oYCs265x68XADJjVmWy_nLh15lMHc5AM9ef-ga0q8CNV2-Acd74-5fmvE8W5FPrjGRc8Vhfgmmp9ealGpZw';
 
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
 const mapContainer = document.getElementById('map-container')
 const mapContain = document.getElementById('map');
 const resultsContain = document.getElementById('search-results');
+let currentSearch = [];
+let markerLocations = [];
 let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
-let runMap = true;
+let runMap = true; //If true the map is allowed to run
 
+window.onload = getBearer()
 
+function getBearer() {
+    
+};
 
 
 //When enter is pressed, the search box shrinks, the map is added and getData runs
@@ -25,9 +31,9 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
             classChange(); //Run function to add classed
             firstTime = false;
         };
-        searchLatLng = []; //Set array to empty
-        resultsContain.innerHTML = ""; //Set String empty
-        mapContainer.innerHTML = ""; //Set String empty
+        searchLatLng = []; //Set array to empty each time function run
+        resultsContain.innerHTML = ""; //Set String empty each time function run
+        mapContainer.innerHTML = ""; //Set String empty each time function run
         getData(event) //Run function to get search results
     }
     
@@ -39,46 +45,18 @@ function classChange(){
     searchBox.classList.add('search-box-after'); //Add class to searchBox
     greetSec.classList.remove('greeting-box-before'); //Remove class from greetSec
     greetSec.classList.add('greeting-box-after'); //Add class to greetSec
-    // mapContain.classList.add('map'); //Add class to mapContain
     resultsContain.classList.add('search-results-after'); // Adds the class to the search results section
 
-}
-
-//Initilisting the Here Map in section map
-function addMapEl() {
-    let mapDiv = document.createElement('div'); //Create a new div called resultDiv
-    mapContainer.appendChild(mapDiv); //Appends resultDiv as a child of resultsContain
-    mapDiv.id ='map';
-    mapDiv.classList.add('map');
-    
-
-    const platform = new H.service.Platform({ //New instance of Here Map
-        apikey: hereApiKey //setting API key
-      });
-      const defaultLayers = platform.createDefaultLayers();
-      const map = new H.Map(document.getElementById('map'),
-        defaultLayers.vector.normal.map,{
-        center: {lat:50, lng:5},
-        zoom: 4,
-        pixelRatio: window.devicePixelRatio || 1
-      });
-      window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
-      const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-      const ui = H.ui.UI.createDefault(map, defaultLayers);
-
-      moveMapToLocation(map)
 };
 
-
-// Boiler Plate Code created with postman.co
 function getData(){
     const search = searchBox.value; //Gets the value of the search
-    getLatLng(search);
+    getLatLng(search, getCoords);
 };
 
 
 // Get the Latitude and Londitude of the search
-function getLatLng(search){
+function getLatLng(search, cb){
     const urlGeo = 'https://geocode.search.hereapi.com/v1/geocode?q=';
     const urlComp = urlGeo + search + '&in=countryCode:GBR'; //combining the api url with the search term and limiting to GBR
     
@@ -93,7 +71,7 @@ function getLatLng(search){
             console.log(xhr.status);
             console.log(JSON.parse(xhr.responseText));
             const data = JSON.parse(xhr.responseText);
-            getCoords(data);
+            cb(data); //Call back to getCoords
             };
     };
     xhr.send();
@@ -106,13 +84,12 @@ function getCoords(data) {
     searchLatLng.push(lat);
     searchLatLng.push(lng);
     coords = searchLatLng.toString();
-    discoverSearch(coords); //run discover function taking coords
-    addMapEl()
+    discoverSearch(coords, addResults, addMapEl); //run discover function taking coords
 };
 
 
 // Runs a search to API using coords
-function discoverSearch(coords) {
+function discoverSearch(coords, cb, cb2) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
     const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=16093';
 
@@ -127,26 +104,29 @@ function discoverSearch(coords) {
         console.log(xhr.status);
         console.log(JSON.parse(xhr.responseText));
         const results = JSON.parse(xhr.responseText).items;
-        addResults(results); //Run function to add results to the search results area
+        cb(results);
+        cb2(results);
         }};
     xhr.send();
 };
 
-function addResults(results, i) {
+function addResults(results) {
+    markerLocations = [];
     results.forEach(function(result){
         addResultToPage(result);
-        console.log(result)
-        addMapMarker(result);
-    })
+    });
 };
 
 function addResultToPage (result) {
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
-    resultDiv.classList.add('col-md-4'); //Adds the class to the div
+    resultDiv.classList.add('col-lg-4'); //Adds the class to the div
+    resultDiv.classList.add('col-md-6'); //Adds the class to the div
+    resultDiv.classList.add('col-sm-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result); //Gets the distance to location in KM
+    currentSearch = result.position;
 
     resultDiv.innerHTML = `
                 <div class="result-title-container">
@@ -158,7 +138,7 @@ function addResultToPage (result) {
                         <p class="result-label">Distance:</p>
                     </div>
                     <div class="col-9 result-data-container">
-                        <p class="result-data">${distance} Km</p>
+                        <p class="result-data">${distance} Miles</p>
                     </div>
                 </div>
                 <div class="row">
@@ -226,9 +206,38 @@ function getHours(result) {
 //Converts the distance in miles to KM to 1dp and returns it
 function getDistance(result) {
     const rawDist = result.distance
-    const dist = rawDist * 0.001;
+    const distKm = rawDist * 0.001;
+    const dist = distKm / 1.609;
     return dist.toFixed(1);
-}
+};
+
+//Add map div and initilise the Here Map in section map
+function addMapEl(results) {
+    let mapDiv = document.createElement('div'); //Create a new div called resultDiv
+    mapContainer.appendChild(mapDiv); //Appends resultDiv as a child of resultsContain
+    mapDiv.id ='map'; //Add map ID to mapDiv
+    mapDiv.classList.add('map'); //Add map class to mapDiv
+    
+    const platform = new H.service.Platform({ //New instance of Here Map
+        apikey: hereApiKey //setting API key
+      });
+
+      const defaultLayers = platform.createDefaultLayers();
+      const map = new H.Map(document.getElementById('map'), //Here map placed into div with ID map (mapDiv)
+        defaultLayers.vector.normal.map,{
+        center: {lat:50, lng:5},
+        zoom: 4,
+        pixelRatio: window.devicePixelRatio || 1
+      });
+
+      window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
+      const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+      const ui = H.ui.UI.createDefault(map, defaultLayers);
+
+      moveMapToLocation(map); //Run function to move map to searched
+      addMapMarker(map, results)
+};
+
  //Move the center of the map to specified locatioin
 function moveMapToLocation(map){
     const lat = searchLatLng[0].toString(); //sets latitude from searhLatLng array
@@ -239,13 +248,50 @@ function moveMapToLocation(map){
         lng: lng
     });
     map.setZoom(12); //Sets the Zoom level of the map
+    const SearchLocation = new H.map.Marker({lat:lat, lng:lng});//Adds a marker where search was
+    map.addObject(SearchLocation);
   };
 
-function addMapMarker(result, map) {
-    const lat = result.position.lat;
-    const lng = result.position.lng;
-    console.log(map, lat)
+function addMapMarker(map, results) {
+    results.forEach(function(result){
+        const lat = result.position.lat;
+        const lng = result.position.lng;
 
-    const marker = new H.map.Marker({lat:lat, lng:lng});
-    // map.addObject(marker);
-}
+        var outerElement = document.createElement('div'),
+            innerElement = document.createElement('div');
+
+    
+        outerElement.appendChild(innerElement);
+    
+        // Add text to the DOM element
+        innerElement.innerHTML = `<img src="assets/images/location-icon-32.png">`;
+    
+        function changeOpacity(evt) {
+        evt.target.style.opacity = 0.6;
+        };
+    
+        function changeOpacityToOne(evt) {
+        evt.target.style.opacity = 1;
+        };
+  
+        //create dom icon and add/remove opacity listeners
+        var domIcon = new H.map.DomIcon(outerElement, {
+        // the function is called every time marker enters the viewport
+        onAttach: function(clonedElement, domIcon, domMarker) {
+            clonedElement.addEventListener('mouseover', changeOpacity);
+            clonedElement.addEventListener('mouseout', changeOpacityToOne);
+        },
+        // the function is called every time marker leaves the viewport
+        onDetach: function(clonedElement, domIcon, domMarker) {
+            clonedElement.removeEventListener('mouseover', changeOpacity);
+            clonedElement.removeEventListener('mouseout', changeOpacityToOne);
+        }
+        });
+
+        const locationMarker = new H.map.DomMarker({lat:lat, lng:lng}, {
+            icon: domIcon
+          });
+        map.addObject(locationMarker);
+    });
+    
+};
