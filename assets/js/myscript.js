@@ -247,7 +247,7 @@ function moveMapToLocation(map){
         lat: lat, 
         lng: lng
     });
-    map.setZoom(12); //Sets the Zoom level of the map
+    map.setZoom(10); //Sets the Zoom level of the map
     const SearchLocation = new H.map.Marker({lat:lat, lng:lng});//Adds a marker where search was
     map.addObject(SearchLocation);
   };
@@ -295,12 +295,19 @@ function addMapMarker(map, results, ui) {
         const phone = getPhone (result);
 
         locationMarker.setData(`
-        <p class="result-data result-address">${result.title}</p>
-        <p class="result-data result-address">${result.address.district}</p>
-        <p class="result-data result-address">${result.address.county}</p>
-        <p class="result-data">${result.address.postalCode}</p>
-        <p class="result-data">${phone}</p>
-
+        <div class="col-12">
+            <div class="col-12">
+                <div class="row">
+                <div class="col-12 result-data-container">
+                    <p class="result-address"><b>${result.title}</b></p>
+                    <p class="result-address">${result.address.district}</p>
+                    <p class="result-address">${result.address.county}</p>
+                    <p class="">${result.address.postalCode}</p>
+                    <p class="">${phone}</p>
+                    </div>
+                </div>
+            </div> 
+        </div>
         `);
         locationMarker.addEventListener('tap', event => {
             const bubble = new H.ui.InfoBubble(
@@ -314,6 +321,4 @@ function addMapMarker(map, results, ui) {
 
         map.addObject(locationMarker);
     });
-    
-    
 };
