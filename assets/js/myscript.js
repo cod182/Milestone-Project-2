@@ -4,7 +4,7 @@ const hereClientId = 'viVz45yDq8PgWQBJT5fE';
 const hereAccessKeyId = 'Xd0fC9GEvWMZ6Kq4DVH3gQ';
 const hereAccessKeySecret = '9LLdVKvpXrRoxTYD251yXbUBjmf5bRRcDlZdkDPqSoNvaq3QN5-r8dh5EON99cLD9g538k7Cz3cOA0UVOE9mkA';
 const hereTokenEndpointUrl = 'https://account.api.here.com/oauth2/token';
-const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDM1MDU0NSwiZXhwIjoxNjI0NDM2OTQ1LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLmVkRHBEQmVrWGFPR1lub19XM2xlOEEuS3dmOTc0WVVvMVh2bUVUX3AtZXVzeE4xbEtwaVlzSjBpSVg0RXVxTko5cHlsYmZET2hEcFZQSjRhYlNva2E0ZlhLck9kd0hFTnlHMEtuOE9QMDRrN2pIU2dSVWg0MVRqaTlxRkFnTHE4VzhoRlFXNktNWDJCQklxV0dXT0l5V1QxWWpLeG82YW1xSjhrQUhQXzh6TkNnLi1kMXotOGFVNHpBeF85WVllUXVBSjlmVUYzU2kybXlhLW42UWhoeHU4dGM.qikQJdiCU6jDIhMDdkmMheD2hB94Y9RXRruFuemw8ZMHgGEVbezRJgi4iQ-VE2l0Ob7Ur1cotVRyW9FYEEZd1PLciY8gOv4UnQY4013apsV-PST6ZHMOsekCRimOv8Jj10aXIv3SGt6v2O5u1vOYJeGtV0lxFRMp0_-bD1LWo8cjWoj_oUgpnSA84LfAndJcBi2iFJL036O9Jjh2f_1D9dzAXpSh0fL1iblsfGDilaNVP0OwpVKXXG7mMHHeszKpA-3oYCs265x68XADJjVmWy_nLh15lMHc5AM9ef-ga0q8CNV2-Acd74-5fmvE8W5FPrjGRc8Vhfgmmp9ealGpZw';
+const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDQzODgzNCwiZXhwIjoxNjI0NTI1MjM0LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLllfTDlqYmV5dDdOOVo2OWhMNkk4N2cuMmF5STBlOXRMMEZHSWtBaUM5dDExajAtVVVOVFdxNzdmMVFpVFJEWjRqM1NFM2xfQXpUdE9FRDdYb2FMWWpyZ0FvU0RLRzNWMVhWZEFCd3JpRDZYQzhTVjlUem5JaUZPTFhydUFia29OX3NBZ3BFNGRhb1RjOGZ5MzlLa2hRNENKQ0hiaGsyTHhpVVlkd200bjZIeHJRLlJXQTR0VDJQYzBGczJacnppYTN0REVERXlhZ1hjdWdUS3BBSVExaWRQMWM.Ibt4j6kQ3L52sASZ8-93Ot7Il_3--w5ncWJ3F5i9yBh7-x_4jkupCm9rd1b6yLm7U0Z_DP_MZY3k-VwzOdzlHTigqXccG1mKCHdVqxn-lQHXtGRVeqWbGeYyHjdBTmqc9zcsW2er43zANeJOw-oFpRZjGBz5L4WEENpxCPMxBf08jQ-BJY4nrueIeh62bl5HGoTLxTXZyQ1JgPr6I0Se2q5qfSr7ubOUV6RX8YR2qd9OJz3vODOtXMJFGAIw9NU7WwSpjvYL1R4j5BpWeNSgn8YGUhOHTBSWQxU4OTF3zYI1gGel5j6bM-d0xUXRvp0298ky_CqhRgrUrIWtVRTTUA';
 
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
@@ -34,7 +34,7 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
-        getData(event) //Run function to get search results
+        getSearchData(event) //Run function to get search results
     }
     
 });
@@ -49,7 +49,7 @@ function classChange(){
 
 };
 
-function getData(){
+function getSearchData(){
     const search = searchBox.value; //Gets the value of the search
     getLatLng(search, getCoords);
 };
@@ -235,7 +235,7 @@ function addMapEl(results) {
       const ui = H.ui.UI.createDefault(map, defaultLayers);
 
       moveMapToLocation(map); //Run function to move map to searched
-      addMapMarker(map, results)
+      addMapMarker(map, results, ui)
 };
 
  //Move the center of the map to specified locatioin
@@ -252,7 +252,8 @@ function moveMapToLocation(map){
     map.addObject(SearchLocation);
   };
 
-function addMapMarker(map, results) {
+  // Adds markers for each of the discovered search location
+function addMapMarker(map, results, ui) {
     results.forEach(function(result){
         const lat = result.position.lat;
         const lng = result.position.lng;
@@ -260,10 +261,9 @@ function addMapMarker(map, results) {
         var outerElement = document.createElement('div'),
             innerElement = document.createElement('div');
 
-    
         outerElement.appendChild(innerElement);
     
-        // Add text to the DOM element
+        // Add image to the DOM element
         innerElement.innerHTML = `<img src="assets/images/location-icon-32.png">`;
     
         function changeOpacity(evt) {
@@ -291,7 +291,29 @@ function addMapMarker(map, results) {
         const locationMarker = new H.map.DomMarker({lat:lat, lng:lng}, {
             icon: domIcon
           });
+
+        const phone = getPhone (result);
+
+        locationMarker.setData(`
+        <p class="result-data result-address">${result.title}</p>
+        <p class="result-data result-address">${result.address.district}</p>
+        <p class="result-data result-address">${result.address.county}</p>
+        <p class="result-data">${result.address.postalCode}</p>
+        <p class="result-data">${phone}</p>
+
+        `);
+        locationMarker.addEventListener('tap', event => {
+            const bubble = new H.ui.InfoBubble(
+                {lat: lat, lng: lng},
+                {
+                    content: event.target.getData()
+                }
+            );
+            ui.addBubble(bubble);
+        },false);
+
         map.addObject(locationMarker);
     });
+    
     
 };
