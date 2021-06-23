@@ -222,20 +222,20 @@ function addMapEl(results) {
         apikey: hereApiKey //setting API key
       });
 
-      const defaultLayers = platform.createDefaultLayers();
-      const map = new H.Map(document.getElementById('map'), //Here map placed into div with ID map (mapDiv)
-        defaultLayers.vector.normal.map,{
-        center: {lat:50, lng:5},
-        zoom: 4,
-        pixelRatio: window.devicePixelRatio || 1
-      });
+    const defaultLayers = platform.createDefaultLayers();
+    const map = new H.Map(document.getElementById('map'), //Here map placed into div with ID map (mapDiv)
+    defaultLayers.vector.normal.map,{
+    center: {lat:50, lng:5},
+    zoom: 4,
+    pixelRatio: window.devicePixelRatio || 1
+    });
 
-      window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
-      const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-      const ui = H.ui.UI.createDefault(map, defaultLayers);
+    window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
+    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    const ui = H.ui.UI.createDefault(map, defaultLayers);
 
-      moveMapToLocation(map); //Run function to move map to searched
-      addMapMarker(map, results, ui)
+    moveMapToLocation(map); //Run function to move map to searched
+    addMapMarker(map, results, ui)
 };
 
  //Move the center of the map to specified locatioin

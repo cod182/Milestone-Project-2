@@ -87,30 +87,15 @@ html, body {
 
 /* Media Queries */
 
-@media screen and (max-width:441px) {
-    #brand-title {
-        font-size:40px !important;
+@media screen and (max-width:991px) {
+    .about-link {
+        margin: 7px 0 0 0 !important;
+        text-align: right;
     }
-}
-
-@media screen and (max-width:392px) {
-    #brand-title {
-        font-size:30px !important;
-    }
-    #logo {
-        height: 70px;
-    }
-}
-
-@media screen and (max-width:327px) {
-    #brand-title {
-        font-size:20px !important;
-    }
-}
-
-@media screen and (max-width:283px) {
-    #logo {
-        height: 50px;
+    
+    .contact-link {
+        margin: 0 !important;
+        text-align: right;
     }
 }
 
@@ -123,7 +108,11 @@ html, body {
 }
 
 #logo {
-    max-height: 90px;
+    max-height: 110px;
+}
+
+#logo-md {
+    max-height: 95px;
 }
 
 #brand-title {
@@ -148,15 +137,29 @@ html, body {
     border-radius: 20px !important;
 }
 
-.navbar-nav {
+/* .navbar-nav {
     background-color: rgb(255 255 255 / 85%);
     border-radius: 20px;
     padding-left: 10px !important;
-}
+} */
 
 .nav-link {
     color: #4fbc6f !important;
     font-size: larger;
+}
+
+.about-link {
+    background-color: rgb(255 255 255 / 85%);
+    border-radius: 20px;
+    padding: 0 5px 0 5px !important;
+    margin: 38px 10px 0 0;
+}
+
+.contact-link {
+    background-color: rgb(255 255 255 / 85%);
+    border-radius: 20px;
+    padding: 0 5px 0 5px !important;
+    margin: 38px 0 0 10px;
 }
 
 .nav-link:hover,
@@ -264,11 +267,12 @@ html, body {
 
 .result-title-container {
     min-height:10vh;
-};
+}
 
 .result-label {
     font-size: min(13px);
     font-weight: bold;
+    margin-bottom: 5px !important;
 }
 
 .result-data-container {
@@ -278,6 +282,7 @@ html, body {
 .result-data {
     font-size: min(12px);
     margin-left: 10px;
+    margin-bottom: 0px !important;
 }
 
 .result-address {
@@ -323,7 +328,7 @@ html, body {
     margin-top: 4vh;
     margin-bottom: 2vh;
     text-align: center;
-    font-size:calc(10px + 1.5vw);
+    /* font-size:calc(10px + 1.5vw); */
 }
 
 #footer {
