@@ -89,13 +89,18 @@ html, body {
 
 @media screen and (max-width:991px) {
     .about-link {
-        margin: 7px 0 0 0 !important;
-        text-align: right;
+        margin: 5px 0 0 0 !important;
+        padding: 0 10px 0 10px !important;
+        width: fit-content;
+        float: right;
     }
     
     .contact-link {
         margin: 0 !important;
         text-align: right;
+        padding: 0 10px 0 10px !important;
+        width: fit-content;
+        float: right;
     }
 }
 
@@ -104,15 +109,15 @@ html, body {
     background-repeat: no-repeat;
     background-size: cover;
     background-position-y:top;
-    height: 14vh;
+    min-height: 120px;
 }
 
 #logo {
-    max-height: 110px;
+    height: 110px;
 }
 
 #logo-md {
-    max-height: 95px;
+    height: 80px;
 }
 
 #brand-title {
@@ -144,19 +149,19 @@ html, body {
 } */
 
 .nav-link {
-    color: #4fbc6f !important;
+    color: white !important;
     font-size: larger;
 }
 
 .about-link {
-    background-color: rgb(255 255 255 / 85%);
+    background-color: #399845;
     border-radius: 20px;
     padding: 0 5px 0 5px !important;
     margin: 38px 10px 0 0;
 }
 
 .contact-link {
-    background-color: rgb(255 255 255 / 85%);
+    background-color: #399845;
     border-radius: 20px;
     padding: 0 5px 0 5px !important;
     margin: 38px 0 0 10px;
