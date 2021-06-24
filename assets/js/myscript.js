@@ -4,25 +4,36 @@ const hereClientId = 'viVz45yDq8PgWQBJT5fE';
 const hereAccessKeyId = 'Xd0fC9GEvWMZ6Kq4DVH3gQ';
 const hereAccessKeySecret = '9LLdVKvpXrRoxTYD251yXbUBjmf5bRRcDlZdkDPqSoNvaq3QN5-r8dh5EON99cLD9g538k7Cz3cOA0UVOE9mkA';
 const hereTokenEndpointUrl = 'https://account.api.here.com/oauth2/token';
-const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDQzODgzNCwiZXhwIjoxNjI0NTI1MjM0LCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLllfTDlqYmV5dDdOOVo2OWhMNkk4N2cuMmF5STBlOXRMMEZHSWtBaUM5dDExajAtVVVOVFdxNzdmMVFpVFJEWjRqM1NFM2xfQXpUdE9FRDdYb2FMWWpyZ0FvU0RLRzNWMVhWZEFCd3JpRDZYQzhTVjlUem5JaUZPTFhydUFia29OX3NBZ3BFNGRhb1RjOGZ5MzlLa2hRNENKQ0hiaGsyTHhpVVlkd200bjZIeHJRLlJXQTR0VDJQYzBGczJacnppYTN0REVERXlhZ1hjdWdUS3BBSVExaWRQMWM.Ibt4j6kQ3L52sASZ8-93Ot7Il_3--w5ncWJ3F5i9yBh7-x_4jkupCm9rd1b6yLm7U0Z_DP_MZY3k-VwzOdzlHTigqXccG1mKCHdVqxn-lQHXtGRVeqWbGeYyHjdBTmqc9zcsW2er43zANeJOw-oFpRZjGBz5L4WEENpxCPMxBf08jQ-BJY4nrueIeh62bl5HGoTLxTXZyQ1JgPr6I0Se2q5qfSr7ubOUV6RX8YR2qd9OJz3vODOtXMJFGAIw9NU7WwSpjvYL1R4j5BpWeNSgn8YGUhOHTBSWQxU4OTF3zYI1gGel5j6bM-d0xUXRvp0298ky_CqhRgrUrIWtVRTTUA';
+const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDUyNTg4MCwiZXhwIjoxNjI0NjEyMjgwLCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLks3VjkwWkJmbVdVSjJDYk1KemNzQVEuOVZWaThSdUE4OHJCNkx0NFR6N3ZOVHNQcGh0RjEyNTVwVjNPdlo1endoQ3NMLWZYZlV2ZFhFRjQ3eVl6WE5IZ3liODNvS1RCNlctdFZORVNHNmxUdjZpZVdCeS0xUW9WUjIyZWpWb1pkZEFJOVJuSTB0Q0pFeXVCOFh4clh1dV90MjQwUTVISGlIUUg1Y1ZFNTdvRHV3LnVDMDNBcVZaelZXLUtXU3VpNmswZTU4aWVFbktNMkJJeF9pRV9GMDNHSVU.DVJtUa0pRAP2IkG0veL0Y93klLhtcNawoWkIOq__S7iV07Fz1yjwd9Q_eznpkOagLh9GOWzwwLsO7WDLN08zHQEhoHpcztRWpWzxgicUefOOWP3gl9aHoK6KQR8bcLgzO3NYzHbNZvHQns8db5-5YG2kyS1RkGMIb0QQZMbMkz0lJ7JgLABevhyGIU46gvcYA4seH0VJoYo1uy_70NkD6A3ySjjCZeYDYwXIqqaIxA9T65_PLCrRMrxDJBYk0ILSZkcSRs25hX4sVW2El0axqT8dQmMq-DDO5QLXvbythyT0SKCS9w9Gm2JB1Q7jTsedRLs_e9GXn-aJz-1dabvhVw';
 
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
 const mapContainer = document.getElementById('map-container')
 const mapContain = document.getElementById('map');
 const resultsContain = document.getElementById('search-results');
-let currentSearch = [];
-let markerLocations = [];
 let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
-let runMap = true; //If true the map is allowed to run
+let darkToggle = document.getElementById('dark-toggle');
 
-window.onload = getBearer()
+darkToggle.addEventListener('click', function() {
+    if(document.body.className !== '') {
+        removeDarkClasses();
+    } else {
+        addDarkClasses();
+    }
+});
 
-function getBearer() {
-    
+function removeDarkClasses() {
+    document.body.classList.remove('dark');
+    document.body.classList.remove('white-text');
+    searchBox.classList.remove('dark-search');
 };
 
+function addDarkClasses() {
+    document.body.classList.add('dark');
+    document.body.classList.add('white-text');
+    searchBox.classList.add('dark-search');
+};
 
 //When enter is pressed, the search box shrinks, the map is added and getData runs
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
@@ -84,11 +95,11 @@ function getCoords(data) {
     searchLatLng.push(lat);
     searchLatLng.push(lng);
     coords = searchLatLng.toString();
-    discoverSearch(coords, addResults, addMapEl); //run discover function taking coords
+    discoverSearch(coords, addResults, addMapEl); //run discover function taking coords and sttart the mapp adding function
 };
 
-
 // Runs a search to API using coords
+// Callback 1 for addResults function, 2 for AddMapsEL function
 function discoverSearch(coords, cb, cb2) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
     const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=16093';
@@ -111,7 +122,6 @@ function discoverSearch(coords, cb, cb2) {
 };
 
 function addResults(results) {
-    markerLocations = [];
     results.forEach(function(result){
         addResultToPage(result);
     });
@@ -126,13 +136,12 @@ function addResultToPage (result) {
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result); //Gets the distance to location in KM
-    currentSearch = result.position;
 
     resultDiv.innerHTML = `
                 <div class="result-title-container">
                     <h2 class="blue bold result-row">${result.title}</h2>
                 </div>
-            <div class="col-9">
+            <div class="col-9" id="data-text">
                 <div class="row">
                     <div class="col-3 result-row">
                         <p class="result-label">Distance:</p>
@@ -181,7 +190,78 @@ function addResultToPage (result) {
     resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
     };
 
-// Gets the phone numer if it exists, if it doesn't, shows no phone icon
+
+function addMoreInfo(result) {
+    const modalOfInfo = document.body.querySelector('[data-modal-info]');
+    let modalHead = document.createElement('div');
+    modalHead.classList.add('modal-header');
+
+    modalHead.innerHTML = `
+        <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
+        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+    `;
+
+    let modalBody = document.createElement('div');
+    modalBody.classList.add('result-modal');
+    modalBody.classList.add('modal-body');
+
+    modalBody.innerHTML = `
+    <div class="row">
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Address:</p>
+                    </div>
+                    <div class="col-9">
+                      <p class="result-data">123 example street</p>
+                      <p class="result-data">Example city</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Services:</p>
+                    </div>
+                    <div class="col-9">
+                      <p class="result-data">Water, Electric, Waste</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Phone:</p>
+                    </div>
+                    <div class="col-9">
+                      <p class="result-data">02938 273748</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Email:</p>
+                    </div>
+                    <div class="col-9">
+                      <p class="result-data">location@email.com</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Website:</p>
+                    </div>
+                    <div class="col-9">
+                      <p class="result-data">www.location.com</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="weather"></div>
+                </div>
+              </div>
+          </div>
+    `;
+
+    modalOfInfo.appendChild(modalHead);
+    modalOfInfo.appendChild(modalBody);
+};
+ 
+// Gets the phone number if it exists, if it doesn't, shows no phone icon
 function getPhone(result) {
         if(result.contacts) {
             if (result.contacts[0].phone){
@@ -210,6 +290,77 @@ function getDistance(result) {
     const dist = distKm / 1.609;
     return dist.toFixed(1);
 };
+
+//Create Modal
+
+function createInfoModal() {
+    
+    const infoModalContainer = document.getElementById('resultMoreInfo');
+    let infoModal = document.createElement('div');
+    infoModal.classList.add('modal-dialog'); //Adds the class to the div
+    infoModal.classList.add('modal-dialog-centered'); //Adds the class to the div
+
+    infoModal.innerHTML = `
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
+            <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body result-modal">
+            <div class="row">
+                <div class="col-9">
+                <div class="row">
+                    <div class="col-3 result-row">
+                    <p class="result-label">Address:</p>
+                    </div>
+                    <div class="col-9">
+                    <p class="result-data">123 example street</p>
+                    <p class="result-data">Example city</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 result-row">
+                    <p class="result-label">Services:</p>
+                    </div>
+                    <div class="col-9">
+                    <p class="result-data">Water, Electric, Waste</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 result-row">
+                    <p class="result-label">Phone:</p>
+                    </div>
+                    <div class="col-9">
+                    <p class="result-data">02938 273748</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 result-row">
+                    <p class="result-label">Email:</p>
+                    </div>
+                    <div class="col-9">
+                    <p class="result-data">location@email.com</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 result-row">
+                    <p class="result-label">Website:</p>
+                    </div>
+                    <div class="col-9">
+                    <p class="result-data">www.location.com</p>
+                    </div>
+                </div>
+                </div>
+                <div class="col-3">
+                <div class="weather"></div>
+                </div>
+            </div>
+        </div>
+        </div>
+    `;
+
+    infoModalContainer.appendChild(infoModal);
+}
 
 //Add map div and initilise the Here Map in section map
 function addMapEl(results) {
