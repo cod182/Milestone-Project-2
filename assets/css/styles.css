@@ -156,22 +156,22 @@ html, body {
 .about-link {
     background-color: #399845;
     border-radius: 20px;
-    padding: 0 5px 0 5px !important;
-    margin: 38px 10px 0 0;
+    padding: 0 10px 0 10px !important;
+    margin: 43px 10px 0 0;
 }
 
 .contact-link {
     background-color: #399845;
     border-radius: 20px;
-    padding: 0 5px 0 5px !important;
-    margin: 38px 0 0 10px;
+    padding: 0 10px 0 10px !important;
+    margin: 43px 0 0 10px;
 }
 
 .nav-link:hover,
 .nav-link:focus,
 .nav-link:active,
 .nav-link:active:focus {
-    color: black !important;
+    color: #00BAFE !important;
 }
 
 .greeting-box-before {

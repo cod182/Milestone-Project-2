@@ -174,7 +174,7 @@ function addResultToPage (result) {
             </div>
                 <div class="row">
                 <div class="col-md-5 result-row">
-                    <button class="btn btn-blue btn-info" data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
+                    <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
                 </div>
                 </div>
     `;
