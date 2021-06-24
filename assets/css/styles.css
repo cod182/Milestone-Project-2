@@ -277,8 +277,8 @@ html, body {
     background-color: gray !important;
 }
 
-.dark-search:placeholder {
-    color: green !important;
+.dark-search::placeholder {
+    color: white !important;
 
 }
 
