@@ -9,26 +9,29 @@ const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQ
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
 const mapContainer = document.getElementById('map-container')
+let radius = '16093';
 const mapContain = document.getElementById('map');
 const resultsContain = document.getElementById('search-results');
 let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
+let firstRadius = true;
 let darkToggle = document.getElementById('dark-toggle');
 
-darkToggle.addEventListener('click', function() {
-    if(document.body.className !== '') {
-        removeDarkClasses();
-    } else {
-        addDarkClasses();
+//Dark mode toggle
+darkToggle.addEventListener('click', function() { //listens for dark button clicked
+    if(document.body.className !== '') { //if body has a class
+        removeDarkClasses(); //remove classed
+    } else {    // if body has no class
+        addDarkClasses(); // add classes
     }
 });
-
+// Classes to remove for Light mode
 function removeDarkClasses() {
     document.body.classList.remove('dark');
     document.body.classList.remove('white-text');
     searchBox.classList.remove('dark-search');
 };
-
+//Classes to add for Dark mode
 function addDarkClasses() {
     document.body.classList.add('dark');
     document.body.classList.add('white-text');
@@ -41,7 +44,11 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
         if (firstTime) { // If this this the first run, run the below code
             classChange(); //Run function to add classed
             firstTime = false;
+        } else {
+            document.getElementById('radius-value').innerHTML = '10';
+            document.getElementById('radius').value = '16093';
         };
+        radius = '16093';
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
@@ -95,14 +102,14 @@ function getCoords(data) {
     searchLatLng.push(lat);
     searchLatLng.push(lng);
     coords = searchLatLng.toString();
-    discoverSearch(coords, addResults, addMapEl); //run discover function taking coords and sttart the mapp adding function
+    discoverSearch(coords, addResults, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
 };
 
 // Runs a search to API using coords
 // Callback 1 for addResults function, 2 for AddMapsEL function
 function discoverSearch(coords, cb, cb2) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
-    const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=16093';
+    const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=' + radius + '&limit=100';
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url);
@@ -115,8 +122,8 @@ function discoverSearch(coords, cb, cb2) {
         console.log(xhr.status);
         console.log(JSON.parse(xhr.responseText));
         const results = JSON.parse(xhr.responseText).items;
-        cb(results);
-        cb2(results);
+        cb(results); // Callback for addReults function
+        cb2(results); // Callbakc for addMapEl function
         }};
     xhr.send();
 };
@@ -135,8 +142,9 @@ function addResultToPage (result) {
     resultDiv.classList.add('result-box'); //Adds the class to the div
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
-    const distance = getDistance(result); //Gets the distance to location in KM
-
+    const distance = getDistance(result.distance); //Gets the distance to location in KM
+    makeRadius();
+    
     resultDiv.innerHTML = `
                 <div class="result-title-container">
                     <h2 class="blue bold result-row">${result.title}</h2>
@@ -284,11 +292,10 @@ function getHours(result) {
 };
 
 //Converts the distance in miles to KM to 1dp and returns it
-function getDistance(result) {
-    const rawDist = result.distance
-    const distKm = rawDist * 0.001;
-    const dist = distKm / 1.609;
-    return dist.toFixed(1);
+function getDistance(mDist) {
+    const distKm = mDist * 0.001; 
+    const dist = distKm / 1.609; //converts KM to Miles
+    return dist.toFixed(1); //Returns distance is miles to 1 decimal place
 };
 
 //Create Modal
@@ -473,3 +480,44 @@ function addMapMarker(map, results, ui) {
         map.addObject(locationMarker);
     });
 };
+
+//Create the radius div and set the innerHTMl
+function makeRadius() {
+    if (firstRadius) { //if frist radius is true (First Run)
+        let radiusArea = document.createElement('div');// Create new Div
+        radiusArea.classList.add('row');
+        radiusArea.innerHTML = `
+            <div class="col-12">
+                <div id="radius-container">
+                    <label for="radius">Radius: </label>
+                    <input type="range" min="1" max="80490" value="16093" class="slider" id="radius">
+                    <p class="d-inline" id="radius-val"><span id="radius-value">10</span> Miles</p>
+                    <button id="radius-update" class="btn btn-info btn-radius">Update</button>
+                </div>
+            </div>
+        `;
+
+        greetSec.appendChild(radiusArea);
+        let rval = document.getElementById('radius-value');
+        let radiusSlide = document.getElementById('radius');
+        let radiusVal = document.getElementById('radius-val');
+
+        radiusSlide.oninput = function() { //if the
+            let mls = getDistance(radiusSlide.value);
+            rval.innerHTML = mls;
+        };
+        firstRadius = false; //Set the variable to false
+        let radiusUpdateBtn = document.getElementById('radius-update');
+        radiusUpdateBtn.addEventListener('click', function () {
+        searchLatLng = []; //Set array to empty each time function run
+        resultsContain.innerHTML = ""; //Set String empty each time function run
+        mapContainer.innerHTML = ""; //Set String empty each time function run
+        radius = radiusSlide.value;
+        getSearchData(searchBox.value) //Run function to get search results
+    });
+    };
+
+    
+};
+
+
