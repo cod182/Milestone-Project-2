@@ -33,7 +33,7 @@
               </button>
               <div class="collapse navbar-collapse m-auto" id="navbarSupportedContent">
                 <ul class="navbar-nav m-auto">
-                  <li class="nav-item">
+                  <li class="about-item">
                     <a class="nav-link green bold about-link" href="#about">About</a>
                   </li>
                   <li><a class="d-none d-lg-inline" href="/index.html"><img id="logo" src="assets/images/logo.png" alt="CampZilla Logo"></a>
@@ -42,10 +42,13 @@
                     <a href="" class="nav-link green bold contact-link" data-bs-toggle="modal" data-bs-target="#contactUsModal">Contact Us</a>
                   </li>
                   <li>
-                    <label class="switch dark-mode-switch">
+                    <span class="dark-mode-switch d-inline" id="dark-toggle"><p class="d-inline d-lg-none bold white">Dark Mode <i class="fas fa-long-arrow-alt-right"></i>
+
+                    </p><i class="dark-box bold far fa-sun"></i></span>
+                    <!-- <label class="switch dark-mode-switch" tabindex="-1">
                       <input id="dark-toggle" type="checkbox">
                       <span class="slider round"></span>
-                    </label>
+                    </label> -->
                   </li>
               </div>
             </div>
@@ -63,48 +66,6 @@
 
     <section class="container-fluid">
       <div id="search-results" class="row m-0">
-        <!--
-          <div class="col-md-4 result-box">
-            <div class="row">
-              <h2 class="result-title blue bold result-row">Location</h2>
-              <div class="col-9">
-                <div class="row">
-                  <div class="col-3 result-row">
-                    <p class="result-label">Address:</p>
-                  </div>
-                  <div class="col-9">
-                    <p class="result-data">123 example street</p>
-                    <p class="result-data">Example city</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-3 result-row">
-                    <p class="result-label">Services:</p>
-                  </div>
-                  <div class="col-9">
-                    <p class="result-data">Water, Electric, Waste</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-3 result-row">
-                    <p class="result-label">Phone:</p>
-                  </div>
-                  <div class="col-9">
-                    <p class="result-data">02938 273748</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="weather"></div>
-              </div>
-                <div class="row">
-                  <div class="col-md-5 result-row">
-                    <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
-                  </div>
-                </div>
-            </div>
-          </div>
-              -->
       </div>
     </section>
 
