@@ -8,6 +8,7 @@
     <link rel="icon" href="assets/images/favicon/logo-16.png" type="image/png" sizes="16x16">
     <link rel="icon" href="assets/images/favicon/logo-32.png" type="image/png" sizes="32x32">
     <link rel="icon" href="assets/images/favicon/logo-96.png" type="image/png" sizes="96x96">
+    <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <script defer src="assets/js/myscript.js"></script>
@@ -24,21 +25,30 @@
       <!-- Bootstrap Nav Bar as a starting point -->
         <nav class="navbar navbar-expand-lg navbar-light ">
             <div class="container-fluid">
-              <a class="navbar-brand" href="#"><img id="logo" src="assets/images/logo.png" alt="CampZilla Logo"></a>
-              <h1 id="brand-title" class="light-blue">CampZilla</h1>
+              <a class="d-md-inline d-lg-none" href="/index.html"><img id="logo-md" src="assets/images/logo.png" alt="CampZilla Logo"></a>
+
+              <!-- <h1 id="brand-title" class="light-blue">CampZilla</h1> -->
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link green bold" aria-current="page" href="#">Home</a>
+              <div class="collapse navbar-collapse m-auto" id="navbarSupportedContent">
+                <ul class="navbar-nav m-auto">
+                  <li class="about-item">
+                    <a class="nav-link green bold about-link" href="#about">About</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link green bold" href="#about">About</a>
+                  <li><a class="d-none d-lg-inline" href="/index.html"><img id="logo" src="assets/images/logo.png" alt="CampZilla Logo"></a>
                   </li>
                   <li>
-                    <a href="" class="nav-link green bold" data-bs-toggle="modal" data-bs-target="#contactUsModal">Contact Us</a>
+                    <a href="" class="nav-link green bold contact-link" data-bs-toggle="modal" data-bs-target="#contactUsModal">Contact Us</a>
+                  </li>
+                  <li>
+                    <span class="dark-mode-switch d-inline" id="dark-toggle"><p class="d-inline d-lg-none bold white">Dark Mode <i class="fas fa-long-arrow-alt-right"></i>
+
+                    </p><i class="dark-box bold far fa-sun"></i></span>
+                    <!-- <label class="switch dark-mode-switch" tabindex="-1">
+                      <input id="dark-toggle" type="checkbox">
+                      <span class="slider round"></span>
+                    </label> -->
                   </li>
               </div>
             </div>
@@ -52,51 +62,11 @@
             </div>
         </div> 
     </section>
-    <section id="map" class=""></section>
+    <section id="map-container" class=""></section>
 
-    <section id="search-results" class="container-fluid">
-      <!-- <div class="row m-0">
-        <div class="col-md-4 result-box">
-          <div class="row">
-            <h2 class="result-title blue bold result-row">Location</h2>
-            <div class="col-9">
-              <div class="row">
-                <div class="col-3 result-row">
-                  <p class="result-label">Address:</p>
-                </div>
-                <div class="col-9">
-                  <p class="result-data">123 example street</p>
-                  <p class="result-data">Example city</p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-3 result-row">
-                  <p class="result-label">Services:</p>
-                </div>
-                <div class="col-9">
-                  <p class="result-data">Water, Electric, Waste</p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-3 result-row">
-                  <p class="result-label">Phone:</p>
-                </div>
-                <div class="col-9">
-                  <p class="result-data">02938 273748</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="weather"></div>
-            </div>
-              <div class="row">
-                <div class="col-md-5 result-row">
-                  <button class="btn btn-blue btn-info" data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
-                </div>
-              </div>
-          </div>
-        </div>
-      </div> -->
+    <section class="container-fluid">
+      <div id="search-results" class="row m-0">
+      </div>
     </section>
 
     <section id="about">
@@ -170,7 +140,7 @@
     <!-- Result More Info Modal -->
     <div class="modal fade" id="resultMoreInfo" tabindex="-1" aria-labelledby="resultMoreInfoLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content" data-modal-info>
           <div class="modal-header">
               <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
               <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>

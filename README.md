@@ -98,6 +98,10 @@ The fonts to be user are roboto
 
 ## Technoogies used
 
+- HTML5
+- CSS
+- Javascript
+- Here Maps API
 
 # Testing
 
