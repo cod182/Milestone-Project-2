@@ -16,6 +16,7 @@ let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
 let firstRadius = true;
 let darkToggle = document.getElementById('dark-toggle');
+let numOfResults = [];
 
 //Dark mode toggle
 darkToggle.addEventListener('click', function() { //listens for dark button clicked
@@ -49,6 +50,7 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
             document.getElementById('radius').value = '16093';
         };
         radius = '16093';
+        numOfResults = [];
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
@@ -129,6 +131,8 @@ function discoverSearch(coords, cb, cb2) {
 };
 
 function addResults(results) {
+    numOfResults = results.length;
+    makeRadius();
     results.forEach(function(result){
         addResultToPage(result);
     });
@@ -143,7 +147,6 @@ function addResultToPage (result) {
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
-    makeRadius();
     
     resultDiv.innerHTML = `
                 <div class="result-title-container">
@@ -300,74 +303,74 @@ function getDistance(mDist) {
 
 //Create Modal
 
-function createInfoModal() {
+// function createInfoModal() {
     
-    const infoModalContainer = document.getElementById('resultMoreInfo');
-    let infoModal = document.createElement('div');
-    infoModal.classList.add('modal-dialog'); //Adds the class to the div
-    infoModal.classList.add('modal-dialog-centered'); //Adds the class to the div
+//     const infoModalContainer = document.getElementById('resultMoreInfo');
+//     let infoModal = document.createElement('div');
+//     infoModal.classList.add('modal-dialog'); //Adds the class to the div
+//     infoModal.classList.add('modal-dialog-centered'); //Adds the class to the div
 
-    infoModal.innerHTML = `
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
-            <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body result-modal">
-            <div class="row">
-                <div class="col-9">
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Address:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">123 example street</p>
-                    <p class="result-data">Example city</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Services:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">Water, Electric, Waste</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Phone:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">02938 273748</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Email:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">location@email.com</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Website:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">www.location.com</p>
-                    </div>
-                </div>
-                </div>
-                <div class="col-3">
-                <div class="weather"></div>
-                </div>
-            </div>
-        </div>
-        </div>
-    `;
+//     infoModal.innerHTML = `
+//         <div class="modal-content">
+//         <div class="modal-header">
+//             <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
+//             <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+//         </div>
+//         <div class="modal-body result-modal">
+//             <div class="row">
+//                 <div class="col-9">
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Address:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">123 example street</p>
+//                     <p class="result-data">Example city</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Services:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">Water, Electric, Waste</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Phone:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">02938 273748</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Email:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">location@email.com</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Website:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">www.location.com</p>
+//                     </div>
+//                 </div>
+//                 </div>
+//                 <div class="col-3">
+//                 <div class="weather"></div>
+//                 </div>
+//             </div>
+//         </div>
+//         </div>
+//     `;
 
-    infoModalContainer.appendChild(infoModal);
-}
+//     infoModalContainer.appendChild(infoModal);
+// };
 
 //Add map div and initilise the Here Map in section map
 function addMapEl(results) {
@@ -487,37 +490,39 @@ function makeRadius() {
         let radiusArea = document.createElement('div');// Create new Div
         radiusArea.classList.add('row');
         radiusArea.innerHTML = `
-            <div class="col-12">
+            <div class="col-12 gx-0">
                 <div id="radius-container">
                     <label for="radius">Radius: </label>
                     <input type="range" min="1" max="80490" value="16093" class="slider" id="radius">
                     <p class="d-inline" id="radius-val"><span id="radius-value">10</span> Miles</p>
                     <button id="radius-update" class="btn btn-info btn-radius">Update</button>
+                    <p class="d-inline">Results:<span id="num-of-results"></span><span class="small"><em>(Max 100)</em></span?</p>
                 </div>
             </div>
         `;
+        const searchUpperContainer = document.getElementById('search-area-container');
+        searchUpperContainer.prepend(radiusArea);
+        firstRadius = false; //Set the variable to false
 
-        greetSec.appendChild(radiusArea);
         let rval = document.getElementById('radius-value');
         let radiusSlide = document.getElementById('radius');
-        let radiusVal = document.getElementById('radius-val');
 
         radiusSlide.oninput = function() { //if the
             let mls = getDistance(radiusSlide.value);
             rval.innerHTML = mls;
         };
-        firstRadius = false; //Set the variable to false
+
         let radiusUpdateBtn = document.getElementById('radius-update');
+
         radiusUpdateBtn.addEventListener('click', function () {
-        searchLatLng = []; //Set array to empty each time function run
-        resultsContain.innerHTML = ""; //Set String empty each time function run
-        mapContainer.innerHTML = ""; //Set String empty each time function run
-        radius = radiusSlide.value;
-        getSearchData(searchBox.value) //Run function to get search results
-    });
+            searchLatLng = []; //Set array to empty each time function run
+            numRes.innerHTML = [];
+            resultsContain.innerHTML = ""; //Set String empty each time function run
+            mapContainer.innerHTML = ""; //Set String empty each time function run
+            radius = radiusSlide.value;
+            getSearchData(searchBox.value) //Run function to get search results
+        });
     };
-
-    
+    const numRes = document.getElementById('num-of-results');
+    numRes.innerHTML = numOfResults;  
 };
-
-

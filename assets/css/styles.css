@@ -300,6 +300,13 @@ html, body {
 
 #radius-container {
     text-align: center;
+    font-size: 12px;
+    background-color: #0085C5;
+    min-height: 30px;
+    padding: 4px 0;
+    margin: 6px 0;
+    font-family: 'Roboto';
+    font-weight: bold;
 }
 
 /* Slider CSS by w3c */
