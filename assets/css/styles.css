@@ -243,6 +243,20 @@ html, body {
     color: black;
 }
 
+.locate-before {
+    left: 50% !important;
+    position: absolute !important;
+    top: 40vh !important;
+    font-size: large !important;
+}
+
+.locate-after {
+    left: 10vw !important;
+    position: absolute !important;
+    top: 152px !important;
+    font-size: small !important;
+}
+
 #locate:hover,
 #locate:focus,
 #locate:active,
@@ -252,9 +266,8 @@ html, body {
 
 #locate:visited {
     color: #0085C5;
+    min-height: 67px;
 }
-
-
 
 .search-area {
     text-align: center;
@@ -295,7 +308,7 @@ html, body {
     background-color:white;
     width: 60vw;
     height: 30px;
-    margin: 2vh auto;
+    margin: 18px auto;
     font-family: Roboto, 'sans-serif';
     text-transform: uppercase;
     font-size:medium;

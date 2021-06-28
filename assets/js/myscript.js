@@ -99,6 +99,8 @@ function classChange(){
     greetSec.classList.remove('greeting-box-before'); //Remove class from greetSec
     greetSec.classList.add('greeting-box-after'); //Add class to greetSec
     resultsContain.classList.add('search-results-after'); // Adds the class to the search results section
+    locate.classList.remove('locate-before'); //Remove class from locate
+    locate.classList.add('locate-after'); //Add class to locate
 
 };
 
