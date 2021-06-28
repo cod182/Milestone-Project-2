@@ -4,31 +4,35 @@ const hereClientId = 'viVz45yDq8PgWQBJT5fE';
 const hereAccessKeyId = 'Xd0fC9GEvWMZ6Kq4DVH3gQ';
 const hereAccessKeySecret = '9LLdVKvpXrRoxTYD251yXbUBjmf5bRRcDlZdkDPqSoNvaq3QN5-r8dh5EON99cLD9g538k7Cz3cOA0UVOE9mkA';
 const hereTokenEndpointUrl = 'https://account.api.here.com/oauth2/token';
-const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDYxMzY5MywiZXhwIjoxNjI0NzAwMDkzLCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLkpVSjFpc0pMTjYxTnJQRnp0SWZXTEEuME92MlFUNGd5allCLTJ0SmRVXzlvc3hVcG1kSF9ObGNkRTNvNHZTNkdIbVEzMkpYMWNhVndfY3UyUTZQa29aWXJvUXNYMC1pZHBOeEgtZ2IyQkpMR2R4UktXWkVXMGgwSmhsNGNvTkp0eGpiRVgxVnJNeENTdnJuLWY5MmYteDBNaWF3U1JHQUhHR2tCOHFyRThUaVd3LkVlQUFob2tLbmxLYmlyT3drcDVmazBJWGpINVU2TUVTQWRrMjhMbWtwUE0.ZSjV5JVJcjjNm2zWCu8yqR4eFUVYYLKH-P_uwpKgodjTi8P2n6FD3vgG39mWRDqpFAQ1_gtQF2NN3nqoBUAeD5SLZvy8welwuCk4JiiPiyuiJOSoGa9lT7wrwaq6bndS5G21yf0IiouLtlB9EyHnQA6ZoRGdBR17_gV7LEnLtkDA1rt1ks8lHdXEk8wBIXcEwripAe27vfqO7yeFsQkl_P9zKktrqE_VHQfSdd4WJxGX6x7InpNfsutI9V9XqnVeFFfyaotwEoPnYPzZ2ePSNWdVGwX5lu98PLU3yUR0nLPBDTd2NW-EJgt0LaovI6FHfGWJ2-dZcIUbrI8RWyXKfQ';
+const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDg4MDMwMiwiZXhwIjoxNjI0OTY2NzAyLCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLkFodkZldDNjZWlxdVhlYXdHRmpaMncuT2FjTXNtSkU5SlRqWTlrQnlObk9LMnB0a1NCNEJHMDhMZVZfYk1IaFMxY0RYVTJpWWVzdy1NV0E5MWMtbm9vQ21kQUxESUtmR05WVzkteEtKbzNZQzUxcktCMEkzT0cxMlVXbW1UeUNtanp0WjhnRGx4bHBhTnNDLUZ0N2czTGRjb0h2bm4wNXUwUHBPVFdSVHdPV2hBLndlTGxlLVB5anEzeXRTWVJqRGFpeWZjeFJEOWFVci1WdmxxN3MxZm85OUk.ocg06BtxZIX4dsiIaUWjKoKyBAK9LYHY6WK8Nbf4MqeNFXfVG9Ro0JHyfS2b-4f4HyC-0lf9LfirOX1v-wHvg0zFxiQpCH_rrOJ9EVhrIxpB9lGkOyB5RgVF4UAeR_YX-JowexdRgL8aNAIARyC7RJueaHa_7ckbOlfdLCklQrUDQN5nTb9qZx52mJ4LnBVYdIZ247f3lB5qsTRj1AnX_RZd3exwPlLeyCAbQT4PMP6bR1mEz0H5VAOix3ZtEVdriw86Tc6Iu1AVV4tz9B51ShG0yhnQdl4pDaCCqwlYUEOTeV-pxojJ_rW0py_OUTgPValkCC-yMLX9fPfqrVVsQA';
 
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
 const mapContainer = document.getElementById('map-container')
+let radius = '16093';
 const mapContain = document.getElementById('map');
 const resultsContain = document.getElementById('search-results');
 let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
+let firstRadius = true;
 let darkToggle = document.getElementById('dark-toggle');
+let numOfResults = [];
 
-darkToggle.addEventListener('click', function() {
-    if(document.body.className !== '') {
-        removeDarkClasses();
-    } else {
-        addDarkClasses();
+//Dark mode toggle
+darkToggle.addEventListener('click', function() { //listens for dark button clicked
+    if(document.body.className !== '') { //if body has a class
+        removeDarkClasses(); //remove classed
+    } else {    // if body has no class
+        addDarkClasses(); // add classes
     }
 });
-
+// Classes to remove for Light mode
 function removeDarkClasses() {
     document.body.classList.remove('dark');
     document.body.classList.remove('white-text');
     searchBox.classList.remove('dark-search');
 };
-
+//Classes to add for Dark mode
 function addDarkClasses() {
     document.body.classList.add('dark');
     document.body.classList.add('white-text');
@@ -41,7 +45,12 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
         if (firstTime) { // If this this the first run, run the below code
             classChange(); //Run function to add classed
             firstTime = false;
+        } else {
+            document.getElementById('radius-value').innerHTML = '10';
+            document.getElementById('radius').value = '16093';
         };
+        radius = '16093';
+        numOfResults = [];
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
@@ -95,14 +104,14 @@ function getCoords(data) {
     searchLatLng.push(lat);
     searchLatLng.push(lng);
     coords = searchLatLng.toString();
-    discoverSearch(coords, addResults, addMapEl); //run discover function taking coords and sttart the mapp adding function
+    discoverSearch(coords, addResults, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
 };
 
 // Runs a search to API using coords
 // Callback 1 for addResults function, 2 for AddMapsEL function
 function discoverSearch(coords, cb, cb2) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
-    const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=16093';
+    const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=' + radius + '&limit=100';
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url);
@@ -115,13 +124,15 @@ function discoverSearch(coords, cb, cb2) {
         console.log(xhr.status);
         console.log(JSON.parse(xhr.responseText));
         const results = JSON.parse(xhr.responseText).items;
-        cb(results);
-        cb2(results);
+        cb(results); // Callback for addReults function
+        cb2(results); // Callbakc for addMapEl function
         }};
     xhr.send();
 };
 
 function addResults(results) {
+    numOfResults = results.length;
+    makeRadius();
     results.forEach(function(result){
         addResultToPage(result);
     });
@@ -135,8 +146,8 @@ function addResultToPage (result) {
     resultDiv.classList.add('result-box'); //Adds the class to the div
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
-    const distance = getDistance(result); //Gets the distance to location in KM
-
+    const distance = getDistance(result.distance); //Gets the distance to location in KM
+    
     resultDiv.innerHTML = `
                 <div class="result-title-container">
                     <h2 class="blue bold result-row">${result.title}</h2>
@@ -284,83 +295,82 @@ function getHours(result) {
 };
 
 //Converts the distance in miles to KM to 1dp and returns it
-function getDistance(result) {
-    const rawDist = result.distance
-    const distKm = rawDist * 0.001;
-    const dist = distKm / 1.609;
-    return dist.toFixed(1);
+function getDistance(mDist) {
+    const distKm = mDist * 0.001; 
+    const dist = distKm / 1.609; //converts KM to Miles
+    return dist.toFixed(1); //Returns distance is miles to 1 decimal place
 };
 
 //Create Modal
 
-function createInfoModal() {
+// function createInfoModal() {
     
-    const infoModalContainer = document.getElementById('resultMoreInfo');
-    let infoModal = document.createElement('div');
-    infoModal.classList.add('modal-dialog'); //Adds the class to the div
-    infoModal.classList.add('modal-dialog-centered'); //Adds the class to the div
+//     const infoModalContainer = document.getElementById('resultMoreInfo');
+//     let infoModal = document.createElement('div');
+//     infoModal.classList.add('modal-dialog'); //Adds the class to the div
+//     infoModal.classList.add('modal-dialog-centered'); //Adds the class to the div
 
-    infoModal.innerHTML = `
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
-            <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body result-modal">
-            <div class="row">
-                <div class="col-9">
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Address:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">123 example street</p>
-                    <p class="result-data">Example city</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Services:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">Water, Electric, Waste</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Phone:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">02938 273748</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Email:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">location@email.com</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                    <p class="result-label">Website:</p>
-                    </div>
-                    <div class="col-9">
-                    <p class="result-data">www.location.com</p>
-                    </div>
-                </div>
-                </div>
-                <div class="col-3">
-                <div class="weather"></div>
-                </div>
-            </div>
-        </div>
-        </div>
-    `;
+//     infoModal.innerHTML = `
+//         <div class="modal-content">
+//         <div class="modal-header">
+//             <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
+//             <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+//         </div>
+//         <div class="modal-body result-modal">
+//             <div class="row">
+//                 <div class="col-9">
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Address:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">123 example street</p>
+//                     <p class="result-data">Example city</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Services:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">Water, Electric, Waste</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Phone:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">02938 273748</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Email:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">location@email.com</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Website:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">www.location.com</p>
+//                     </div>
+//                 </div>
+//                 </div>
+//                 <div class="col-3">
+//                 <div class="weather"></div>
+//                 </div>
+//             </div>
+//         </div>
+//         </div>
+//     `;
 
-    infoModalContainer.appendChild(infoModal);
-}
+//     infoModalContainer.appendChild(infoModal);
+// };
 
 //Add map div and initilise the Here Map in section map
 function addMapEl(results) {
@@ -472,4 +482,53 @@ function addMapMarker(map, results, ui) {
 
         map.addObject(locationMarker);
     });
+};
+
+//Create the radius div and set the innerHTMl
+function makeRadius() {
+    if (firstRadius) { //if frist radius is true (First Run)
+        let radiusArea = document.createElement('div');// Create new Div
+        radiusArea.classList.add('row');
+        radiusArea.innerHTML = `
+            <div class="row" id="radius-container">
+                <div class="col-md-6 col-sm-12 gx-0">
+                    <div id="radius-adjust">
+                        <label for="radius">Radius: </label>
+                        <input type="range"  min="1" max="80490" value="16093"  class="slider" id="radius">
+                        <p class="d-inline" id="radius-val"><span id="radius-value">10</span> Miles</p>
+                        <button id="radius-update" class="btn btn-info btn-radius">Update</button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 gx-0">
+                    <div id="result-no-container">
+                        <p class="d-inline">Results:<span id="num-of-results"></span><span class="small"><em>(Max 100)</em></span?</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        const searchUpperContainer = document.getElementById('search-area-container');
+        searchUpperContainer.prepend(radiusArea);
+        firstRadius = false; //Set the variable to false
+
+        let rval = document.getElementById('radius-value');
+        let radiusSlide = document.getElementById('radius');
+
+        radiusSlide.oninput = function() { //if the
+            let mls = getDistance(radiusSlide.value);
+            rval.innerHTML = mls;
+        };
+
+        let radiusUpdateBtn = document.getElementById('radius-update');
+
+        radiusUpdateBtn.addEventListener('click', function () {
+            searchLatLng = []; //Set array to empty each time function run
+            numRes.innerHTML = [];
+            resultsContain.innerHTML = ""; //Set String empty each time function run
+            mapContainer.innerHTML = ""; //Set String empty each time function run
+            radius = radiusSlide.value;
+            getSearchData(searchBox.value) //Run function to get search results
+        });
+    };
+    const numRes = document.getElementById('num-of-results');
+    numRes.innerHTML = numOfResults;  
 };
