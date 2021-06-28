@@ -236,6 +236,26 @@ html, body {
     margin: 0 auto;
 }
 
+#locate {
+    background: transparent;
+    border: none;
+    font-size: large;
+    color: black;
+}
+
+#locate:hover,
+#locate:focus,
+#locate:active,
+#loate:active:focus {
+    color: #00BAFE;
+}
+
+#locate:visited {
+    color: #0085C5;
+}
+
+
+
 .search-area {
     text-align: center;
 }
