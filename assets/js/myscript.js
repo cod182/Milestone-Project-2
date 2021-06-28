@@ -53,6 +53,7 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
             document.getElementById('radius-value').innerHTML = '10';
             document.getElementById('radius').value = '16093';
         };
+        searchBox.value = '';
         radius = '16093';
         numOfResults = [];
         searchLatLng = []; //Set array to empty each time function run
@@ -529,7 +530,7 @@ function makeRadius() {
                 <div class="col-md-6 col-sm-12 gx-0">
                     <div id="radius-adjust">
                         <label for="radius">Radius: </label>
-                        <input type="range"  min="1" max="80490" value="16093"  class="slider" id="radius">
+                        <input type="range" step="8000" min="1" max="80490" value="16093"  class="slider" id="radius">
                         <p class="d-inline" id="radius-val"><span id="radius-value">10</span> Miles</p>
                         <button id="radius-update" class="btn btn-info btn-radius">Update</button>
                     </div>
@@ -548,9 +549,9 @@ function makeRadius() {
         let rval = document.getElementById('radius-value');
         let radiusSlide = document.getElementById('radius');
 
-        radiusSlide.oninput = function() { //if the
+        radiusSlide.oninput = function() { //Displayed the radius selected when the slider is moved
             let mls = getDistance(radiusSlide.value);
-            rval.innerHTML = mls;
+            rval.innerHTML = Math.round(mls); //rounds the numer and siaplyed in rval
         };
 
         let radiusUpdateBtn = document.getElementById('radius-update');
