@@ -13,6 +13,7 @@ const mapContainer = document.getElementById('map-container')
 let radius = '16093';
 const mapContain = document.getElementById('map');
 const resultsContain = document.getElementById('search-results');
+let geoSearch = false;
 let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
 let firstRadius = true;
@@ -57,6 +58,7 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
+        geoSearch = true;
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -80,6 +82,7 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
             document.getElementById('radius').value = '16093';
         };
         radius = '16093';
+        geoSearch = false;
         numOfResults = [];
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
@@ -551,12 +554,20 @@ function makeRadius() {
         let radiusUpdateBtn = document.getElementById('radius-update');
 
         radiusUpdateBtn.addEventListener('click', function () {
-            searchLatLng = []; //Set array to empty each time function run
-            numRes.innerHTML = [];
-            resultsContain.innerHTML = ""; //Set String empty each time function run
-            mapContainer.innerHTML = ""; //Set String empty each time function run
-            radius = radiusSlide.value;
-            getSearchData(searchBox.value) //Run function to get search results
+            if(geoSearch) {
+                numRes.innerHTML = [];
+                resultsContain.innerHTML = ""; //Set String empty each time function run
+                mapContainer.innerHTML = ""; //Set String empty each time function run
+                radius = radiusSlide.value;
+                discoverSearch(coords, addResults, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+            } else {
+                searchLatLng = []; //Set array to empty each time function run
+                numRes.innerHTML = [];
+                resultsContain.innerHTML = ""; //Set String empty each time function run
+                mapContainer.innerHTML = ""; //Set String empty each time function run
+                radius = radiusSlide.value;
+                getSearchData(searchBox.value) //Run function to get search results
+            }
         });
     };
     const numRes = document.getElementById('num-of-results');
