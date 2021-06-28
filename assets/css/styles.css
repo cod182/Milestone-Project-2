@@ -499,6 +499,7 @@ html, body {
 }
 
 .contact-label {
+    vertical-align: top;
     font-size: x-large;
     font-family: 'Roboto', 'sans-serif';
     width: 25%;
@@ -511,6 +512,7 @@ html, body {
     margin-top: 5px;
     margin-bottom: 5px;
     min-width: 74%;
+    vertical-align: text-top;
 }
 
 .contact-message {

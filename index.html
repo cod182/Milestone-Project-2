@@ -104,12 +104,11 @@
             <form onsubmit="return sendEmail(this)"">
               <div>
                 <label class="contact-label" for="contact-reason">Reason:</label>
-                <input class="contact-input" list="reason-choice" id="contact-reason" name="reason" placeholder="Reason for Contacting..." required>
-                <datalist id="reason-choice">
-                  <option value="General Enquiry"></option>
-                  <option value="Missing Data"></option>
-                  <option value="Website Issue"></option>
-                </datalist>
+                <select class="contact-input" id="contact-reason" name="reason" placeholder="Reason for Contacting..." required>
+                  <option value="General Enquiry">General Enquiry</option>
+                  <option value="Missing Data">Missing Data</option>
+                  <option value="Website Issue">Website Issue</option>
+                </select>
               </div>
               <div>
                 <label class="contact-label" for="contact-name">Name:</label>
