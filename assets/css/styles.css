@@ -122,6 +122,17 @@ html, body {
     }
 }
 
+@media screen and (max-width:767px) {
+    #result-no-container {
+        float: none !important;
+        padding: 0 !important;
+    }
+    #radius-adjust {
+        float: none !important;
+        padding: 0 !important;
+    }
+}
+
 /* Dark Mode */
 
 .dark-mode-switch {
@@ -301,12 +312,21 @@ html, body {
 #radius-container {
     text-align: center;
     font-size: 12px;
-    background-color: #0085C5;
+    background-color: #00BAFE;
     min-height: 30px;
     padding: 4px 0;
     margin: 6px 0;
     font-family: 'Roboto';
     font-weight: bold;
+}
+
+#radius-adjust {
+    float: right;
+}
+
+#result-no-container {
+    float: left;
+    padding-left: 3vw;
 }
 
 /* Slider CSS by w3c */
@@ -339,14 +359,14 @@ html, body {
     width: 10px; /* Set a specific slider handle width */
     height: 10px; /* Slider handle height */
     border-radius: 50px;
-    background: #0085C5; /* Green background */
+    background: #4fbc6f; /* Blue background */
     cursor: pointer; /* Cursor on hover */
   }
   
   .slider::-moz-range-thumb {
     width: 25px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #0085C5; /* Green background */
+    background: #4fbc6f; /* Green background */
     cursor: pointer; /* Cursor on hover */
   }
 

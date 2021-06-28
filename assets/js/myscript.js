@@ -4,7 +4,7 @@ const hereClientId = 'viVz45yDq8PgWQBJT5fE';
 const hereAccessKeyId = 'Xd0fC9GEvWMZ6Kq4DVH3gQ';
 const hereAccessKeySecret = '9LLdVKvpXrRoxTYD251yXbUBjmf5bRRcDlZdkDPqSoNvaq3QN5-r8dh5EON99cLD9g538k7Cz3cOA0UVOE9mkA';
 const hereTokenEndpointUrl = 'https://account.api.here.com/oauth2/token';
-const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDYxMzY5MywiZXhwIjoxNjI0NzAwMDkzLCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLkpVSjFpc0pMTjYxTnJQRnp0SWZXTEEuME92MlFUNGd5allCLTJ0SmRVXzlvc3hVcG1kSF9ObGNkRTNvNHZTNkdIbVEzMkpYMWNhVndfY3UyUTZQa29aWXJvUXNYMC1pZHBOeEgtZ2IyQkpMR2R4UktXWkVXMGgwSmhsNGNvTkp0eGpiRVgxVnJNeENTdnJuLWY5MmYteDBNaWF3U1JHQUhHR2tCOHFyRThUaVd3LkVlQUFob2tLbmxLYmlyT3drcDVmazBJWGpINVU2TUVTQWRrMjhMbWtwUE0.ZSjV5JVJcjjNm2zWCu8yqR4eFUVYYLKH-P_uwpKgodjTi8P2n6FD3vgG39mWRDqpFAQ1_gtQF2NN3nqoBUAeD5SLZvy8welwuCk4JiiPiyuiJOSoGa9lT7wrwaq6bndS5G21yf0IiouLtlB9EyHnQA6ZoRGdBR17_gV7LEnLtkDA1rt1ks8lHdXEk8wBIXcEwripAe27vfqO7yeFsQkl_P9zKktrqE_VHQfSdd4WJxGX6x7InpNfsutI9V9XqnVeFFfyaotwEoPnYPzZ2ePSNWdVGwX5lu98PLU3yUR0nLPBDTd2NW-EJgt0LaovI6FHfGWJ2-dZcIUbrI8RWyXKfQ';
+const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDg4MDMwMiwiZXhwIjoxNjI0OTY2NzAyLCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLkFodkZldDNjZWlxdVhlYXdHRmpaMncuT2FjTXNtSkU5SlRqWTlrQnlObk9LMnB0a1NCNEJHMDhMZVZfYk1IaFMxY0RYVTJpWWVzdy1NV0E5MWMtbm9vQ21kQUxESUtmR05WVzkteEtKbzNZQzUxcktCMEkzT0cxMlVXbW1UeUNtanp0WjhnRGx4bHBhTnNDLUZ0N2czTGRjb0h2bm4wNXUwUHBPVFdSVHdPV2hBLndlTGxlLVB5anEzeXRTWVJqRGFpeWZjeFJEOWFVci1WdmxxN3MxZm85OUk.ocg06BtxZIX4dsiIaUWjKoKyBAK9LYHY6WK8Nbf4MqeNFXfVG9Ro0JHyfS2b-4f4HyC-0lf9LfirOX1v-wHvg0zFxiQpCH_rrOJ9EVhrIxpB9lGkOyB5RgVF4UAeR_YX-JowexdRgL8aNAIARyC7RJueaHa_7ckbOlfdLCklQrUDQN5nTb9qZx52mJ4LnBVYdIZ247f3lB5qsTRj1AnX_RZd3exwPlLeyCAbQT4PMP6bR1mEz0H5VAOix3ZtEVdriw86Tc6Iu1AVV4tz9B51ShG0yhnQdl4pDaCCqwlYUEOTeV-pxojJ_rW0py_OUTgPValkCC-yMLX9fPfqrVVsQA';
 
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
@@ -490,13 +490,19 @@ function makeRadius() {
         let radiusArea = document.createElement('div');// Create new Div
         radiusArea.classList.add('row');
         radiusArea.innerHTML = `
-            <div class="col-12 gx-0">
-                <div id="radius-container">
-                    <label for="radius">Radius: </label>
-                    <input type="range" min="1" max="80490" value="16093" class="slider" id="radius">
-                    <p class="d-inline" id="radius-val"><span id="radius-value">10</span> Miles</p>
-                    <button id="radius-update" class="btn btn-info btn-radius">Update</button>
-                    <p class="d-inline">Results:<span id="num-of-results"></span><span class="small"><em>(Max 100)</em></span?</p>
+            <div class="row" id="radius-container">
+                <div class="col-md-6 col-sm-12 gx-0">
+                    <div id="radius-adjust">
+                        <label for="radius">Radius: </label>
+                        <input type="range"  min="1" max="80490" value="16093"  class="slider" id="radius">
+                        <p class="d-inline" id="radius-val"><span id="radius-value">10</span> Miles</p>
+                        <button id="radius-update" class="btn btn-info btn-radius">Update</button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 gx-0">
+                    <div id="result-no-container">
+                        <p class="d-inline">Results:<span id="num-of-results"></span><span class="small"><em>(Max 100)</em></span?</p>
+                    </div>
                 </div>
             </div>
         `;
