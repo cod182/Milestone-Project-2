@@ -16,7 +16,6 @@ let numOfResults = [];
 const aboutText = document.getElementById('about-text');
 
 // Changes the about message every 5 seconds
-
 var text = [];
     var counter = 0;
 
@@ -33,9 +32,9 @@ var text = [];
     </p>
     `);
 
-setInterval(change, 5000);
+setInterval(changeText, 5000);
 
-function change() {
+function changeText() {
     aboutText.classList.add('about-hide');
     setTimeout(function () {
         aboutText.innerHTML = text[counter];
@@ -45,7 +44,7 @@ function change() {
             counter = 0;
         }
     }, 500);
-}
+};
 
 
 //Dark mode toggle
@@ -200,6 +199,7 @@ function addResultToPage (result) {
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
+    resultDiv.setAttribute('data-result', 'data-result'); //add the data attribut with
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
@@ -595,4 +595,19 @@ function makeRadius() {
     };
     const numRes = document.getElementById('num-of-results');
     numRes.innerHTML = numOfResults;  
+};
+
+function moveMapToResult(map,results) {
+    const resultBox = document.querySelector('[data-result]');
+    resultBox.addEventListener('click', function(){
+        console.log('hello');
+            const lat = result.position.lat;
+            const lng = result.position.lng;
+
+            map.setCenter({ //Sets the Lat & Lng of the map
+                lat: lat, 
+                lng: lng
+            });
+            map.setZoom(14); //Sets the Zoom level of the map
+    })
 };

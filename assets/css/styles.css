@@ -313,7 +313,6 @@ html, body {
 .result-num-container {
     float: left;
     padding-left: 3vw;
-    margin-top: 8px;
 }
 
 /* Slider CSS by w3c */
@@ -376,6 +375,13 @@ html, body {
     padding: 20px;
     font-family: roboto, 'sans-serif';
     margin: 10px auto;
+}
+
+.result-box:hover,
+.result-box:active,
+.result-box:focus,
+.result-box:active:focus {
+    background-color: #31aa55;
 }
 
 .result-row {
