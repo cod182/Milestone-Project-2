@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script defer src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous">
+    </script>
     <script defer src="assets/js/myscript.js"></script>
-    <script defer src="jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
     <script type="text/javascript">
       (function(){
@@ -72,11 +73,10 @@
           </div>
         </div>
         <div class="row">
-          <div class="about-content col-10">
-            <p class="about-text white roboto">Here at CampZilla we want to find you the perfect spot on your travels! We’ve created a simple way to see all the best stopover locations wherever you are. Whether you want a 5* stop with all the amenities or a patch of grass near to town, we’ve got you covered!
-              <br>
-              Just tap your location in the box above and we'll find what you need, it's that simple!
-            </p>
+          <div id="about-text"class="about-content col-10">
+            <p class="about-text white roboto">
+              <span class="hello-about">Welcome to CampZilla!</span>
+          </p>
           </div>
         </div>
       </div>
