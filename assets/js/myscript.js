@@ -1,9 +1,4 @@
 const hereApiKey = 'cAo6Cjf5wlcux7gJjPODw_tNNN5lglP7Ayka-t9R7J4'; //Here Maps Api Key
-const hereUserId = 'HERE-9843d6a3-4032-4da0-baf4-2d719893cbd5';
-const hereClientId = 'viVz45yDq8PgWQBJT5fE';
-const hereAccessKeyId = 'Xd0fC9GEvWMZ6Kq4DVH3gQ';
-const hereAccessKeySecret = '9LLdVKvpXrRoxTYD251yXbUBjmf5bRRcDlZdkDPqSoNvaq3QN5-r8dh5EON99cLD9g538k7Cz3cOA0UVOE9mkA';
-const hereTokenEndpointUrl = 'https://account.api.here.com/oauth2/token';
 
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
@@ -18,6 +13,40 @@ let firstTime = true;
 let firstRadius = true;
 let darkToggle = document.getElementById('dark-toggle');
 let numOfResults = [];
+const aboutText = document.getElementById('about-text');
+
+// Changes the about message every 5 seconds
+
+var text = [];
+    var counter = 0;
+
+    text.push(`
+    <p class="about-text white roboto">
+        We are passionate about travelling and want to find you the perfect spot on your travels! Our site makes it easier for you to find the perfect location to rest your head. Whether you are in a tent, campervan or just after a room, we’ve got an easy to use method for finding you somewhere to stop. You could want a 5* stop with all the amenities or a patch of grass near to town, we’ve got you covered!
+    </p>
+    `);
+
+    text.push(`
+    <p class="about-text white roboto">
+        All you need to do it tap your location into the search box above and bingo! You’ll have all the stops around your location, tap on one to get a bit more info!
+        You can also tap the location button to get all the stops around you!
+    </p>
+    `);
+
+setInterval(change, 5000);
+
+function change() {
+    aboutText.classList.add('about-hide');
+    setTimeout(function () {
+        aboutText.innerHTML = text[counter];
+        aboutText.classList.remove('about-hide');
+        counter++;
+        if (counter >= text.length) {
+            counter = 0;
+        }
+    }, 500);
+}
+
 
 //Dark mode toggle
 darkToggle.addEventListener('click', function() { //listens for dark button clicked
@@ -169,9 +198,7 @@ function addResults(results) {
 
 function addResultToPage (result) {
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
-    resultDiv.classList.add('col-lg-4'); //Adds the class to the div
-    resultDiv.classList.add('col-md-6'); //Adds the class to the div
-    resultDiv.classList.add('col-sm-12'); //Adds the class to the div
+    resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
@@ -529,7 +556,7 @@ function makeRadius() {
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12 gx-0">
-                    <div id="result-no-container">
+                    <div id="result-no-container" class="result-num-container">
                         <p class="d-inline">Results:<span id="num-of-results"></span><span class="small"><em>(Max 100)</em></span?</p>
                     </div>
                 </div>

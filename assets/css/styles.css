@@ -6,6 +6,29 @@ html, body {
     padding: 0;
   }
 
+  /* Dark Mode */
+
+.dark-mode-switch {
+    position:absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.dark {
+    background-color:#262829;
+}
+
+.white-text {
+    color: white;
+}
+
+.dark-box {
+    background-color: #399845;
+    border: 2px solid black;
+    border-radius: 50px;
+    padding: 5px;
+}
+
   /* Colours */
 
 .green {
@@ -49,115 +72,47 @@ html, body {
 /* Buttons */
 
 .btn-blue {
-    color: #000 !important;
-    font-weight: bold !important;
-    border-color: #00BAFE !important;
-    background-color: #00BAFE !important;
-    margin: 5px auto;
+    color: #000 !important; /* Overriding Bootstrap CSS*/
+    font-weight: bold !important; /* Overriding Bootstrap CSS*/;
+    border-color: #00BAFE !important; /* Overriding Bootstrap CSS*/;
+    background-color: #00BAFE !important; /* Overriding Bootstrap CSS*/;
+    margin: 5px auto !important; /* Overriding Bootstrap CSS*/;
 }
 
 .btn-blue:hover,
 .btn-blue:focus,
 .btn-blue:active,
 .btn-blue:active:focus {
-    border-color: #0083b3 !important;
-    background-color: #0083b3 !important;
-    color: white !important;
+    border-color: #0083b3 !important; /* Overriding Bootstrap CSS*/;
+    background-color: #0083b3 !important; /* Overriding Bootstrap CSS*/;
+    color: white !important; /* Overriding Bootstrap CSS*/;
 }
 
 .btn-close {
-    background-color: rgb(255 255 255 / 85%) !important;
-    border-radius: 20px !important;
-    opacity: 1 !important;
+    background-color: rgb(255 255 255 / 85%);
+    border-radius: 20px;
+    opacity: 1;
 }
 
 .btn-close:hover {
     transition: ease-in-out;
-    background-color: rgb(158 158 158 / 85%) !important;
+    background-color: rgb(158 158 158 / 85%);
 }
 
 .btn-info {
     max-height: 30px;
     max-width: 100px;
     margin: auto;
-    padding: 0 2px 0 2px !important;
-    font-weight: 400 !important;
-    font-size: small !important;
+    padding: 0 2px 0 2px !important; /* Overriding Bootstrap CSS*/
+    font-size: small !important; /* Overriding Bootstrap CSS*/
 }
 
-/* Media Queries */
-
-@media screen and (max-width:991px) {
-    .about-link {
-        margin: 5px 0 0 0 !important;
-        padding: 0 10px 0 10px !important;
-        width: fit-content;
-        float: right;
-    }
-    
-    .contact-link {
-        margin: 2px 0 0 0 !important;
-        text-align: right;
-        padding: 0 10px 0 10px !important;
-        width: fit-content;
-        float: right;
-    }
-
-    .about-item {
-        width: auto !important;
-    }
-
-    .dark-mode-switch {
-        position: sticky !important;
-        float: right !important;
-        margin-top: 2px !important;
-        margin-bottom: 5px !important;
-        width: auto;
-        background-color: #399845;
-        border-radius: 20px;
-        padding: 0 10px 0 10px !important;
-    }
-    .dark-box {
-        border: none !important;
-    }
-}
-
-@media screen and (max-width:767px) {
-    #result-no-container {
-        float: none !important;
-        padding: 0 !important;
-    }
-    #radius-adjust {
-        float: none !important;
-        padding: 0 !important;
-    }
-}
-
-/* Dark Mode */
-
-.dark-mode-switch {
-    position:absolute;
-    right: 5px;
-    top: 5px;
-}
-
-.dark {
-    background-color:#262829 !important;
-}
-
-.white-text {
-    color: white !important;
-}
-
-.dark-box {
-    background-color: #399845;
-    border: 2px solid black;
-    border-radius: 50px;
-    padding: 5px;
+.btn-radius {
+    font-size: small !important;  /* Overriding Bootstrap CSS*/
 }
 
 .navbar {
-    background-image: url(../images/modal-banner.png) !important;
+    background-image: url(../images/modal-banner.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position-y:top;
@@ -185,17 +140,17 @@ html, body {
 
 .navbar-collapse {
     flex-basis: 100%;
-    flex-grow: 0 !important;
+    flex-grow: 0;
     align-items: center;
 }
 
 .navbar-toggler {
-    background-color: rgb(255 255 255 / 85%) !important;
-    border-radius: 20px !important;
+    background-color: rgb(255 255 255 / 85%);
+    border-radius: 20px;
 }
 
 .nav-link {
-    color: white !important;
+    color: white !important; /* Overriding Bootstrap CSS*/
     font-size: larger;
 }
 
@@ -206,23 +161,23 @@ html, body {
 .about-link {
     background-color: #399845;
     border-radius: 20px;
-    padding: 0 10px 0 10px !important;
-    margin: 43px 10px 0 0;
+    padding: 0 10px 0 10px !important; /* Overriding Bootstrap CSS*/
+    margin: 43px 10px 0 0 !important; /* Overriding Bootstrap CSS*/
     float: right;
 }
 
 .contact-link {
     background-color: #399845;
     border-radius: 20px;
-    padding: 0 10px 0 10px !important;
-    margin: 43px 0 0 10px;
+    padding: 0 10px 0 10px !important; /* Overriding Bootstrap CSS*/
+    margin: 43px 0 0 10px !important; /* Overriding Bootstrap CSS*/
 }
 
 .nav-link:hover,
 .nav-link:focus,
 .nav-link:active,
 .nav-link:active:focus {
-    color: #00BAFE !important;
+    color: #00BAFE !important; /* Overriding Bootstrap CSS*/
 }
 
 .greeting-box-before {
@@ -240,21 +195,20 @@ html, body {
     background: transparent;
     border: none;
     font-size: large;
-    color: black;
-}
-
-.locate-before {
-    left: 50% !important;
-    position: absolute !important;
-    top: 40vh !important;
-    font-size: large !important;
 }
 
 .locate-after {
-    left: 10vw !important;
-    position: absolute !important;
-    top: 152px !important;
-    font-size: small !important;
+    left: 10vw;
+    position: absolute;
+    top: 152px;
+    font-size: small;
+}
+
+.locate-before {
+    left: 50%;
+    position: absolute;
+    top: 40vh;
+    font-size: large;
 }
 
 #locate:hover,
@@ -273,34 +227,8 @@ html, body {
     text-align: center;
 }
 
-.dark-search {
-    background-color: gray !important;
-}
-
-.dark-search::placeholder {
-    color: white !important;
-
-}
-
-.search-box-before {
-    background-image: url(../images/search-bg.png) !important;
-    background-repeat: repeat-x;
-    background-size:contain;
-    background-position-y:bottom;
-    background-position-x: center;
-    background-color: white;
-    width: 80vw;
-    height: 80px;
-    margin: 35vh auto;
-    font-family: Roboto, 'sans-serif';
-    text-transform: uppercase;
-    font-size:calc(10px + 1.5vw);
-    text-align: center;
-    border-radius: 50px;
-}
-
 .search-box-after {
-    background-image: url(../images/search-bg.png) !important;
+    background-image: url(../images/search-bg.png);
     background-repeat: repeat-x;
     background-size:contain;
     background-position-y:bottom;
@@ -316,11 +244,37 @@ html, body {
     border-radius: 50px;
 }
 
-.search-box-before:focus-visible {
+.search-box-after:focus-visible {
     outline: none;
 }
 
-.search-box-after:focus-visible {
+.search-box-after::placeholder {
+    font-family: Roboto, 'sans-serif';
+    text-transform: uppercase;
+    color: grey;
+    font-size:medium;
+    text-align: center;
+    margin: auto;
+}
+
+.search-box-before {
+    background-image: url(../images/search-bg.png);
+    background-repeat: repeat-x;
+    background-size:contain;
+    background-position-y:bottom;
+    background-position-x: center;
+    background-color: white;
+    width: 80vw;
+    height: 80px;
+    margin: 35vh auto;
+    font-family: Roboto, 'sans-serif';
+    text-transform: uppercase;
+    font-size:calc(10px + 1.5vw);
+    text-align: center;
+    border-radius: 50px;
+}
+
+.search-box-before:focus-visible {
     outline: none;
 }
 
@@ -333,13 +287,12 @@ html, body {
     margin: auto;
 }
 
-.search-box-after::placeholder {
-    font-family: Roboto, 'sans-serif';
-    text-transform: uppercase;
-    color: grey;
-    font-size:medium;
-    text-align: center;
-    margin: auto;
+.dark-search{
+    background-color: gray;
+}
+
+.dark-search::placeholder {
+    color: white;
 }
 
 #radius-container {
@@ -357,9 +310,10 @@ html, body {
     float: right;
 }
 
-#result-no-container {
+.result-num-container {
     float: left;
     padding-left: 3vw;
+    margin-top: 8px;
 }
 
 /* Slider CSS by w3c */
@@ -413,19 +367,19 @@ html, body {
 
 .search-results-after {
     border-radius: 16px;
-    margin: 0 auto!important;
+    margin: 0 auto;
 }
 
 .result-box {
     border: 1px solid black;
     border-radius: 20px;
-    padding: 20px !important;
+    padding: 20px;
     font-family: roboto, 'sans-serif';
     margin: 10px auto;
 }
 
 .result-row {
-    padding: 0 !important;
+    padding: 0;
 }
 
 .result-title-container {
@@ -435,7 +389,7 @@ html, body {
 .result-label {
     font-size: min(13px);
     font-weight: bold;
-    margin-bottom: 5px !important;
+    margin-bottom: 5px;
 }
 
 .result-data-container {
@@ -445,15 +399,15 @@ html, body {
 .result-data {
     font-size: min(12px);
     margin-left: 10px;
-    margin-bottom: 0px !important;
+    margin-bottom: 0px;
 }
 
 .result-address {
-    margin-bottom: 0!important;
+    margin-bottom: 0;
 }
 
 .result-modal {
-    padding: 30px !important;
+    padding: 30px;
 }
 
 #about {
@@ -483,8 +437,21 @@ html, body {
     padding: inherit;;
 }
 
+.hello-about {
+    margin: auto;
+    text-align: center;
+    font-size: x-large;
+}
+
 .about-content {
     margin: 0 auto;
+    opacity: 1;
+    transition: opacity 0.5s;
+    font-size: 1.5rem;
+}
+
+.about-hide {
+    opacity: 0;
 }
 
 .about-text {
@@ -516,12 +483,12 @@ html, body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    border-radius: 50px 50px 0 0 !important;
+    border-radius: 50px 50px 0 0 !important; /* Overriding Bootstrap CSS*/
 }
 
 .contact-modal-content {
-    color: black !important;
-    border-radius: 50px !important;
+    color: black;
+    border-radius: 50px !important; /* Overriding Bootstrap CSS*/
 }
 
 .contact-modal-title {
@@ -558,4 +525,52 @@ html, body {
     margin-bottom: 5px;
     min-width: 74%;
     min-height: 40%;
+}
+
+/* Media Queries */
+
+@media screen and (max-width:991px) {
+    .about-link {
+        margin: 5px 0 0 0 !important; /* Overriding Bootstrap CSS*/
+        padding: 0 10px 0 10px !important; /* Overriding Bootstrap CSS*/
+        width: fit-content;
+        float: right;
+    }
+    
+    .contact-link {
+        margin: 2px 0 0 0 !important; /* Overriding Bootstrap CSS*/
+        text-align: right;
+        padding: 0 10px 0 10px !important; /* Overriding Bootstrap CSS*/
+        width: fit-content;
+        float: right;
+    }
+
+    .about-item {
+        width: auto;
+    }
+
+    .dark-mode-switch {
+        position: sticky;
+        float: right;
+        margin-top: 2px;
+        margin-bottom: 5px;
+        width: auto;
+        background-color: #399845;
+        border-radius: 20px;
+        padding: 0 10px 0 10px;
+    }
+    .dark-box {
+        border: none;
+    }
+}
+
+@media screen and (max-width:767px) {
+    #result-no-container {
+        float: none;
+        padding: 0;
+    }
+    #radius-adjust {
+        float: none;
+        padding: 0;
+    }
 }
