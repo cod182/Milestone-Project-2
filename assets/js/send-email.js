@@ -14,7 +14,7 @@ function sendEmail(contactForm) {
         function(response) {
             console.log('SUCCESS',response)
             // document.getElementById('contact-submit').remove();
-            document.getElementById('message-status').innerHTML =`<p class='green bold'><em>Message Sent!</em></p>`;
+            document.getElementById('message-status').innerHTML =`<p class='green bold'><em>Message Sent!</em> <i class="green fas fa-check-circle"></i></p>`;
             submitButton.classList.remove('btn-blue');
             submitButton.classList.add('btn-success');
             submitButton.disabled = true;
