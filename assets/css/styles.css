@@ -511,7 +511,7 @@ html, body {
     color: white;
 }
 
-.modal-header {
+.contact-modal-header {
     background-image: url(../images/modal-banner.png);
     background-position: center;
     background-repeat: no-repeat;
@@ -519,16 +519,21 @@ html, body {
     border-radius: 50px 50px 0 0 !important;
 }
 
-.modal-content {
+.contact-modal-content {
     color: black !important;
     border-radius: 50px !important;
 }
 
-.modal-title {
+.contact-modal-title {
     margin: 0 auto;
     font-size: xx-large;
     background-color: rgb(255 255 255 / 85%);
     border-radius: 20px;
+}
+
+.contact-modal-close {
+    position: absolute;
+    right: 10px;
 }
 
 .contact-label {
