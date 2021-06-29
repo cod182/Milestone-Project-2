@@ -1,3 +1,8 @@
+const submitButton = document.getElementById('contact-submit');
+const cName = document.getElementById('contact-name');
+const email = document.getElementById('contact-email');
+const message = document.getElementById('contact-message');
+
 function sendEmail(contactForm) {
     emailjs.send('gmail','codie',{
         "from_name": contactForm.name.value,
@@ -7,15 +12,26 @@ function sendEmail(contactForm) {
     })
     .then(
         function(response) {
-            console.log('SUCSESS',response)
-            document.getElementById('contact-submit').remove();
-            document.getElementById('message-status').innerHTML =`<p class='blue bold'><em>Message Sent!</em></p>`;
-            setTimeout(function(){ document.getElementById('modal-close').click() }, 2000);
+            console.log('SUCCESS',response)
+            // document.getElementById('contact-submit').remove();
+            document.getElementById('message-status').innerHTML =`<p class='green bold'><em>Message Sent!</em></p>`;
+            submitButton.classList.remove('btn-blue');
+            submitButton.classList.add('btn-success');
+            submitButton.disabled = true;
+            setTimeout(function(){ 
+                document.getElementById('contact-modal-close').click();
+                submitButton.disabled = false;
+                document.getElementById('message-status').innerHTML =``;
+                submitButton.classList.remove('btn-success');
+                submitButton.classList.add('btn-blue');
+                cName.value = '';
+                email.value = '';
+                message.value = '';
+            }, 2000);
         },
         function(error) {
             console.log('FAILED', error)
             document.getElementById('message-status').innerHTML =`<p class='red bold'><em>Error! Please try again.</em></p>`;
-
         });
     return false;
 };

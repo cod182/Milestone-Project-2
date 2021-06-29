@@ -4,13 +4,12 @@ const hereClientId = 'viVz45yDq8PgWQBJT5fE';
 const hereAccessKeyId = 'Xd0fC9GEvWMZ6Kq4DVH3gQ';
 const hereAccessKeySecret = '9LLdVKvpXrRoxTYD251yXbUBjmf5bRRcDlZdkDPqSoNvaq3QN5-r8dh5EON99cLD9g538k7Cz3cOA0UVOE9mkA';
 const hereTokenEndpointUrl = 'https://account.api.here.com/oauth2/token';
-const bearerToken = 'eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsImlzcyI6IkhFUkUiLCJhaWQiOiJ2aVZ6NDV5RHE4UGdXUUJKVDVmRSIsImlhdCI6MTYyNDg4MDMwMiwiZXhwIjoxNjI0OTY2NzAyLCJraWQiOiJqMSJ9.ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJRMEpETFVoVE5URXlJbjAuLkFodkZldDNjZWlxdVhlYXdHRmpaMncuT2FjTXNtSkU5SlRqWTlrQnlObk9LMnB0a1NCNEJHMDhMZVZfYk1IaFMxY0RYVTJpWWVzdy1NV0E5MWMtbm9vQ21kQUxESUtmR05WVzkteEtKbzNZQzUxcktCMEkzT0cxMlVXbW1UeUNtanp0WjhnRGx4bHBhTnNDLUZ0N2czTGRjb0h2bm4wNXUwUHBPVFdSVHdPV2hBLndlTGxlLVB5anEzeXRTWVJqRGFpeWZjeFJEOWFVci1WdmxxN3MxZm85OUk.ocg06BtxZIX4dsiIaUWjKoKyBAK9LYHY6WK8Nbf4MqeNFXfVG9Ro0JHyfS2b-4f4HyC-0lf9LfirOX1v-wHvg0zFxiQpCH_rrOJ9EVhrIxpB9lGkOyB5RgVF4UAeR_YX-JowexdRgL8aNAIARyC7RJueaHa_7ckbOlfdLCklQrUDQN5nTb9qZx52mJ4LnBVYdIZ247f3lB5qsTRj1AnX_RZd3exwPlLeyCAbQT4PMP6bR1mEz0H5VAOix3ZtEVdriw86Tc6Iu1AVV4tz9B51ShG0yhnQdl4pDaCCqwlYUEOTeV-pxojJ_rW0py_OUTgPValkCC-yMLX9fPfqrVVsQA';
 
 const searchBox = document.getElementById('search-box');
 const greetSec = document.getElementById('greeting-box');
-const loate = document.getElementById('locate');
+const loate = document.getElementById('locate'); //Geo Locate button
 const mapContainer = document.getElementById('map-container')
-let radius = '16093';
+let radius = '16093'; //Default number for the search radius
 const mapContain = document.getElementById('map');
 const resultsContain = document.getElementById('search-results');
 let geoSearch = false;
@@ -114,13 +113,10 @@ function getSearchData(){
 // Get the Latitude and Londitude of the search
 function getLatLng(search, cb){
     const urlGeo = 'https://geocode.search.hereapi.com/v1/geocode?q=';
-    const urlComp = urlGeo + search + '&in=countryCode:GBR'; //combining the api url with the search term and limiting to GBR
+    const urlComp = urlGeo + search + '&in=countryCode:GBR' + '&apiKey=' + hereApiKey; //combining the api url with the search term and limiting to GBR
     
     var xhr = new XMLHttpRequest();
     xhr.open("GET", urlComp);
-    
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer " + bearerToken);
     
     xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
@@ -147,13 +143,10 @@ function getCoords(data) {
 // Callback 1 for addResults function, 2 for AddMapsEL function
 function discoverSearch(coords, cb, cb2) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
-    const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=' + radius + '&limit=100';
+    const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=' + radius + '&limit=100' + '&apiKey=' + hereApiKey;
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url);
-    
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer " + bearerToken);
     
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
@@ -253,7 +246,7 @@ function addMoreInfo(result) {
     modalBody.classList.add('modal-body');
 
     modalBody.innerHTML = `
-    <div class="row">
+            <div class="row">
                 <div class="col-9">
                   <div class="row">
                     <div class="col-3 result-row">
