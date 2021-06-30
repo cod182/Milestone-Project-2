@@ -205,7 +205,7 @@ function addResultToPage (result, map) {
 
     resultDiv.innerHTML = `
         <div class="result-title-container">
-                    <h2 class="blue bold result-row" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">${result.title}</h2>
+                    <h2 class="blue bold result-row" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}"><a href="#map">${result.title}</a></h2>
                 </div>
             <div class="col-9" id="data-text">
                 <div class="row">

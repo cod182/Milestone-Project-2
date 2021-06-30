@@ -381,7 +381,7 @@ html, body {
 .result-box:active,
 .result-box:focus,
 .result-box:active:focus {
-    background-color: #31aa55;
+    box-shadow: 8px 7px #01b9fe;
 }
 
 .result-row {
@@ -390,6 +390,11 @@ html, body {
 
 .result-title-container {
     min-height:5vh;
+}
+
+.result-title-container a {
+    text-decoration: none;
+    color:#0085C5;
 }
 
 .result-label {
