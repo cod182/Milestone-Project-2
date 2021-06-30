@@ -190,11 +190,34 @@ function addResults(results, map) {
     numOfResults = results.length;
     makeRadius();
     results.forEach(function(result){
-        addResultToPage(result, map);
+        getWeather(result, map);
     });
 };
 
-function addResultToPage (result, map) {
+let weatherResults = [];
+
+//takes the result and get an XML document of info related
+function getWeather(result, map) {
+    const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", weatherUrl);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            console.log('getWeather status - ', xhr.status);
+            let parser = new DOMParser(),
+            xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
+            
+            addResultToPage(result, map, xmlDoc.getElementsByTagName('observation')[0]);
+            moveMapToResult(map);
+
+        }};
+    xhr.send();
+};
+
+//Addes the result given to the DOM
+function addResultToPage (result, map, weather) {
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
@@ -203,55 +226,75 @@ function addResultToPage (result, map) {
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
 
+    let currWeather = weather.childNodes[3].innerHTML; // current weather at location
+    let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
+    let currTemp = weather.childNodes[9].innerHTML;
+
     resultDiv.innerHTML = `
-        <div class="result-title-container">
-                    <h2 class="blue bold result-row" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}"><a href="#map">${result.title}</a></h2>
-                </div>
-            <div class="col-9" id="data-text">
-                <div class="row">
-                    <div class="col-3 result-row">
-                        <p class="result-label">Distance:</p>
-                    </div>
-                    <div class="col-9 result-data-container">
-                        <p class="result-data">${distance} Miles</p>
-                    </div>
-                </div>
-                <div class="row">
-                <div class="col-3 result-row">
-                    <p class="result-label">Address:</p>
-                </div>
-                <div class="col-9 result-data-container">
-                    <p class="result-data result-address">${result.title}</p>
-                    <p class="result-data result-address">${result.address.district}</p>
-                    <p class="result-data result-address">${result.address.county}</p>
-                    <p class="result-data">${result.address.postalCode}</p>
-                </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                        <p class="result-label">Phone:</p>
-                    </div>
-                    <div class="col-9 result-data-container">
-                        <p class="result-data">${phone}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 result-row">
-                        <p class="result-label">Opening Hours:</p>
-                    </div>
-                    <div class="col-9 result-data-container">
-                        <p class="result-data">${hours}</p>
-                    </div>
-                </div>
+            <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
+                <h2 class="blue bold result-row">
+                    <a href="#map">${result.title}</a>
+                </h2>
             </div>
-            <div class="col-3">
-                <div class="weather"></div>
-            </div>
-                <div class="row">
+            <div class="row">
+                <div class="col-9">
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Distance:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${distance} Miles</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Address:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data result-address">${result.title}</p>
+                            <p class="result-data result-address">${result.address.district}</p>
+                            <p class="result-data result-address">${result.address.county}</p>
+                            <p class="result-data">${result.address.postalCode}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Phone:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${phone}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Opening Hours:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${hours}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="weather">
+                        <div>
+                            <h4>Current Weather</h4>
+                            <img src="${iconWeather}" alt="weather Icon">
+                            <p>${currWeather}</p>
+                            <p>Current Temp: <span>${currTemp}ºc</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <div class="row">
                 <div class="col-md-5 result-row">
                     <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
                 </div>
-        </div>
+            </div>
     `;
     resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
     };
@@ -353,7 +396,7 @@ function getHours(result) {
 function getDistance(mDist) {
     const distKm = mDist * 0.001; 
     const dist = distKm / 1.609; //converts KM to Miles
-    return dist.toFixed(1); //Returns distance is miles to 1 decimal place
+    return dist.toFixed(1); //Returns distance in miles to 1 decimal place
 };
 
 //Create Modal
@@ -449,11 +492,10 @@ function addMapEl(results) {
     window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     const ui = H.ui.UI.createDefault(map, defaultLayers);
-
+    
+    addResults(results, map);
     moveMapToLocation(map); //Run function to move map to searched
     addMapMarker(map, results, ui)
-    addResults(results, map);
-    moveMapToResult(map);
 };
 
  //Move the center of the map to specified locatioin
@@ -465,10 +507,11 @@ function moveMapToLocation(map){
         lat: lat, 
         lng: lng
     });
+
     map.setZoom(10); //Sets the Zoom level of the map
     const SearchLocation = new H.map.Marker({lat:lat, lng:lng});//Adds a marker where search was
     map.addObject(SearchLocation);
-  };
+};
 
   // Adds markers for each of the discovered search location
 function addMapMarker(map, results, ui) {
@@ -600,13 +643,12 @@ function makeRadius() {
 
 
 function moveMapToResult(map) {
-
         const resultBoxes = document.querySelectorAll('[data-result]');
         for (let i = 0; i < resultBoxes.length; i++) {
             const clickedResult = resultBoxes[i];
             clickedResult.addEventListener('click', function(){
-                let lat = $(this).attr("data-lat");
-                let lng = $(this).attr("data-lng");
+                let lat = $(this).attr('data-lat');
+                let lng = $(this).attr('data-lng');
                 console.log(lat, lng);
                 map.setCenter({ //Sets the Lat & Lng of the map
                     lat: lat, 
@@ -614,18 +656,5 @@ function moveMapToResult(map) {
                 });
                 map.setZoom(14); //Sets the Zoom level of the map
                 });
-        }
-
-        // const resultBox = document.querySelector('[data-result]');
-
-        // resultBox.addEventListener('click', function(){
-        // let lat = $(this).attr("data-lat");
-        // let lng = $(this).attr("data-lng");
-        // console.log(lat, lng);
-        // map.setCenter({ //Sets the Lat & Lng of the map
-        //     lat: lat, 
-        //     lng: lng
-        // });
-        // map.setZoom(14); //Sets the Zoom level of the map
-        // });
+        };
 };
