@@ -186,18 +186,19 @@ function discoverSearch(coords, cb) {
     xhr.send();
 };
 
-function addResults(results, map) {
-    numOfResults = results.length;
-    makeRadius();
+//loops through the results to give results to pass on
+function addResults(results, map) { 
+    numOfResults = results.length; //sets the number of results for the radius results
+    makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
-        getWeather(result, map);
+        getWeather(result, map, addResultToPage);
     });
 };
 
 let weatherResults = [];
 
-//takes the result and get an XML document of info related
-function getWeather(result, map) {
+//takes the result and gets an XML document of info related, then calls back for addReultsToPage
+function getWeather(result, map, cb) {
     const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
 
     var xhr = new XMLHttpRequest();
@@ -208,9 +209,10 @@ function getWeather(result, map) {
             console.log('getWeather status - ', xhr.status);
             let parser = new DOMParser(),
             xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
+            let xml = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation
             
-            addResultToPage(result, map, xmlDoc.getElementsByTagName('observation')[0]);
-            moveMapToResult(map);
+            cb(result, map, xml); //Callback to run the addResultToPage function
+            moveMapToResult(map); //Run the moveMapToResult function. Just activates
 
         }};
     xhr.send();
