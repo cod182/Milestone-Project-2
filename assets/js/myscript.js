@@ -191,14 +191,14 @@ function addResults(results, map) {
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
-        getWeather(result, map, addResultToPage);
+        getWeather(result, map, addResultToPage, moveMapToResult);
     });
 };
 
 let weatherResults = [];
 
 //takes the result and gets an XML document of info related, then calls back for addReultsToPage
-function getWeather(result, map, cb) {
+function getWeather(result, map, cb, cb2) {
     const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
 
     var xhr = new XMLHttpRequest();
@@ -212,8 +212,7 @@ function getWeather(result, map, cb) {
             let xml = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation
             
             cb(result, map, xml); //Callback to run the addResultToPage function
-            moveMapToResult(map); //Run the moveMapToResult function. Just activates
-
+            cb2(map); //Callback to Run the moveMapToResult function. Just activates
         }};
     xhr.send();
 };
@@ -236,10 +235,11 @@ function addResultToPage (result, map, weather) {
             <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
                 <h2 class="blue bold result-row">
                     <a href="#map">${result.title}</a>
+                    <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
                 </h2>
             </div>
             <div class="row">
-                <div class="col-9">
+                <div class="col-sm-12 col-md-9">
 
                     <div class="row">
                         <div class="col-3 result-row">
@@ -281,7 +281,7 @@ function addResultToPage (result, map, weather) {
                     </div>
                 </div>
 
-                <div class="col-3">
+                <div class="col-md-3 d-none d-md-inline weather-container">
                     <div class="weather">
                         <div>
                             <h4>Current Weather</h4>

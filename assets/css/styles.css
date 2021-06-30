@@ -421,6 +421,20 @@ html, body {
     padding: 30px;
 }
 
+.weather-container {
+    border: 2px solid black;
+    border-radius: 4%;
+    margin-left: -3%;
+    padding: 10px 5px 10px 5px;
+    text-align: center;
+    margin: -4% 0% 0% -22px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.weather-icon-sm {
+    max-height: 40px;
+}
+
 #about {
     background-color:#399845 ;
     border-radius: 30px;
