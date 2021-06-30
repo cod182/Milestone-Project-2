@@ -230,7 +230,7 @@ function addResultToPage (result, map, weather) {
 
     let currWeather = weather.childNodes[3].innerHTML; // current weather at location
     let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
-    let currTemp = weather.childNodes[9].innerHTML;
+    let currTemp = fixTemp(weather.childNodes[9].innerHTML);
 
     resultDiv.innerHTML = `
             <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
@@ -400,6 +400,11 @@ function getDistance(mDist) {
     const dist = distKm / 1.609; //converts KM to Miles
     return dist.toFixed(1); //Returns distance in miles to 1 decimal place
 };
+
+//converts the string temp to a number with 2 digits
+function fixTemp(temp) {
+    return parseInt(temp, 10);
+}
 
 //Create Modal
 
