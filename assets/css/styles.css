@@ -313,7 +313,6 @@ html, body {
 .result-num-container {
     float: left;
     padding-left: 3vw;
-    margin-top: 8px;
 }
 
 /* Slider CSS by w3c */
@@ -378,12 +377,24 @@ html, body {
     margin: 10px auto;
 }
 
+.result-box:hover,
+.result-box:active,
+.result-box:focus,
+.result-box:active:focus {
+    box-shadow: 8px 7px #01b9fe;
+}
+
 .result-row {
     padding: 0;
 }
 
 .result-title-container {
     min-height:5vh;
+}
+
+.result-title-container a {
+    text-decoration: none;
+    color:#0085C5;
 }
 
 .result-label {

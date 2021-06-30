@@ -16,7 +16,6 @@ let numOfResults = [];
 const aboutText = document.getElementById('about-text');
 
 // Changes the about message every 5 seconds
-
 var text = [];
     var counter = 0;
 
@@ -33,9 +32,9 @@ var text = [];
     </p>
     `);
 
-setInterval(change, 5000);
+setInterval(changeText, 5000);
 
-function change() {
+function changeText() {
     aboutText.classList.add('about-hide');
     setTimeout(function () {
         aboutText.innerHTML = text[counter];
@@ -45,7 +44,7 @@ function change() {
             counter = 0;
         }
     }, 500);
-}
+};
 
 
 //Dark mode toggle
@@ -95,7 +94,7 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
             searchLatLng.push(position.coords.latitude);
             searchLatLng.push(position.coords.longitude);
             coords = searchLatLng.toString();
-            discoverSearch(coords, addResults, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+            discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
         })
       }
     });
@@ -165,12 +164,12 @@ function getCoords(data) {
     searchLatLng.push(lat);
     searchLatLng.push(lng);
     coords = searchLatLng.toString();
-    discoverSearch(coords, addResults, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+    discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
 };
 
 // Runs a search to API using coords
 // Callback 1 for addResults function, 2 for AddMapsEL function
-function discoverSearch(coords, cb, cb2) {
+function discoverSearch(coords, cb) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
     const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=' + radius + '&limit=100' + '&apiKey=' + hereApiKey;
 
@@ -183,30 +182,30 @@ function discoverSearch(coords, cb, cb2) {
         console.log(JSON.parse(xhr.responseText));
         const results = JSON.parse(xhr.responseText).items;
         cb(results); // Callback for addReults function
-        cb2(results); // Callbakc for addMapEl function
         }};
     xhr.send();
 };
 
-function addResults(results) {
+function addResults(results, map) {
     numOfResults = results.length;
     makeRadius();
     results.forEach(function(result){
-        addResultToPage(result);
+        addResultToPage(result, map);
     });
 };
 
-function addResultToPage (result) {
+function addResultToPage (result, map) {
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
+
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
-    
+
     resultDiv.innerHTML = `
-                <div class="result-title-container">
-                    <h2 class="blue bold result-row">${result.title}</h2>
+        <div class="result-title-container">
+                    <h2 class="blue bold result-row" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}"><a href="#map">${result.title}</a></h2>
                 </div>
             <div class="col-9" id="data-text">
                 <div class="row">
@@ -252,7 +251,7 @@ function addResultToPage (result) {
                 <div class="col-md-5 result-row">
                     <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
                 </div>
-                </div>
+        </div>
     `;
     resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
     };
@@ -453,6 +452,8 @@ function addMapEl(results) {
 
     moveMapToLocation(map); //Run function to move map to searched
     addMapMarker(map, results, ui)
+    addResults(results, map);
+    moveMapToResult(map);
 };
 
  //Move the center of the map to specified locatioin
@@ -582,7 +583,7 @@ function makeRadius() {
                 resultsContain.innerHTML = ""; //Set String empty each time function run
                 mapContainer.innerHTML = ""; //Set String empty each time function run
                 radius = radiusSlide.value;
-                discoverSearch(coords, addResults, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+                discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
             } else {
                 searchLatLng = []; //Set array to empty each time function run
                 numRes.innerHTML = [];
@@ -595,4 +596,36 @@ function makeRadius() {
     };
     const numRes = document.getElementById('num-of-results');
     numRes.innerHTML = numOfResults;  
+};
+
+
+function moveMapToResult(map) {
+
+        const resultBoxes = document.querySelectorAll('[data-result]');
+        for (let i = 0; i < resultBoxes.length; i++) {
+            const clickedResult = resultBoxes[i];
+            clickedResult.addEventListener('click', function(){
+                let lat = $(this).attr("data-lat");
+                let lng = $(this).attr("data-lng");
+                console.log(lat, lng);
+                map.setCenter({ //Sets the Lat & Lng of the map
+                    lat: lat, 
+                    lng: lng
+                });
+                map.setZoom(14); //Sets the Zoom level of the map
+                });
+        }
+
+        // const resultBox = document.querySelector('[data-result]');
+
+        // resultBox.addEventListener('click', function(){
+        // let lat = $(this).attr("data-lat");
+        // let lng = $(this).attr("data-lng");
+        // console.log(lat, lng);
+        // map.setCenter({ //Sets the Lat & Lng of the map
+        //     lat: lat, 
+        //     lng: lng
+        // });
+        // map.setZoom(14); //Sets the Zoom level of the map
+        // });
 };
