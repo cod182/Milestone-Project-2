@@ -194,7 +194,7 @@ function addResults(results, map) {
         getWeather(result); //get the weather results from result
         setTimeout(function(){ //wait 200ms to give getWeather time to retrieve results
             addResultToPage(result); 
-        }, 250);
+        }, 300);
         moveMapToResult(map); //run the moveMapToResult function
     });
 };
@@ -226,79 +226,86 @@ function addResultToPage (result) {
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
+    if (weather === null) { //if weather is null, addResultToPage loaded too fast, start again
+        getWeather(result); //call getWeather
+        setTimeout(function(){ //wait 200ms to give getWeather time to retrieve results
+            addResultToPage(result); //Call AddResultsToPage
+        }, 250);
+        console.log('reloading...');//Log that reloading happened
+    } else {
+        let currWeather = weather.childNodes[3].innerHTML; // current weather at location
+        let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
+        let currTemp = fixTemp(weather.childNodes[9].innerHTML);
+        resultDiv.innerHTML = `
+                <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
+                    <h2 class="blue bold result-row">
+                        <a href="#map">${result.title}</a>
+                        <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
+                    </h2>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-9">
 
-    let currWeather = weather.childNodes[3].innerHTML; // current weather at location
-    let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
-    let currTemp = fixTemp(weather.childNodes[9].innerHTML);
-    resultDiv.innerHTML = `
-            <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
-                <h2 class="blue bold result-row">
-                    <a href="#map">${result.title}</a>
-                    <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
-                </h2>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-9">
-
-                    <div class="row">
-                        <div class="col-3 result-row">
-                            <p class="result-label">Distance:</p>
+                        <div class="row">
+                            <div class="col-3 result-row">
+                                <p class="result-label">Distance:</p>
+                            </div>
+                            <div class="col-9 result-data-container">
+                                <p class="result-data">${distance} Miles</p>
+                            </div>
                         </div>
-                        <div class="col-9 result-data-container">
-                            <p class="result-data">${distance} Miles</p>
+
+                        <div class="row">
+                            <div class="col-3 result-row">
+                                <p class="result-label">Address:</p>
+                            </div>
+                            <div class="col-9 result-data-container">
+                                <p class="result-data result-address">${result.title}</p>
+                                <p class="result-data result-address">${result.address.district}</p>
+                                <p class="result-data result-address">${result.address.county}</p>
+                                <p class="result-data">${result.address.postalCode}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 result-row">
+                                <p class="result-label">Phone:</p>
+                            </div>
+                            <div class="col-9 result-data-container">
+                                <p class="result-data">${phone}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 result-row">
+                                <p class="result-label">Opening Hours:</p>
+                            </div>
+                            <div class="col-9 result-data-container">
+                                <p class="result-data">${hours}</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-3 result-row">
-                            <p class="result-label">Address:</p>
-                        </div>
-                        <div class="col-9 result-data-container">
-                            <p class="result-data result-address">${result.title}</p>
-                            <p class="result-data result-address">${result.address.district}</p>
-                            <p class="result-data result-address">${result.address.county}</p>
-                            <p class="result-data">${result.address.postalCode}</p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-3 result-row">
-                            <p class="result-label">Phone:</p>
-                        </div>
-                        <div class="col-9 result-data-container">
-                            <p class="result-data">${phone}</p>
+                    <div class="col-md-3 d-none d-md-inline weather-container">
+                        <div class="weather">
+                            <div>
+                                <h4 class="weather-title">Current Weather</h4>
+                                <img src="${iconWeather}" alt="weather Icon">
+                                <p class="weather-current">${currWeather}</p>
+                                <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-3 result-row">
-                            <p class="result-label">Opening Hours:</p>
-                        </div>
-                        <div class="col-9 result-data-container">
-                            <p class="result-data">${hours}</p>
-                        </div>
+                </div>  
+                <div class="row">
+                    <div class="col-md-5 result-row">
+                        <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
                     </div>
                 </div>
-
-                <div class="col-md-3 d-none d-md-inline weather-container">
-                    <div class="weather">
-                        <div>
-                            <h4 class="weather-title">Current Weather</h4>
-                            <img src="${iconWeather}" alt="weather Icon">
-                            <p class="weather-current">${currWeather}</p>
-                            <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>  
-            <div class="row">
-                <div class="col-md-5 result-row">
-                    <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
-                </div>
-            </div>
-    `;
-    resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
-    };
+        `;
+        resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
+    };   
+};
 
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
