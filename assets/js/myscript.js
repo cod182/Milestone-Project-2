@@ -46,30 +46,41 @@ function changeText() {
     }, 500);
 };
 
+let darkMode = localStorage.getItem('darkMode')
 
-//Dark mode toggle
-darkToggle.addEventListener('click', function() { //listens for dark button clicked
-    if(document.body.className !== '') { //if body has a class
-        removeDarkClasses(); //remove classed
-    } else {    // if body has no class
-        addDarkClasses(); // add classes
-    }
-});
 // Classes to remove for Light mode
-function removeDarkClasses() {
+const disableDark = () => {
     document.body.classList.remove('dark');
     document.body.classList.remove('white-text');
     searchBox.classList.remove('dark-search');
     locate.classList.remove('white-text');
+    localStorage.setItem('darkMode', null);
+
 
 };
 //Classes to add for Dark mode
-function addDarkClasses() {
+const enableDark = () => {
     document.body.classList.add('dark');
     document.body.classList.add('white-text');
     searchBox.classList.add('dark-search');
     locate.classList.add('white-text');
+    localStorage.setItem('darkMode','enabled');
 };
+
+//Checks if dark mode is enabled in local storage
+if(darkMode === 'enabled') {
+    enableDark();
+};
+
+//Dark mode toggle
+darkToggle.addEventListener('click', () => { //listens for dark button clicked
+    darkMode = localStorage.getItem('darkMode')
+    if(darkMode !== 'enabled') { //if body has a class
+        enableDark(); // add classes
+    } else {    // if body has no class
+        disableDark(); //remove classed
+    }
+});
 
 // Get location using geolocation and run a search based on resulting Lat/Lng
 locate.addEventListener('click', function(event){ //Event listener on the locate button
