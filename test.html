@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campzilla - Home</title>
+    <link rel="icon" href="assets/images/favicon/logo-16.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="assets/images/favicon/logo-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="assets/images/favicon/logo-96.png" type="image/png" sizes="96x96">
+    <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script defer src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous">
+    </script>
+    <script defer src="assets/js/myscript.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+    <script type="text/javascript">
+      (function(){
+          emailjs.init("user_g1KRgEDq9ymwiRfNP9t9s");
+      })();
+    </script>
+</head>
+<body>
+    
+    <section class="container-fluid" id="search-area-container">
+        <div id="search-results" class="row m-0">
+
+
+            <div class="result-title-container col-12">
+                <h2 class="blue bold result-row" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
+                    <a href="#map">${result.title}</a>
+                </h2>
+            </div>
+            <div class="row">
+                <div class="col-9">
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Distance:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${distance} Miles</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Address:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data result-address">${result.title}</p>
+                            <p class="result-data result-address">${result.address.district}</p>
+                            <p class="result-data result-address">${result.address.county}</p>
+                            <p class="result-data">${result.address.postalCode}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Phone:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${phone}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Opening Hours:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${hours}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="weather">
+                        <div>
+                            <img src="${iconWeather}" alt="weather Icon">
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col-md-5 result-row">
+                    <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
+                </div>
+            </div>
+
+            
+        </div>
+    </section>
+
+
+</body>
+</html>
