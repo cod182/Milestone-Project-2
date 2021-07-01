@@ -204,16 +204,15 @@ function addResults(results, map) {
     results.forEach(function(result){
         getWeather(result); //get the weather results from result
         setTimeout(function(){ //wait 200ms to give getWeather time to retrieve results
-            addResultToPage(result); 
-        }, 300);
-        moveMapToResult(map); //run the moveMapToResult function
+            addResultToPage(result); //Call AddResultsToPage
+            moveMapToResult(map);
+        }, 250);        
     });
 };
 
 //takes the result and gets an XML document of info related, then calls back for addReultsToPage and moveMapToResult
-function getWeather(result,) {
+function getWeather(result) {
     const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
-
     var xhr = new XMLHttpRequest();
     xhr.open("GET", weatherUrl);
 
@@ -225,8 +224,9 @@ function getWeather(result,) {
             weather = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
         }};
     xhr.send();
-};
+    };
 let weather = null; //store current weather here
+
 
 //Addes the result given to the DOM
 function addResultToPage (result) {
@@ -237,10 +237,12 @@ function addResultToPage (result) {
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
+
     if (weather === null) { //if weather is null, addResultToPage loaded too fast, start again
         getWeather(result); //call getWeather
         setTimeout(function(){ //wait 200ms to give getWeather time to retrieve results
             addResultToPage(result); //Call AddResultsToPage
+            moveMapToResult(map);
         }, 250);
         console.log('reloading...');//Log that reloading happened
     } else {
@@ -315,9 +317,9 @@ function addResultToPage (result) {
                 </div>
         `;
         resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
+        addMoreInfo(result)
     };   
 };
-
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
 function getPhone(result) {
@@ -348,80 +350,115 @@ function getDistance(mDist) {
     return dist.toFixed(1); //Returns distance in miles to 1 decimal place
 };
 
+//gets the website address for the result
+function getWebsite(result) {
+    if(result.contacts) { //if contacts exists in result
+        if (result.contacts[0].www){ //if website exists in contacts
+            return result.contacts[0].www[0].value; //display website 
+        } else if (result.contacts[0].www) { //if no website 1, check for website 2
+            return result.contacts[0].www[1].value; //display website
+        }
+    } else { // if no website
+        return `<i class="fas fa-phone"></i><span class="result-data">- Call to confirm</span>`;
+    };
+};
+
+//gets the email address for the result
+function getEmail(result) {
+    if(result.contacts) { //if contacts exists in result
+        if (result.contacts[0].email){ //if email exists in contacts
+            return result.contacts[0].email[0].value; //display email 
+        } else {
+            return `<i class="fas fa-phone"></i><span class="result-data">- Please Call</span>`;
+        }
+    } else { // if no email
+        return `<i class="fas fa-phone"></i><span class="result-data">- Please Call</span>`;
+    };
+};
+
 //converts the string temp to a number with 2 digits
 function fixTemp(temp) {
     return parseInt(temp, 10);
 }
 
-// function addMoreInfo(result) {
-//     const modalOfInfo = document.body.querySelector('[data-modal-info]');
-//     let modalHead = document.createElement('div');
-//     modalHead.classList.add('modal-header');
+function addMoreInfo(result) {
 
-//     modalHead.innerHTML = `
-//         <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
-//         <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-//     `;
+    const phone = getPhone (result); //Gets the contact number of the result
+    const hours = getHours(result); //Gets the hours the result is open
+    const distance = getDistance(result.distance); //Gets the distance to result in miles
+    const email = getEmail(result); //Gets the email of the result
+    const website = getWebsite(result); //Gets the website of the result
 
-//     let modalBody = document.createElement('div');
-//     modalBody.classList.add('result-modal');
-//     modalBody.classList.add('modal-body');
+    const modalOfInfo = document.body.querySelector('[data-modal-info]');
+    let modalHead = document.createElement('div');
+    modalHead.classList.add('modal-header');
 
-//     modalBody.innerHTML = `
-//             <div class="row">
-//                 <div class="col-9">
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Address:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">123 example street</p>
-//                       <p class="result-data">Example city</p>
-//                     </div>
-//                   </div>
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Services:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">Water, Electric, Waste</p>
-//                     </div>
-//                   </div>
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Phone:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">02938 273748</p>
-//                     </div>
-//                   </div>
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Email:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">location@email.com</p>
-//                     </div>
-//                   </div>
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Website:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">www.location.com</p>
-//                     </div>
-//                   </div>
-//                 </div>
-//                 <div class="col-3">
-//                   <div class="weather"></div>
-//                 </div>
-//               </div>
-//           </div>
-//     `;
+    modalHead.innerHTML = `
+        <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
+        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+    `;
 
-//     modalOfInfo.appendChild(modalHead);
-//     modalOfInfo.appendChild(modalBody);
-// };
+    let modalBody = document.createElement('div');
+    modalBody.classList.add('result-modal');
+    modalBody.classList.add('modal-body');
+
+    modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Address:</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="result-data result-address">${result.title}</p>
+                        <p class="result-data result-address">${result.address.district}</p>
+                        <p class="result-data result-address">${result.address.county}</p>
+                        <p class="result-data">${result.address.postalCode}</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Services:</p>
+                    </div>
+                    <div class="col-9">
+                      <p class="result-data">Water, Electric, Waste</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Phone:</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="result-data">${phone}</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                        <p class="result-label">Email:</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="result-data">${email}</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Website:</p>
+                    </div>
+                    <div class="col-9">
+                      <p class="result-data">${website}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="weather"></div>
+                </div>
+              </div>
+          </div>
+    `;
+
+    modalOfInfo.appendChild(modalHead);
+    modalOfInfo.appendChild(modalBody);
+};
 
 //Create Modal
 
@@ -519,7 +556,7 @@ function addMapEl(results) {
     
     addResults(results, map);
     moveMapToLocation(map); //Run function to move map to searched
-    addMapMarker(map, results, ui)
+    addMapMarker(map, results, ui);
 };
 
  //Move the center of the map to specified locatioin

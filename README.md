@@ -151,6 +151,7 @@ The site was the made avaiable at the above url.
 
 # Credits
 
+- Help with localStorage provided by Kevin Powell on YouTube
 
 ---
 ## This project is for educational purposes only
