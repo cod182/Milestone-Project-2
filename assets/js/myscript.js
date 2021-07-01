@@ -191,14 +191,16 @@ function addResults(results, map) {
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
-        getWeather(result, map, addResultToPage, moveMapToResult);
+        getWeather(result); //get the weather results from result
+        setTimeout(function(){ //wait 200ms to give getWeather time to retrieve results
+            addResultToPage(result); 
+        }, 250);
+        moveMapToResult(map); //run the moveMapToResult function
     });
 };
 
-let weatherResults = [];
-
-//takes the result and gets an XML document of info related, then calls back for addReultsToPage
-function getWeather(result, map, cb, cb2) {
+//takes the result and gets an XML document of info related, then calls back for addReultsToPage and moveMapToResult
+function getWeather(result,) {
     const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
 
     var xhr = new XMLHttpRequest();
@@ -209,16 +211,14 @@ function getWeather(result, map, cb, cb2) {
             console.log('getWeather status - ', xhr.status);
             let parser = new DOMParser(),
             xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
-            let xml = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation
-            
-            cb(result, map, xml); //Callback to run the addResultToPage function
-            cb2(map); //Callback to Run the moveMapToResult function. Just activates
+            weather = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
         }};
     xhr.send();
 };
+let weather = null; //store current weather here
 
 //Addes the result given to the DOM
-function addResultToPage (result, map, weather) {
+function addResultToPage (result) {
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
@@ -230,7 +230,6 @@ function addResultToPage (result, map, weather) {
     let currWeather = weather.childNodes[3].innerHTML; // current weather at location
     let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
     let currTemp = fixTemp(weather.childNodes[9].innerHTML);
-
     resultDiv.innerHTML = `
             <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
                 <h2 class="blue bold result-row">
@@ -284,10 +283,10 @@ function addResultToPage (result, map, weather) {
                 <div class="col-md-3 d-none d-md-inline weather-container">
                     <div class="weather">
                         <div>
-                            <h4>Current Weather</h4>
+                            <h4 class="weather-title">Current Weather</h4>
                             <img src="${iconWeather}" alt="weather Icon">
-                            <p>${currWeather}</p>
-                            <p>Current Temp: <span>${currTemp}ºc</span></p>
+                            <p class="weather-current">${currWeather}</p>
+                            <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
                         </div>
                     </div>
                 </div>
@@ -301,87 +300,17 @@ function addResultToPage (result, map, weather) {
     resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
     };
 
-
-function addMoreInfo(result) {
-    const modalOfInfo = document.body.querySelector('[data-modal-info]');
-    let modalHead = document.createElement('div');
-    modalHead.classList.add('modal-header');
-
-    modalHead.innerHTML = `
-        <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
-        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-    `;
-
-    let modalBody = document.createElement('div');
-    modalBody.classList.add('result-modal');
-    modalBody.classList.add('modal-body');
-
-    modalBody.innerHTML = `
-            <div class="row">
-                <div class="col-9">
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Address:</p>
-                    </div>
-                    <div class="col-9">
-                      <p class="result-data">123 example street</p>
-                      <p class="result-data">Example city</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Services:</p>
-                    </div>
-                    <div class="col-9">
-                      <p class="result-data">Water, Electric, Waste</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Phone:</p>
-                    </div>
-                    <div class="col-9">
-                      <p class="result-data">02938 273748</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Email:</p>
-                    </div>
-                    <div class="col-9">
-                      <p class="result-data">location@email.com</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Website:</p>
-                    </div>
-                    <div class="col-9">
-                      <p class="result-data">www.location.com</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="weather"></div>
-                </div>
-              </div>
-          </div>
-    `;
-
-    modalOfInfo.appendChild(modalHead);
-    modalOfInfo.appendChild(modalBody);
-};
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
 function getPhone(result) {
-        if(result.contacts) {
-            if (result.contacts[0].phone){
-                return result.contacts[0].phone[0].value;
-            } else if (result.contacts[0].mobile) {
-                return result.contacts[0].mobile[0].value;
+        if(result.contacts) { //if contacts exists in result
+            if (result.contacts[0].phone){ //if phone exists in contacts
+                return result.contacts[0].phone[0].value; //display phone number
+            } else if (result.contacts[0].mobile) { //if no phone number, check for mobile number
+                return result.contacts[0].mobile[0].value; //display mobile number
             }
-        } else {
-            return `<i class="fas fa-phone-slash"></i>`;
+        } else { // if no phone or mobile
+            return `<i class="fas fa-phone-slash"></i>`; //display no phone icon
         };
 };
 
@@ -394,9 +323,9 @@ function getHours(result) {
     }
 };
 
-//Converts the distance in miles to KM to 1dp and returns it
+//Converts the distance in meters to miles to 1dp and returns it
 function getDistance(mDist) {
-    const distKm = mDist * 0.001; 
+    const distKm = mDist * 0.001; //convert meters to KM
     const dist = distKm / 1.609; //converts KM to Miles
     return dist.toFixed(1); //Returns distance in miles to 1 decimal place
 };
@@ -405,6 +334,76 @@ function getDistance(mDist) {
 function fixTemp(temp) {
     return parseInt(temp, 10);
 }
+
+// function addMoreInfo(result) {
+//     const modalOfInfo = document.body.querySelector('[data-modal-info]');
+//     let modalHead = document.createElement('div');
+//     modalHead.classList.add('modal-header');
+
+//     modalHead.innerHTML = `
+//         <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
+//         <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+//     `;
+
+//     let modalBody = document.createElement('div');
+//     modalBody.classList.add('result-modal');
+//     modalBody.classList.add('modal-body');
+
+//     modalBody.innerHTML = `
+//             <div class="row">
+//                 <div class="col-9">
+//                   <div class="row">
+//                     <div class="col-3 result-row">
+//                       <p class="result-label">Address:</p>
+//                     </div>
+//                     <div class="col-9">
+//                       <p class="result-data">123 example street</p>
+//                       <p class="result-data">Example city</p>
+//                     </div>
+//                   </div>
+//                   <div class="row">
+//                     <div class="col-3 result-row">
+//                       <p class="result-label">Services:</p>
+//                     </div>
+//                     <div class="col-9">
+//                       <p class="result-data">Water, Electric, Waste</p>
+//                     </div>
+//                   </div>
+//                   <div class="row">
+//                     <div class="col-3 result-row">
+//                       <p class="result-label">Phone:</p>
+//                     </div>
+//                     <div class="col-9">
+//                       <p class="result-data">02938 273748</p>
+//                     </div>
+//                   </div>
+//                   <div class="row">
+//                     <div class="col-3 result-row">
+//                       <p class="result-label">Email:</p>
+//                     </div>
+//                     <div class="col-9">
+//                       <p class="result-data">location@email.com</p>
+//                     </div>
+//                   </div>
+//                   <div class="row">
+//                     <div class="col-3 result-row">
+//                       <p class="result-label">Website:</p>
+//                     </div>
+//                     <div class="col-9">
+//                       <p class="result-data">www.location.com</p>
+//                     </div>
+//                   </div>
+//                 </div>
+//                 <div class="col-3">
+//                   <div class="weather"></div>
+//                 </div>
+//               </div>
+//           </div>
+//     `;
+
+//     modalOfInfo.appendChild(modalHead);
+//     modalOfInfo.appendChild(modalBody);
+// };
 
 //Create Modal
 
@@ -560,7 +559,7 @@ function addMapMarker(map, results, ui) {
             icon: domIcon
           });
 
-        const phone = getPhone (result);
+        const phone = getPhone (result); //send the result to the getPhone function
 
         locationMarker.setData(`
         <div class="col-12">
@@ -591,7 +590,7 @@ function addMapMarker(map, results, ui) {
     });
 };
 
-//Create the radius div and set the innerHTMl
+//Create the radius div and set the innerHTML
 function makeRadius() {
     if (firstRadius) { //if frist radius is true (First Run)
         let radiusArea = document.createElement('div');// Create new Div
@@ -648,7 +647,7 @@ function makeRadius() {
     numRes.innerHTML = numOfResults;  
 };
 
-
+//gets coordinates and focuses the map on that location
 function moveMapToResult(map) {
         const resultBoxes = document.querySelectorAll('[data-result]');
         for (let i = 0; i < resultBoxes.length; i++) {
@@ -665,3 +664,4 @@ function moveMapToResult(map) {
                 });
         };
 };
+

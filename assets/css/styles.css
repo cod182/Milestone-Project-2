@@ -435,6 +435,11 @@ html, body {
     max-height: 40px;
 }
 
+.weather-title {
+    color: #0085C5;
+    text-decoration: underline;
+}
+
 #about {
     background-color:#399845 ;
     border-radius: 30px;
