@@ -353,7 +353,7 @@ function addResultToPage (result, weather) {
     let currTemp = fixTemp(weather.childNodes[9].innerHTML);
 
     resultDiv.innerHTML = `
-            <div class="result-title-container col-12" data-result="data-result">
+            <div class="result-title-container col-12">
                 <h2 class="blue bold result-row">
                     <a href="#map" onclick="moveMapToResult(this, map)" data-lat="${result.position.lat}" data-lng="${result.position.lng}">${result.title}</a>
                     <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
@@ -702,7 +702,7 @@ function moveMapToResult(event, map) {
         lng: lng
     });
     map.setZoom(14); //Sets the Zoom level of the map
-    console.log('Move to: ' + lat,lng);
+    console.log('Move map to: ' + lat,lng);
 };
 
 
