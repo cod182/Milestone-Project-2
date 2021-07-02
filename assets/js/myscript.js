@@ -179,7 +179,7 @@ function getCoords(data) {
 };
 
 // Runs a search to API using coords
-// Callback 1 for addResults function, 2 for AddMapsEL function
+// Callback 1 for addResults function
 function discoverSearch(coords, cb) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
     const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=' + radius + '&limit=100' + '&apiKey=' + hereApiKey;
@@ -197,39 +197,151 @@ function discoverSearch(coords, cb) {
     xhr.send();
 };
 
+//Add map div and initilise the Here Map in section map
+function addMapEl(results) {
+    let mapDiv = document.createElement('div'); //Create a new div called resultDiv
+    mapContainer.appendChild(mapDiv); //Appends resultDiv as a child of resultsContain
+    mapDiv.id ='map'; //Add map ID to mapDiv
+    mapDiv.classList.add('map'); //Add map class to mapDiv
+    
+    const platform = new H.service.Platform({ //New instance of Here Map
+        apikey: hereApiKey //setting API key
+      });
+
+    const defaultLayers = platform.createDefaultLayers();
+    const map = new H.Map(document.getElementById('map'), //Here map placed into div with ID map (mapDiv)
+    defaultLayers.vector.normal.map,{
+    center: {lat:50, lng:5},
+    zoom: 4,
+    pixelRatio: window.devicePixelRatio || 1
+    });
+
+    window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
+    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    const ui = H.ui.UI.createDefault(map, defaultLayers);
+    
+    addResults(results, map);
+    moveMapToLocation(map); //Run function to move map to searched
+    addMapMarker(map, results, ui);
+};
+
+ //Move the center of the map to specified locatioin
+function moveMapToLocation(map){
+    const lat = searchLatLng[0].toString(); //sets latitude from searhLatLng array
+    const lng = searchLatLng[1].toString(); //sets longitude from searhLatLng array
+
+    map.setCenter({ //Sets the Lat & Lng of the map
+        lat: lat, 
+        lng: lng
+    });
+
+    map.setZoom(10); //Sets the Zoom level of the map
+    const SearchLocation = new H.map.Marker({lat:lat, lng:lng});//Adds a marker where search was
+    map.addObject(SearchLocation);
+};
+
+  // Adds markers for each of the discovered search location
+function addMapMarker(map, results, ui) {
+    results.forEach(function(result){
+        const lat = result.position.lat;
+        const lng = result.position.lng;
+
+        var outerElement = document.createElement('div'),
+            innerElement = document.createElement('div');
+
+        outerElement.appendChild(innerElement);
+    
+        // Add image to the DOM element
+        innerElement.innerHTML = `<img src="assets/images/location-icon-32.png">`;
+    
+        function changeOpacity(evt) {
+        evt.target.style.opacity = 0.6;
+        };
+    
+        function changeOpacityToOne(evt) {
+        evt.target.style.opacity = 1;
+        };
+  
+        //create dom icon and add/remove opacity listeners
+        var domIcon = new H.map.DomIcon(outerElement, {
+        // the function is called every time marker enters the viewport
+        onAttach: function(clonedElement, domIcon, domMarker) {
+            clonedElement.addEventListener('mouseover', changeOpacity);
+            clonedElement.addEventListener('mouseout', changeOpacityToOne);
+        },
+        // the function is called every time marker leaves the viewport
+        onDetach: function(clonedElement, domIcon, domMarker) {
+            clonedElement.removeEventListener('mouseover', changeOpacity);
+            clonedElement.removeEventListener('mouseout', changeOpacityToOne);
+        }
+        });
+
+        const locationMarker = new H.map.DomMarker({lat:lat, lng:lng}, {
+            icon: domIcon
+          });
+
+        const phone = getPhone (result); //send the result to the getPhone function
+
+        locationMarker.setData(`
+        <div class="col-12">
+            <div class="col-12">
+                <div class="row">
+                <div class="col-12 result-data-container">
+                    <p class="result-address"><b>${result.title}</b></p>
+                    <p class="result-address">${result.address.district}</p>
+                    <p class="result-address">${result.address.county}</p>
+                    <p class="">${result.address.postalCode}</p>
+                    <p class="">${phone}</p>
+                    </div>
+                </div>
+            </div> 
+        </div>
+        `);
+        locationMarker.addEventListener('tap', event => {
+            const bubble = new H.ui.InfoBubble(
+                {lat: lat, lng: lng},
+                {
+                    content: event.target.getData()
+                }
+            );
+            ui.addBubble(bubble);
+        },false);
+
+        map.addObject(locationMarker);
+    });
+};
+
 //loops through the results to give results to pass on
 function addResults(results, map) { 
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
-    results.forEach(function(result){
-        getWeather(result); //get the weather results from result
-        setTimeout(function(){ //wait 200ms to give getWeather time to retrieve results
-            addResultToPage(result); //Call AddResultsToPage
-            moveMapToResult(map);
-        }, 250);        
-    });
+    setTimeout (function () {
+        results.forEach(function(result){
+            getWeather(result, map, addResultToPage); //get the weather results from result
+        });
+    },250);
 };
 
 //takes the result and gets an XML document of info related, then calls back for addReultsToPage and moveMapToResult
-function getWeather(result) {
+function getWeather(result, map, cb) {
     const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
     var xhr = new XMLHttpRequest();
     xhr.open("GET", weatherUrl);
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            console.log('getWeather status - ', xhr.status);
-            let parser = new DOMParser(),
-            xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
-            weather = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
+            console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState);
+            let parser = new DOMParser();
+            let xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
+            cb(result, map, xmlDoc.getElementsByTagName('observation')[0]); //get the first tag of type observation and assign it to weather variable
         }};
     xhr.send();
     };
-let weather = null; //store current weather here
-
 
 //Addes the result given to the DOM
-function addResultToPage (result) {
+function addResultToPage (result, map, weather) {
+    moveMapToResult(map);
+
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
@@ -238,88 +350,81 @@ function addResultToPage (result) {
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
 
-    if (weather === null) { //if weather is null, addResultToPage loaded too fast, start again
-        getWeather(result); //call getWeather
-        setTimeout(function(){ //wait 200ms to give getWeather time to retrieve results
-            addResultToPage(result); //Call AddResultsToPage
-            moveMapToResult(map);
-        }, 250);
-        console.log('reloading...');//Log that reloading happened
-    } else {
-        let currWeather = weather.childNodes[3].innerHTML; // current weather at location
-        let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
-        let currTemp = fixTemp(weather.childNodes[9].innerHTML);
-        resultDiv.innerHTML = `
-                <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
-                    <h2 class="blue bold result-row">
-                        <a href="#map">${result.title}</a>
-                        <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
-                    </h2>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-9">
+    let currWeather = weather.childNodes[3].innerHTML; // current weather at location
+    let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
+    let currTemp = fixTemp(weather.childNodes[9].innerHTML);
 
-                        <div class="row">
-                            <div class="col-3 result-row">
-                                <p class="result-label">Distance:</p>
-                            </div>
-                            <div class="col-9 result-data-container">
-                                <p class="result-data">${distance} Miles</p>
-                            </div>
+    resultDiv.innerHTML = `
+            <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
+                <h2 class="blue bold result-row">
+                    <a href="#map">${result.title}</a>
+                    <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
+                </h2>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-9">
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Distance:</p>
                         </div>
-
-                        <div class="row">
-                            <div class="col-3 result-row">
-                                <p class="result-label">Address:</p>
-                            </div>
-                            <div class="col-9 result-data-container">
-                                <p class="result-data result-address">${result.title}</p>
-                                <p class="result-data result-address">${result.address.district}</p>
-                                <p class="result-data result-address">${result.address.county}</p>
-                                <p class="result-data">${result.address.postalCode}</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-3 result-row">
-                                <p class="result-label">Phone:</p>
-                            </div>
-                            <div class="col-9 result-data-container">
-                                <p class="result-data">${phone}</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-3 result-row">
-                                <p class="result-label">Opening Hours:</p>
-                            </div>
-                            <div class="col-9 result-data-container">
-                                <p class="result-data">${hours}</p>
-                            </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${distance} Miles</p>
                         </div>
                     </div>
 
-                    <div class="col-md-3 d-none d-md-inline weather-container">
-                        <div class="weather">
-                            <div>
-                                <h4 class="weather-title">Current Weather</h4>
-                                <img src="${iconWeather}" alt="weather Icon">
-                                <p class="weather-current">${currWeather}</p>
-                                <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
-                            </div>
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Address:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data result-address">${result.title}</p>
+                            <p class="result-data result-address">${result.address.district}</p>
+                            <p class="result-data result-address">${result.address.county}</p>
+                            <p class="result-data">${result.address.postalCode}</p>
                         </div>
                     </div>
-                </div>  
-                <div class="row">
-                    <div class="col-md-5 result-row">
-                        <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Phone:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${phone}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Opening Hours:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${hours}</p>
+                        </div>
                     </div>
                 </div>
-        `;
-        resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
-        addMoreInfo(result)
-    };   
-};
+
+                <div class="col-md-3 d-none d-md-inline weather-container">
+                    <div class="weather">
+                        <div>
+                            <h4 class="weather-title">Current Weather</h4>
+                            <img src="${iconWeather}" alt="weather Icon">
+                            <p class="weather-current">${currWeather}</p>
+                            <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col-md-5 result-row">
+                    <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
+                </div>
+            </div>
+    `;
+    resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
+    addMoreInfo(result)
+};   
+
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
 function getPhone(result) {
@@ -531,120 +636,6 @@ function addMoreInfo(result) {
 //     infoModalContainer.appendChild(infoModal);
 // };
 
-//Add map div and initilise the Here Map in section map
-function addMapEl(results) {
-    let mapDiv = document.createElement('div'); //Create a new div called resultDiv
-    mapContainer.appendChild(mapDiv); //Appends resultDiv as a child of resultsContain
-    mapDiv.id ='map'; //Add map ID to mapDiv
-    mapDiv.classList.add('map'); //Add map class to mapDiv
-    
-    const platform = new H.service.Platform({ //New instance of Here Map
-        apikey: hereApiKey //setting API key
-      });
-
-    const defaultLayers = platform.createDefaultLayers();
-    const map = new H.Map(document.getElementById('map'), //Here map placed into div with ID map (mapDiv)
-    defaultLayers.vector.normal.map,{
-    center: {lat:50, lng:5},
-    zoom: 4,
-    pixelRatio: window.devicePixelRatio || 1
-    });
-
-    window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
-    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-    const ui = H.ui.UI.createDefault(map, defaultLayers);
-    
-    addResults(results, map);
-    moveMapToLocation(map); //Run function to move map to searched
-    addMapMarker(map, results, ui);
-};
-
- //Move the center of the map to specified locatioin
-function moveMapToLocation(map){
-    const lat = searchLatLng[0].toString(); //sets latitude from searhLatLng array
-    const lng = searchLatLng[1].toString(); //sets longitude from searhLatLng array
-
-    map.setCenter({ //Sets the Lat & Lng of the map
-        lat: lat, 
-        lng: lng
-    });
-
-    map.setZoom(10); //Sets the Zoom level of the map
-    const SearchLocation = new H.map.Marker({lat:lat, lng:lng});//Adds a marker where search was
-    map.addObject(SearchLocation);
-};
-
-  // Adds markers for each of the discovered search location
-function addMapMarker(map, results, ui) {
-    results.forEach(function(result){
-        const lat = result.position.lat;
-        const lng = result.position.lng;
-
-        var outerElement = document.createElement('div'),
-            innerElement = document.createElement('div');
-
-        outerElement.appendChild(innerElement);
-    
-        // Add image to the DOM element
-        innerElement.innerHTML = `<img src="assets/images/location-icon-32.png">`;
-    
-        function changeOpacity(evt) {
-        evt.target.style.opacity = 0.6;
-        };
-    
-        function changeOpacityToOne(evt) {
-        evt.target.style.opacity = 1;
-        };
-  
-        //create dom icon and add/remove opacity listeners
-        var domIcon = new H.map.DomIcon(outerElement, {
-        // the function is called every time marker enters the viewport
-        onAttach: function(clonedElement, domIcon, domMarker) {
-            clonedElement.addEventListener('mouseover', changeOpacity);
-            clonedElement.addEventListener('mouseout', changeOpacityToOne);
-        },
-        // the function is called every time marker leaves the viewport
-        onDetach: function(clonedElement, domIcon, domMarker) {
-            clonedElement.removeEventListener('mouseover', changeOpacity);
-            clonedElement.removeEventListener('mouseout', changeOpacityToOne);
-        }
-        });
-
-        const locationMarker = new H.map.DomMarker({lat:lat, lng:lng}, {
-            icon: domIcon
-          });
-
-        const phone = getPhone (result); //send the result to the getPhone function
-
-        locationMarker.setData(`
-        <div class="col-12">
-            <div class="col-12">
-                <div class="row">
-                <div class="col-12 result-data-container">
-                    <p class="result-address"><b>${result.title}</b></p>
-                    <p class="result-address">${result.address.district}</p>
-                    <p class="result-address">${result.address.county}</p>
-                    <p class="">${result.address.postalCode}</p>
-                    <p class="">${phone}</p>
-                    </div>
-                </div>
-            </div> 
-        </div>
-        `);
-        locationMarker.addEventListener('tap', event => {
-            const bubble = new H.ui.InfoBubble(
-                {lat: lat, lng: lng},
-                {
-                    content: event.target.getData()
-                }
-            );
-            ui.addBubble(bubble);
-        },false);
-
-        map.addObject(locationMarker);
-    });
-};
-
 //Create the radius div and set the innerHTML
 function makeRadius() {
     if (firstRadius) { //if frist radius is true (First Run)
@@ -719,4 +710,6 @@ function moveMapToResult(map) {
                 });
         };
 };
+
+
 
