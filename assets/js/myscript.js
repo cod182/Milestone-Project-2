@@ -14,7 +14,7 @@ let firstRadius = true;
 let darkToggle = document.getElementById('dark-toggle');
 let numOfResults = [];
 const aboutText = document.getElementById('about-text');
-let map = null;
+let map = null; //map variable
 
 // Changes the about message every 5 seconds
 var text = [];
@@ -317,13 +317,13 @@ function addResults(results, map) {
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
-        getWeather(result, map, addResultToPage); //get the weather results from result
+        getWeather(result, addResultToPage); //get the weather results from result
     });
 
 };
 
-//takes the result and gets an XML document of info related, then calls back for addReultsToPage and moveMapToResult
-function getWeather(result, map, cb) {
+//takes the result and gets an XML document of info related, then calls back for addReultsToPage
+function getWeather(result, cb) {
     const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
     var xhr = new XMLHttpRequest();
     xhr.open("GET", weatherUrl);
@@ -333,13 +333,13 @@ function getWeather(result, map, cb) {
             console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState);
             let parser = new DOMParser();
             let xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
-            cb(result, map, xmlDoc.getElementsByTagName('observation')[0]); //get the first tag of type observation and assign it to weather variable
+            cb(result, xmlDoc.getElementsByTagName('observation')[0]); //get the first tag of type observation and assign it to weather variable
         }};
     xhr.send();
     };
 
 //Addes the result given to the DOM
-function addResultToPage (result, map, weather) {
+function addResultToPage (result, weather) {
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
@@ -353,9 +353,9 @@ function addResultToPage (result, map, weather) {
     let currTemp = fixTemp(weather.childNodes[9].innerHTML);
 
     resultDiv.innerHTML = `
-            <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
+            <div class="result-title-container col-12" data-result="data-result">
                 <h2 class="blue bold result-row">
-                    <a href="#map" onclick="moveMapToResult(map);">${result.title}</a>
+                    <a href="#map" onclick="moveMapToResult(this, map)" data-lat="${result.position.lat}" data-lng="${result.position.lng}">${result.title}</a>
                     <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
                 </h2>
             </div>
@@ -692,23 +692,17 @@ function makeRadius() {
 };
 
 //gets coordinates and focuses the map on that location
-function moveMapToResult(map) {
-        const resultBoxes = document.querySelectorAll('[data-result]');
-        for (let i = 0; i < resultBoxes.length; i++) {
-            const clickedResult = resultBoxes[i];
-            console.log(resultBoxes);
-            clickedResult.addEventListener('click', function(){
-                let lat = $(this).attr('data-lat');
-                let lng = $(this).attr('data-lng');
-                console.log(lat, lng);
-                map.setCenter({ //Sets the Lat & Lng of the map
-                    lat: lat, 
-                    lng: lng
-                });
-                map.setZoom(14); //Sets the Zoom level of the map
-                });
-        };
-};
+function moveMapToResult(event, map) {
 
+    let lat  = event.dataset.lat;
+    let lng = event.dataset.lng;
+
+    map.setCenter({ //Sets the Lat & Lng of the map
+        lat: lat, 
+        lng: lng
+    });
+    map.setZoom(14); //Sets the Zoom level of the map
+    console.log('Move to: ' + lat,lng);
+};
 
 
