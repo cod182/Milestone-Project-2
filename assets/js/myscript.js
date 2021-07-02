@@ -14,6 +14,7 @@ let firstRadius = true;
 let darkToggle = document.getElementById('dark-toggle');
 let numOfResults = [];
 const aboutText = document.getElementById('about-text');
+let map = null;
 
 // Changes the about message every 5 seconds
 var text = [];
@@ -209,7 +210,7 @@ function addMapEl(results) {
       });
 
     const defaultLayers = platform.createDefaultLayers();
-    const map = new H.Map(document.getElementById('map'), //Here map placed into div with ID map (mapDiv)
+    map = new H.Map(document.getElementById('map'), //Here map placed into div with ID map (mapDiv)
     defaultLayers.vector.normal.map,{
     center: {lat:50, lng:5},
     zoom: 4,
@@ -315,11 +316,10 @@ function addMapMarker(map, results, ui) {
 function addResults(results, map) { 
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
-    setTimeout (function () {
-        results.forEach(function(result){
-            getWeather(result, map, addResultToPage); //get the weather results from result
-        });
-    },250);
+    results.forEach(function(result){
+        getWeather(result, map, addResultToPage); //get the weather results from result
+    });
+
 };
 
 //takes the result and gets an XML document of info related, then calls back for addReultsToPage and moveMapToResult
@@ -340,8 +340,6 @@ function getWeather(result, map, cb) {
 
 //Addes the result given to the DOM
 function addResultToPage (result, map, weather) {
-    moveMapToResult(map);
-
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
@@ -357,7 +355,7 @@ function addResultToPage (result, map, weather) {
     resultDiv.innerHTML = `
             <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
                 <h2 class="blue bold result-row">
-                    <a href="#map">${result.title}</a>
+                    <a href="#map" onclick="moveMapToResult(map);">${result.title}</a>
                     <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
                 </h2>
             </div>
@@ -698,6 +696,7 @@ function moveMapToResult(map) {
         const resultBoxes = document.querySelectorAll('[data-result]');
         for (let i = 0; i < resultBoxes.length; i++) {
             const clickedResult = resultBoxes[i];
+            console.log(resultBoxes);
             clickedResult.addEventListener('click', function(){
                 let lat = $(this).attr('data-lat');
                 let lng = $(this).attr('data-lng');
