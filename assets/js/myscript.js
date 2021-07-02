@@ -14,6 +14,7 @@ let firstRadius = true;
 let darkToggle = document.getElementById('dark-toggle');
 let numOfResults = [];
 const aboutText = document.getElementById('about-text');
+let map = null; //map variable
 
 // Changes the about message every 5 seconds
 var text = [];
@@ -179,7 +180,7 @@ function getCoords(data) {
 };
 
 // Runs a search to API using coords
-// Callback 1 for addResults function, 2 for AddMapsEL function
+// Callback 1 for addResults function
 function discoverSearch(coords, cb) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
     const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=' + radius + '&limit=100' + '&apiKey=' + hereApiKey;
@@ -197,303 +198,6 @@ function discoverSearch(coords, cb) {
     xhr.send();
 };
 
-//loops through the results to give results to pass on
-function addResults(results, map) { 
-    numOfResults = results.length; //sets the number of results for the radius results
-    makeRadius(); //Runs the makeRadis function
-    results.forEach(function(result){
-        getWeather(result); //get the weather results from result
-        setTimeout(function(){ //wait 200ms to give getWeather time to retrieve results
-            addResultToPage(result); 
-        }, 300);
-        moveMapToResult(map); //run the moveMapToResult function
-    });
-};
-
-//takes the result and gets an XML document of info related, then calls back for addReultsToPage and moveMapToResult
-function getWeather(result,) {
-    const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", weatherUrl);
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            console.log('getWeather status - ', xhr.status);
-            let parser = new DOMParser(),
-            xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
-            weather = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
-        }};
-    xhr.send();
-};
-let weather = null; //store current weather here
-
-//Addes the result given to the DOM
-function addResultToPage (result) {
-    let resultDiv = document.createElement('div'); //Create a new div called resultDiv
-    resultDiv.classList.add('col-12'); //Adds the class to the div
-    resultDiv.classList.add('result-box'); //Adds the class to the div
-
-    const phone = getPhone (result); //Gets the contact number of the location
-    const hours = getHours(result); //Gets the hours the location is open
-    const distance = getDistance(result.distance); //Gets the distance to location in KM
-    if (weather === null) { //if weather is null, addResultToPage loaded too fast, start again
-        getWeather(result); //call getWeather
-        setTimeout(function(){ //wait 200ms to give getWeather time to retrieve results
-            addResultToPage(result); //Call AddResultsToPage
-        }, 250);
-        console.log('reloading...');//Log that reloading happened
-    } else {
-        let currWeather = weather.childNodes[3].innerHTML; // current weather at location
-        let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
-        let currTemp = fixTemp(weather.childNodes[9].innerHTML);
-        resultDiv.innerHTML = `
-                <div class="result-title-container col-12" data-result="data-result" data-lat="${result.position.lat}" data-lng="${result.position.lng}">
-                    <h2 class="blue bold result-row">
-                        <a href="#map">${result.title}</a>
-                        <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
-                    </h2>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-9">
-
-                        <div class="row">
-                            <div class="col-3 result-row">
-                                <p class="result-label">Distance:</p>
-                            </div>
-                            <div class="col-9 result-data-container">
-                                <p class="result-data">${distance} Miles</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-3 result-row">
-                                <p class="result-label">Address:</p>
-                            </div>
-                            <div class="col-9 result-data-container">
-                                <p class="result-data result-address">${result.title}</p>
-                                <p class="result-data result-address">${result.address.district}</p>
-                                <p class="result-data result-address">${result.address.county}</p>
-                                <p class="result-data">${result.address.postalCode}</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-3 result-row">
-                                <p class="result-label">Phone:</p>
-                            </div>
-                            <div class="col-9 result-data-container">
-                                <p class="result-data">${phone}</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-3 result-row">
-                                <p class="result-label">Opening Hours:</p>
-                            </div>
-                            <div class="col-9 result-data-container">
-                                <p class="result-data">${hours}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 d-none d-md-inline weather-container">
-                        <div class="weather">
-                            <div>
-                                <h4 class="weather-title">Current Weather</h4>
-                                <img src="${iconWeather}" alt="weather Icon">
-                                <p class="weather-current">${currWeather}</p>
-                                <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-                <div class="row">
-                    <div class="col-md-5 result-row">
-                        <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
-                    </div>
-                </div>
-        `;
-        resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
-    };   
-};
-
- 
-// Gets the phone number if it exists, if it doesn't, shows no phone icon
-function getPhone(result) {
-        if(result.contacts) { //if contacts exists in result
-            if (result.contacts[0].phone){ //if phone exists in contacts
-                return result.contacts[0].phone[0].value; //display phone number
-            } else if (result.contacts[0].mobile) { //if no phone number, check for mobile number
-                return result.contacts[0].mobile[0].value; //display mobile number
-            }
-        } else { // if no phone or mobile
-            return `<i class="fas fa-phone-slash"></i>`; //display no phone icon
-        };
-};
-
-//Gets the hours the location is open, if none available, asks to call
-function getHours(result) {
-    if(result.openingHours){
-        return result.openingHours[0].text
-    } else {
-        return `<i class="fas fa-phone"></i><span class="result-data">- Call to confirm</span>`;
-    }
-};
-
-//Converts the distance in meters to miles to 1dp and returns it
-function getDistance(mDist) {
-    const distKm = mDist * 0.001; //convert meters to KM
-    const dist = distKm / 1.609; //converts KM to Miles
-    return dist.toFixed(1); //Returns distance in miles to 1 decimal place
-};
-
-//converts the string temp to a number with 2 digits
-function fixTemp(temp) {
-    return parseInt(temp, 10);
-}
-
-// function addMoreInfo(result) {
-//     const modalOfInfo = document.body.querySelector('[data-modal-info]');
-//     let modalHead = document.createElement('div');
-//     modalHead.classList.add('modal-header');
-
-//     modalHead.innerHTML = `
-//         <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
-//         <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-//     `;
-
-//     let modalBody = document.createElement('div');
-//     modalBody.classList.add('result-modal');
-//     modalBody.classList.add('modal-body');
-
-//     modalBody.innerHTML = `
-//             <div class="row">
-//                 <div class="col-9">
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Address:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">123 example street</p>
-//                       <p class="result-data">Example city</p>
-//                     </div>
-//                   </div>
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Services:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">Water, Electric, Waste</p>
-//                     </div>
-//                   </div>
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Phone:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">02938 273748</p>
-//                     </div>
-//                   </div>
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Email:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">location@email.com</p>
-//                     </div>
-//                   </div>
-//                   <div class="row">
-//                     <div class="col-3 result-row">
-//                       <p class="result-label">Website:</p>
-//                     </div>
-//                     <div class="col-9">
-//                       <p class="result-data">www.location.com</p>
-//                     </div>
-//                   </div>
-//                 </div>
-//                 <div class="col-3">
-//                   <div class="weather"></div>
-//                 </div>
-//               </div>
-//           </div>
-//     `;
-
-//     modalOfInfo.appendChild(modalHead);
-//     modalOfInfo.appendChild(modalBody);
-// };
-
-//Create Modal
-
-// function createInfoModal() {
-    
-//     const infoModalContainer = document.getElementById('resultMoreInfo');
-//     let infoModal = document.createElement('div');
-//     infoModal.classList.add('modal-dialog'); //Adds the class to the div
-//     infoModal.classList.add('modal-dialog-centered'); //Adds the class to the div
-
-//     infoModal.innerHTML = `
-//         <div class="modal-content">
-//         <div class="modal-header">
-//             <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
-//             <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-//         </div>
-//         <div class="modal-body result-modal">
-//             <div class="row">
-//                 <div class="col-9">
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Address:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">123 example street</p>
-//                     <p class="result-data">Example city</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Services:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">Water, Electric, Waste</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Phone:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">02938 273748</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Email:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">location@email.com</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Website:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">www.location.com</p>
-//                     </div>
-//                 </div>
-//                 </div>
-//                 <div class="col-3">
-//                 <div class="weather"></div>
-//                 </div>
-//             </div>
-//         </div>
-//         </div>
-//     `;
-
-//     infoModalContainer.appendChild(infoModal);
-// };
-
 //Add map div and initilise the Here Map in section map
 function addMapEl(results) {
     let mapDiv = document.createElement('div'); //Create a new div called resultDiv
@@ -506,7 +210,7 @@ function addMapEl(results) {
       });
 
     const defaultLayers = platform.createDefaultLayers();
-    const map = new H.Map(document.getElementById('map'), //Here map placed into div with ID map (mapDiv)
+    map = new H.Map(document.getElementById('map'), //Here map placed into div with ID map (mapDiv)
     defaultLayers.vector.normal.map,{
     center: {lat:50, lng:5},
     zoom: 4,
@@ -519,7 +223,7 @@ function addMapEl(results) {
     
     addResults(results, map);
     moveMapToLocation(map); //Run function to move map to searched
-    addMapMarker(map, results, ui)
+    addMapMarker(map, results, ui);
 };
 
  //Move the center of the map to specified locatioin
@@ -608,6 +312,328 @@ function addMapMarker(map, results, ui) {
     });
 };
 
+//loops through the results to give results to pass on
+function addResults(results, map) { 
+    numOfResults = results.length; //sets the number of results for the radius results
+    makeRadius(); //Runs the makeRadis function
+    results.forEach(function(result){
+        getWeather(result, addResultToPage); //get the weather results from result
+    });
+
+};
+
+//takes the result and gets an XML document of info related, then calls back for addReultsToPage
+function getWeather(result, cb) {
+    const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", weatherUrl);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState);
+            let parser = new DOMParser();
+            let xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
+            cb(result, xmlDoc.getElementsByTagName('observation')[0]); //get the first tag of type observation and assign it to weather variable
+        }};
+    xhr.send();
+    };
+
+//Addes the result given to the DOM
+function addResultToPage (result, weather) {
+    let resultDiv = document.createElement('div'); //Create a new div called resultDiv
+    resultDiv.classList.add('col-12'); //Adds the class to the div
+    resultDiv.classList.add('result-box'); //Adds the class to the div
+
+    const phone = getPhone (result); //Gets the contact number of the location
+    const hours = getHours(result); //Gets the hours the location is open
+    const distance = getDistance(result.distance); //Gets the distance to location in KM
+
+    let currWeather = weather.childNodes[3].innerHTML; // current weather at location
+    let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
+    let currTemp = fixTemp(weather.childNodes[9].innerHTML);
+
+    resultDiv.innerHTML = `
+            <div class="result-title-container col-12" data-result="data-result">
+                <h2 class="blue bold result-row">
+                    <a href="#map" onclick="moveMapToResult(this, map)" data-lat="${result.position.lat}" data-lng="${result.position.lng}">${result.title}</a>
+                    <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
+                </h2>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-9">
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Distance:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${distance} Miles</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Address:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data result-address">${result.title}</p>
+                            <p class="result-data result-address">${result.address.district}</p>
+                            <p class="result-data result-address">${result.address.county}</p>
+                            <p class="result-data">${result.address.postalCode}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Phone:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${phone}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Opening Hours:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${hours}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 d-none d-md-inline weather-container">
+                    <div class="weather">
+                        <div>
+                            <h4 class="weather-title">Current Weather</h4>
+                            <img src="${iconWeather}" alt="weather Icon">
+                            <p class="weather-current">${currWeather}</p>
+                            <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col-md-5 result-row">
+                    <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
+                </div>
+            </div>
+    `;
+    resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
+    addMoreInfo(result)
+};   
+
+ 
+// Gets the phone number if it exists, if it doesn't, shows no phone icon
+function getPhone(result) {
+        if(result.contacts) { //if contacts exists in result
+            if (result.contacts[0].phone){ //if phone exists in contacts
+                return result.contacts[0].phone[0].value; //display phone number
+            } else if (result.contacts[0].mobile) { //if no phone number, check for mobile number
+                return result.contacts[0].mobile[0].value; //display mobile number
+            }
+        } else { // if no phone or mobile
+            return `<i class="fas fa-phone-slash"></i>`; //display no phone icon
+        };
+};
+
+//Gets the hours the location is open, if none available, asks to call
+function getHours(result) {
+    if(result.openingHours){
+        return result.openingHours[0].text
+    } else {
+        return `<i class="fas fa-phone"></i><span class="result-data">- Call to confirm</span>`;
+    }
+};
+
+//Converts the distance in meters to miles to 1dp and returns it
+function getDistance(mDist) {
+    const distKm = mDist * 0.001; //convert meters to KM
+    const dist = distKm / 1.609; //converts KM to Miles
+    return dist.toFixed(1); //Returns distance in miles to 1 decimal place
+};
+
+//gets the website address for the result
+function getWebsite(result) {
+    if(result.contacts) { //if contacts exists in result
+        if (result.contacts[0].www){ //if website exists in contacts
+            return result.contacts[0].www[0].value; //display website 
+        } else if (result.contacts[0].www) { //if no website 1, check for website 2
+            return result.contacts[0].www[1].value; //display website
+        }
+    } else { // if no website
+        return `<i class="fas fa-phone"></i><span class="result-data">- Call to confirm</span>`;
+    };
+};
+
+//gets the email address for the result
+function getEmail(result) {
+    if(result.contacts) { //if contacts exists in result
+        if (result.contacts[0].email){ //if email exists in contacts
+            return result.contacts[0].email[0].value; //display email 
+        } else {
+            return `<i class="fas fa-phone"></i><span class="result-data">- Please Call</span>`;
+        }
+    } else { // if no email
+        return `<i class="fas fa-phone"></i><span class="result-data">- Please Call</span>`;
+    };
+};
+
+//converts the string temp to a number with 2 digits
+function fixTemp(temp) {
+    return parseInt(temp, 10);
+}
+
+function addMoreInfo(result) {
+
+    const phone = getPhone (result); //Gets the contact number of the result
+    const hours = getHours(result); //Gets the hours the result is open
+    const distance = getDistance(result.distance); //Gets the distance to result in miles
+    const email = getEmail(result); //Gets the email of the result
+    const website = getWebsite(result); //Gets the website of the result
+
+    const modalOfInfo = document.body.querySelector('[data-modal-info]');
+    let modalHead = document.createElement('div');
+    modalHead.classList.add('modal-header');
+
+    modalHead.innerHTML = `
+        <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
+        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+    `;
+
+    let modalBody = document.createElement('div');
+    modalBody.classList.add('result-modal');
+    modalBody.classList.add('modal-body');
+
+    modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Address:</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="result-data result-address">${result.title}</p>
+                        <p class="result-data result-address">${result.address.district}</p>
+                        <p class="result-data result-address">${result.address.county}</p>
+                        <p class="result-data">${result.address.postalCode}</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Services:</p>
+                    </div>
+                    <div class="col-9">
+                      <p class="result-data">Water, Electric, Waste</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Phone:</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="result-data">${phone}</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                        <p class="result-label">Email:</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="result-data">${email}</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3 result-row">
+                      <p class="result-label">Website:</p>
+                    </div>
+                    <div class="col-9">
+                      <p class="result-data">${website}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="weather"></div>
+                </div>
+              </div>
+          </div>
+    `;
+
+    modalOfInfo.appendChild(modalHead);
+    modalOfInfo.appendChild(modalBody);
+};
+
+//Create Modal
+
+// function createInfoModal() {
+    
+//     const infoModalContainer = document.getElementById('resultMoreInfo');
+//     let infoModal = document.createElement('div');
+//     infoModal.classList.add('modal-dialog'); //Adds the class to the div
+//     infoModal.classList.add('modal-dialog-centered'); //Adds the class to the div
+
+//     infoModal.innerHTML = `
+//         <div class="modal-content">
+//         <div class="modal-header">
+//             <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
+//             <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+//         </div>
+//         <div class="modal-body result-modal">
+//             <div class="row">
+//                 <div class="col-9">
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Address:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">123 example street</p>
+//                     <p class="result-data">Example city</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Services:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">Water, Electric, Waste</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Phone:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">02938 273748</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Email:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">location@email.com</p>
+//                     </div>
+//                 </div>
+//                 <div class="row">
+//                     <div class="col-3 result-row">
+//                     <p class="result-label">Website:</p>
+//                     </div>
+//                     <div class="col-9">
+//                     <p class="result-data">www.location.com</p>
+//                     </div>
+//                 </div>
+//                 </div>
+//                 <div class="col-3">
+//                 <div class="weather"></div>
+//                 </div>
+//             </div>
+//         </div>
+//         </div>
+//     `;
+
+//     infoModalContainer.appendChild(infoModal);
+// };
+
 //Create the radius div and set the innerHTML
 function makeRadius() {
     if (firstRadius) { //if frist radius is true (First Run)
@@ -666,20 +692,17 @@ function makeRadius() {
 };
 
 //gets coordinates and focuses the map on that location
-function moveMapToResult(map) {
-        const resultBoxes = document.querySelectorAll('[data-result]');
-        for (let i = 0; i < resultBoxes.length; i++) {
-            const clickedResult = resultBoxes[i];
-            clickedResult.addEventListener('click', function(){
-                let lat = $(this).attr('data-lat');
-                let lng = $(this).attr('data-lng');
-                console.log(lat, lng);
-                map.setCenter({ //Sets the Lat & Lng of the map
-                    lat: lat, 
-                    lng: lng
-                });
-                map.setZoom(14); //Sets the Zoom level of the map
-                });
-        };
+function moveMapToResult(event, map) {
+
+    let lat  = event.dataset.lat;
+    let lng = event.dataset.lng;
+
+    map.setCenter({ //Sets the Lat & Lng of the map
+        lat: lat, 
+        lng: lng
+    });
+    map.setZoom(14); //Sets the Zoom level of the map
+    console.log('Move to: ' + lat,lng);
 };
+
 
