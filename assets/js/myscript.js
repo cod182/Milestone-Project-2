@@ -15,6 +15,7 @@ let darkToggle = document.getElementById('dark-toggle');
 let numOfResults = [];
 const aboutText = document.getElementById('about-text');
 let map = null; //map variable
+let firstWeather;
 
 // Changes the about message every 5 seconds
 var text = [];
@@ -122,6 +123,7 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
             document.getElementById('radius').value = '16093';
         };
         radius = '16093';
+        firstWeather = true;
         geoSearch = false;
         numOfResults = [];
         searchLatLng = []; //Set array to empty each time function run
@@ -317,29 +319,37 @@ function addResults(results, map) {
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
-        getWeather(result, addResultToPage); //get the weather results from result
+        addResultToPage(result);
     });
 
 };
 
 //takes the result and gets an XML document of info related, then calls back for addReultsToPage
-function getWeather(result, cb) {
-    const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", weatherUrl);
+function getWeather(result) {
+    let weatherResult = null;
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState);
-            let parser = new DOMParser();
-            let xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
-            cb(result, xmlDoc.getElementsByTagName('observation')[0]); //get the first tag of type observation and assign it to weather variable
-        }};
-    xhr.send();
+    return new Promise(resolve => {
+        const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", weatherUrl);
+        
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 3) {
+                console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState); //LOG status and ready State
+            }else if (xhr.readyState === 4) {
+                console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState);
+                let parser = new DOMParser();
+                let xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
+                weatherResult = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
+                resolve(weatherResult);
+            } };
+        xhr.send();
+      });
     };
 
 //Addes the result given to the DOM
-function addResultToPage (result, weather) {
+async function addResultToPage (result) {
+    const weather = await getWeather(result);
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
@@ -347,7 +357,7 @@ function addResultToPage (result, weather) {
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
-
+    console.log(weather);
     let currWeather = weather.childNodes[3].innerHTML; // current weather at location
     let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
     let currTemp = fixTemp(weather.childNodes[9].innerHTML);
@@ -694,15 +704,15 @@ function makeRadius() {
 //gets coordinates and focuses the map on that location
 function moveMapToResult(event, map) {
 
-    let lat  = event.dataset.lat;
-    let lng = event.dataset.lng;
+    let lat  = event.dataset.lat; //set the lat from the dataset lat
+    let lng = event.dataset.lng;//set the lng from the dataset lng
 
     map.setCenter({ //Sets the Lat & Lng of the map
         lat: lat, 
         lng: lng
     });
     map.setZoom(14); //Sets the Zoom level of the map
-    console.log('Move map to: ' + lat,lng);
+    console.log('Move map to: lat ' + lat + ',lng ' + lng);
 };
 
 

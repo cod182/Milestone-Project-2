@@ -364,6 +364,11 @@ html, body {
     margin-bottom: 10px;
 }
 
+.loading {
+    max-height: 40px;
+    margin: 0 50% 0 50%;
+}
+
 .search-results-after {
     border-radius: 16px;
     margin: 0 auto;
