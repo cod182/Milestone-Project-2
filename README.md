@@ -59,12 +59,22 @@ The business vision is to help people locate an appropriate campsite to book whe
 
 ### Wireframes
 
+## Original
+
 - [Mobile >576px](assets/images/wireframes/_576px.png)
+- [Mobile >576px](assets/images/wireframes/_576px.png) 
 - [Mobile ≥616px](assets/images/wireframes/≥616.png)
 - [Tablet ≥768px](assets/images/wireframes/≥616.png)
 - [Desktop ≥992px](assets/images/wireframes/≥992px.png)
 - [Desktop ≥1400px](assets/images/wireframes/≥1440px.png)
 
+## Re-design
+
+- [Mobile >576px](assets/images/wireframes/redesigne/_576px.png)
+- [Mobile ≥616px](assets/images/wireframes/≥616.png)
+- [Tablet ≥768px](assets/images/wireframes/≥616.png)
+- [Desktop ≥992px](assets/images/wireframes/≥992px.png)
+- [Desktop ≥1400px](assets/images/wireframes/≥1440px.png)
 
 ## Surface
 

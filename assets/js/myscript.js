@@ -301,6 +301,7 @@ function addMapMarker(map, results, ui) {
         </div>
         `);
         locationMarker.addEventListener('tap', event => {
+            ui.getBubbles().forEach(bub => ui.removeBubble(bub));
             const bubble = new H.ui.InfoBubble(
                 {lat: lat, lng: lng},
                 {
@@ -315,7 +316,7 @@ function addMapMarker(map, results, ui) {
 };
 
 //loops through the results to give results to pass on
-function addResults(results, map) { 
+function addResults(results) { 
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
@@ -325,31 +326,56 @@ function addResults(results, map) {
 };
 
 //takes the result and gets an XML document of info related, then calls back for addReultsToPage
-function getWeather(result) {
-    let weatherResult = null;
+// function getWeather(result) {
+//     return new Promise(resolve => {
+//         const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
+//         var xhr = new XMLHttpRequest();
+//         xhr.open("GET", weatherUrl);
+//         let weatherResult = null;
 
-    return new Promise(resolve => {
-        const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", weatherUrl);
-        
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 3) {
-                console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState); //LOG status and ready State
-            }else if (xhr.readyState === 4) {
-                console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState);
-                let parser = new DOMParser();
-                let xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
-                weatherResult = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
-                resolve(weatherResult);
-            } };
-        xhr.send();
+//         xhr.onreadystatechange = function () {
+//             if (xhr.readyState === 3) {
+//                 console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState); //LOG status and ready State
+//             }else if (xhr.readyState === 4) {
+//                 console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState);
+//                 let parser = new DOMParser();
+//                 let xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
+//                 weatherResult = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
+
+//             } };
+//         xhr.send();
+//         setTimeout(() => {
+//           resolve(weatherResult);
+//         }, 3000);
+//       });
+    
+//     };
+
+async function getWeatherXML(result) {
+
+    const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
+
+    return await fetch(weatherUrl)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.text()
+    })
+    .then(data => {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(data, 'text/xml'); //
+        return xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
+    })
+    .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
       });
-    };
+};
 
 //Addes the result given to the DOM
 async function addResultToPage (result) {
-    const weather = await getWeather(result);
+    let weather = await getWeatherXML(result);
+
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
@@ -357,7 +383,7 @@ async function addResultToPage (result) {
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
-    console.log(weather);
+
     let currWeather = weather.childNodes[3].innerHTML; // current weather at location
     let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
     let currTemp = fixTemp(weather.childNodes[9].innerHTML);
@@ -429,8 +455,8 @@ async function addResultToPage (result) {
                 </div>
             </div>
     `;
+    addMoreInfo(result);
     resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
-    addMoreInfo(result)
 };   
 
  
