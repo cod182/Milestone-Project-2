@@ -378,7 +378,9 @@ async function getWeather(result) {
 
 // RESULTS OUT OF ORDER
 //Open Weather API
-    const weatherURL = 'https://api.openweathermap.org/data/2.5/weather?q='+ result.address.city + '&units=metric&appid=966dc856d7503b6af207c5b5d50e5703';
+    const openApi = '2e87b4183a4f602f8d20b6eca0cffef3';
+    const weatherURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + result.position.lat + '&lon=' + result.position.lng + '&units=metric&appid=' + openApi;
+
     return await fetch(weatherURL)
     .then(response => {
                 if (!response.ok) {
@@ -392,8 +394,6 @@ async function getWeather(result) {
     .catch(error => {
         console.error('There has been a problem with your fetch operation:', error);
     });
-
-
 
 // RESULTS OUT OF ORDER
 
@@ -411,6 +411,7 @@ async function getWeather(result) {
 //Adds the result given to the DOM
 async function addResultToPage (result) {
     let weatherNow = await getWeather(result);
+    console.log(weatherNow);
 
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
@@ -422,9 +423,9 @@ async function addResultToPage (result) {
     const email = getEmail(result); //Gets the email of the result
     const website = getWebsite(result); //Gets the website of the result
 
-    let currWeather = weatherNow.weather[0].description; // current weather at location
-    let iconWeather = 'http://openweathermap.org/img/w/' + weatherNow.weather[0].icon + '.png'; //current weather icon at location
-    let currTemp = fixTemp(weatherNow.main.temp); //sets the temp to no decimal places
+    let currWeather = weatherNow.current.weather[0].description; // current weather at location
+    let iconWeather = 'http://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
+    let currTemp = fixTemp(weatherNow.current.temp); //sets the temp to no decimal places
 
     resultDiv.innerHTML = `
             <div class="result-title-container col-12">
@@ -434,8 +435,8 @@ async function addResultToPage (result) {
                 </h2>
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-9">
-
+                <div class="col-sm-12 col-md-7">
+                
                     <div class="row">
                         <div class="col-3 result-row">
                             <p class="result-label">Distance:</p>
@@ -452,7 +453,7 @@ async function addResultToPage (result) {
                         <div class="col-9 result-data-container">
                             <p class="result-data result-address">${result.title}</p>
                             <p class="result-data result-address">${result.address.district}</p>
-                            <p class="result-data result-address">${result.address.county}</p>
+                            <p class="result-data result-address more-info d-none">${result.address.county}</p>
                             <p class="result-data result-address more-info d-none">${result.address.city}</p>
                             <p class="result-data">${result.address.postalCode}</p>
                         </div>
@@ -485,8 +486,6 @@ async function addResultToPage (result) {
                         </div>
                     </div>
 
-                    
-
                     <div class="row more-info d-none">
                         <div class="col-3 result-row">
                             <p class="result-label">Website:</p>
@@ -499,7 +498,7 @@ async function addResultToPage (result) {
 
                 </div>
 
-                <div class="col-md-3 d-none d-md-inline weather-container">
+                <div class="col-md-5 d-none d-md-inline weather-container container-fluid">
                     <div class="weather">
                         <div>
                             <h4 class="weather-title">Current Weather</h4>
@@ -507,6 +506,34 @@ async function addResultToPage (result) {
                             <p class="weather-current">${currWeather}</p>
                             <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
                         </div>
+                    </div>
+                    <div class="more-info d-none hour-forcast">
+                        <h5>Hourly Forcast</h5>
+                        <div class="row">
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.hourly[0].weather[0].description}</p>
+                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertTimestamptoTime(weatherNow.hourly[0].dt)}</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.hourly[1].weather[0].description}</p>
+                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertTimestamptoTime(weatherNow.hourly[1].dt)}</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.hourly[2].weather[0].description}</p>
+                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertTimestamptoTime(weatherNow.hourly[2].dt)}</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.hourly[3].weather[0].description}</p>
+                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertTimestamptoTime(weatherNow.hourly[3].dt)}</p>
+                            </div>
+                        </row>
                     </div>
                 </div>
             </div>  
@@ -523,20 +550,37 @@ async function addResultToPage (result) {
 function moreInfo(elem) {
     let hello = document.createElement('div');
     hello.innerHTML = 'hello';
-    let city = elem.parentElement.parentElement.parentElement.getElementsByClassName('more-info');
+    let parent = elem.parentElement.parentElement.parentElement.getElementsByClassName('more-info');
+    console.log(elem.parentElement.parentElement.parentElement.getElementsByClassName('more-info'))
     if(elem.innerText === 'More Info'){
         elem.innerText = `Less Info`;
-        city[0].classList.remove('d-none');
-        city[1].classList.remove('d-none');
-        city[2].classList.remove('d-none');
+        parent[0].classList.remove('d-none');
+        parent[1].classList.remove('d-none');
+        parent[2].classList.remove('d-none');
+        parent[3].classList.remove('d-none');
+        parent[4].classList.remove('d-none');
     } else {
         elem.innerText = 'More Info';
-        city[0].classList.add('d-none');
-        city[1].classList.add('d-none');
-        city[2].classList.add('d-none');
+        parent[0].classList.add('d-none');
+        parent[1].classList.add('d-none');
+        parent[2].classList.add('d-none');
+        parent[3].classList.add('d-none');
+        parent[4].classList.add('d-none');
     };
-    
+};
 
+//converts unix timecode to hours
+function convertTimestamptoTime(unixTimestamp) {
+    
+            dateObj = new Date(unixTimestamp * 1000);
+
+            hours = dateObj.getUTCHours(); // Get hours from the timestamp
+            minutes = dateObj.getUTCMinutes(); // Get minutes from the timestamp
+
+            hoursMin = hours.toString().padStart(2, '0') + ':' +
+                minutes.toString().padStart(2, '0'); //combine hours and minutes
+            
+                return hoursMin;
 };
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon

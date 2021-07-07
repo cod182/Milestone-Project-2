@@ -103,8 +103,8 @@ html, body {
     max-height: 30px;
     max-width: 100px;
     margin: auto;
-    padding: 0 2px 0 2px !important; /* Overriding Bootstrap CSS*/
-    font-size: small !important; /* Overriding Bootstrap CSS*/
+    padding: 3px 722px 3px 7px !important; /* Overriding Bootstrap CSS*/
+    font-size: medium !important; /* Overriding Bootstrap CSS*/
 }
 
 .btn-radius {
@@ -124,8 +124,6 @@ html, body {
 }
 
 #logo:hover {
-    transition: ease-in-out;
-    -moz-animation: ease-in-out;
     box-shadow: 0 0 15px #01b9fe;
     border-radius: 50%;
 }
@@ -461,7 +459,7 @@ html, body {
 
 .weather-container {
     border: 2px solid black;
-    border-radius: 4%;
+    border-radius: 20px;
     margin-left: -3%;
     padding: 10px 5px 10px 5px;
     text-align: center;
@@ -480,6 +478,16 @@ html, body {
 
 .weather-current {
     text-transform: capitalize;
+}
+
+.hour-forcast h5{
+    color: #01b9fe;
+}
+
+.hour-forcast p{
+    font-size: small;
+    text-transform: capitalize;
+    margin: 0;
 }
 
 #about {
