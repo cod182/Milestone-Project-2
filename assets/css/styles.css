@@ -123,6 +123,13 @@ html, body {
     height: 110px;
 }
 
+#logo:hover {
+    transition: ease-in-out;
+    -moz-animation: ease-in-out;
+    box-shadow: 0 0 15px #01b9fe;
+    border-radius: 50%;
+}
+
 #logo-md {
     height: 80px;
 }
@@ -424,6 +431,32 @@ html, body {
 
 .result-modal {
     padding: 30px;
+    color: #000;
+}
+
+.result-modal-header {
+    background-image: url(../images/modal-banner.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50px 50px 0 0 !important; /* Overriding Bootstrap CSS*/
+}
+
+.result-modal-content {
+    color: black;
+    border-radius: 50px !important; /* Overriding Bootstrap CSS*/
+}
+
+.result-modal-title {
+    margin: 0 auto;
+    font-size: xx-large;
+    background-color: rgb(255 255 255 / 85%);
+    border-radius: 20px;
+}
+
+.result-modal-close {
+    position: absolute;
+    right: 10px;
 }
 
 .weather-container {
@@ -443,6 +476,10 @@ html, body {
 .weather-title {
     color: #0085C5;
     text-decoration: underline;
+}
+
+.weather-current {
+    text-transform: capitalize;
 }
 
 #about {
@@ -563,6 +600,11 @@ html, body {
 }
 
 /* Media Queries */
+@media screen and (min-width:1200px) {
+    .about-text {
+        font-size: larger;
+    }
+}
 
 @media screen and (max-width:991px) {
     .about-link {

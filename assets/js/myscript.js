@@ -316,7 +316,7 @@ function addMapMarker(map, results, ui) {
 };
 
 //loops through the results to give results to pass on
-function addResults(results) { 
+async function addResults(results) { 
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
@@ -327,6 +327,8 @@ function addResults(results) {
 
 //takes the result and gets an XML document of info related, then calls back for addReultsToPage
 // function getWeather(result) {
+    // RESULTS OUT OF ORDER
+
 //     return new Promise(resolve => {
 //         const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
 //         var xhr = new XMLHttpRequest();
@@ -351,30 +353,64 @@ function addResults(results) {
     
 //     };
 
-async function getWeatherXML(result) {
+async function getWeather(result) {
 
-    const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
+// RESULTS OUT OF ORDER
+//Here Maps API
+    // const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
 
-    return await fetch(weatherUrl)
+    // return await fetch(weatherUrl)
+    // .then(response => {
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //       }
+    //     return response.text();
+    // })
+    // .then(data => {
+    //     let parser = new DOMParser();
+    //     let xmlDoc = parser.parseFromString(data, 'text/xml'); //
+    //     return xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
+    // })
+    // .catch(error => {
+    //     console.error('There has been a problem with your fetch operation:', error);
+    //   });
+
+
+// RESULTS OUT OF ORDER
+//Open Weather API
+    const weatherURL = 'https://api.openweathermap.org/data/2.5/weather?q='+ result.address.city + '&units=metric&appid=966dc856d7503b6af207c5b5d50e5703';
+    return await fetch(weatherURL)
     .then(response => {
-        if (!response.ok) {
+                if (!response.ok) {
             throw new Error('Network response was not ok');
           }
-          return response.text()
+          return response.json();
     })
     .then(data => {
-        let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(data, 'text/xml'); //
-        return xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
+        return data;
     })
     .catch(error => {
         console.error('There has been a problem with your fetch operation:', error);
-      });
+    });
+
+
+
+// RESULTS OUT OF ORDER
+
+    // try {
+    //     const weatherURL = 'https://api.openweathermap.org/data/2.5/weather?q='+ result.address.city + '&units=metric&appid=966dc856d7503b6af207c5b5d50e5703';
+    //     const reposResponse = await fetch(weatherURL);
+    //     const weather = await reposResponse.json();
+    
+    // return weather;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
 };
 
-//Addes the result given to the DOM
+//Adds the result given to the DOM
 async function addResultToPage (result) {
-    let weather = await getWeatherXML(result);
+    let weatherNow = await getWeather(result);
 
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
@@ -383,10 +419,12 @@ async function addResultToPage (result) {
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
+    const email = getEmail(result); //Gets the email of the result
+    const website = getWebsite(result); //Gets the website of the result
 
-    let currWeather = weather.childNodes[3].innerHTML; // current weather at location
-    let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
-    let currTemp = fixTemp(weather.childNodes[9].innerHTML);
+    let currWeather = weatherNow.weather[0].description; // current weather at location
+    let iconWeather = 'http://openweathermap.org/img/w/' + weatherNow.weather[0].icon + '.png'; //current weather icon at location
+    let currTemp = fixTemp(weatherNow.main.temp); //sets the temp to no decimal places
 
     resultDiv.innerHTML = `
             <div class="result-title-container col-12">
@@ -415,6 +453,7 @@ async function addResultToPage (result) {
                             <p class="result-data result-address">${result.title}</p>
                             <p class="result-data result-address">${result.address.district}</p>
                             <p class="result-data result-address">${result.address.county}</p>
+                            <p class="result-data result-address more-info d-none">${result.address.city}</p>
                             <p class="result-data">${result.address.postalCode}</p>
                         </div>
                     </div>
@@ -428,6 +467,15 @@ async function addResultToPage (result) {
                         </div>
                     </div>
 
+                    <div class="row more-info d-none">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Email:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${email}</p>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-3 result-row">
                             <p class="result-label">Opening Hours:</p>
@@ -436,6 +484,19 @@ async function addResultToPage (result) {
                             <p class="result-data">${hours}</p>
                         </div>
                     </div>
+
+                    
+
+                    <div class="row more-info d-none">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Website:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${website}</p>
+                        </div>
+                    </div>
+
+
                 </div>
 
                 <div class="col-md-3 d-none d-md-inline weather-container">
@@ -451,14 +512,32 @@ async function addResultToPage (result) {
             </div>  
             <div class="row">
                 <div class="col-md-5 result-row">
-                    <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
+                    <button class="btn btn-blue btn-info more-info-button" onclick="moreInfo(this)">More Info</button>
                 </div>
             </div>
     `;
-    addMoreInfo(result);
     resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
-};   
+};
 
+// Changes the More info button to Less Info when clicked
+function moreInfo(elem) {
+    let hello = document.createElement('div');
+    hello.innerHTML = 'hello';
+    let city = elem.parentElement.parentElement.parentElement.getElementsByClassName('more-info');
+    if(elem.innerText === 'More Info'){
+        elem.innerText = `Less Info`;
+        city[0].classList.remove('d-none');
+        city[1].classList.remove('d-none');
+        city[2].classList.remove('d-none');
+    } else {
+        elem.innerText = 'More Info';
+        city[0].classList.add('d-none');
+        city[1].classList.add('d-none');
+        city[2].classList.add('d-none');
+    };
+    
+
+};
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
 function getPhone(result) {
@@ -495,10 +574,12 @@ function getWebsite(result) {
         if (result.contacts[0].www){ //if website exists in contacts
             return result.contacts[0].www[0].value; //display website 
         } else if (result.contacts[0].www) { //if no website 1, check for website 2
-            return result.contacts[0].www[1].value; //display website
+            return `<a href="${result.contacts[0].www[1].value}" alt="${result.title}" target="_blank"</a>`; //display website
+        } else {
+            return `<i class="fas fa-phone"></i><span class="result-data">Website not available</span>`;
         }
     } else { // if no website
-        return `<i class="fas fa-phone"></i><span class="result-data">- Call to confirm</span>`;
+        return `<i class="fas fa-phone"></i><span class="result-data">Website not available</span>`;
     };
 };
 
@@ -518,7 +599,7 @@ function getEmail(result) {
 //converts the string temp to a number with 2 digits
 function fixTemp(temp) {
     return parseInt(temp, 10);
-}
+};
 
 function addMoreInfo(result) {
 
@@ -531,10 +612,11 @@ function addMoreInfo(result) {
     const modalOfInfo = document.body.querySelector('[data-modal-info]');
     let modalHead = document.createElement('div');
     modalHead.classList.add('modal-header');
+    modalHead.classList.add('result-modal-header');
 
     modalHead.innerHTML = `
-        <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
-        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="result-modal-title modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
+        <button type="button" class="result-modal-close btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
     `;
 
     let modalBody = document.createElement('div');
@@ -599,76 +681,6 @@ function addMoreInfo(result) {
     modalOfInfo.appendChild(modalBody);
 };
 
-//Create Modal
-
-// function createInfoModal() {
-    
-//     const infoModalContainer = document.getElementById('resultMoreInfo');
-//     let infoModal = document.createElement('div');
-//     infoModal.classList.add('modal-dialog'); //Adds the class to the div
-//     infoModal.classList.add('modal-dialog-centered'); //Adds the class to the div
-
-//     infoModal.innerHTML = `
-//         <div class="modal-content">
-//         <div class="modal-header">
-//             <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
-//             <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-//         </div>
-//         <div class="modal-body result-modal">
-//             <div class="row">
-//                 <div class="col-9">
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Address:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">123 example street</p>
-//                     <p class="result-data">Example city</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Services:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">Water, Electric, Waste</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Phone:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">02938 273748</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Email:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">location@email.com</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Website:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">www.location.com</p>
-//                     </div>
-//                 </div>
-//                 </div>
-//                 <div class="col-3">
-//                 <div class="weather"></div>
-//                 </div>
-//             </div>
-//         </div>
-//         </div>
-//     `;
-
-//     infoModalContainer.appendChild(infoModal);
-// };
 
 //Create the radius div and set the innerHTML
 function makeRadius() {
