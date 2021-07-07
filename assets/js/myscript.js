@@ -540,27 +540,31 @@ async function addResultToPage (result) {
                         <h5>Daily Forcast</h5>
                         <div class="row">
                             <div class="col-3 hourly-box">
-                            <p>${weatherNow.daily[0].weather[0].description}</p>
-                            <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>Today</p>
+                                <p>${weatherNow.daily[0].weather[0].description}</p>
+                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertUnixToDay(weatherNow.daily[0].dt)}</p>
+                                <p>High of:${fixTemp(weatherNow.daily[0].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p>${weatherNow.daily[1].weather[0].description}</p>
-                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>Tomorrow</p>
+                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertUnixToDay(weatherNow.daily[1].dt)}</p>
+                                <p>High of:${fixTemp(weatherNow.daily[1].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                             <p>${weatherNow.daily[2].weather[0].description}</p>
-                            <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>DAY</p>
+                            <img src="${'http://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                            <p>${convertUnixToDay(weatherNow.daily[2].dt)}</p>
+                            <p>High of:${fixTemp(weatherNow.daily[2].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p>${weatherNow.daily[3].weather[0].description}</p>
-                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>DAY</p>
+                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertUnixToDay(weatherNow.daily[3].dt)}</p>
+                                <p>High of:${fixTemp(weatherNow.daily[3].temp.max)}ºc</p>
                             </div>
                         </div>
                     </div>
@@ -611,6 +615,15 @@ function convertTimestamptoTime(unixTimestamp) {
                 minutes.toString().padStart(2, '0'); //combine hours and minutes
             
                 return hoursMin;
+};
+
+function convertUnixToDay(unix) {
+
+const milliseconds = unix * 1000 
+
+const dateObject = new Date(milliseconds)
+
+return dateObject.toLocaleString("en-gb", {weekday: "long"})
 };
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
