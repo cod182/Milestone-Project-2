@@ -103,7 +103,7 @@ html, body {
     max-height: 30px;
     max-width: 100px;
     margin: auto;
-    padding: 3px 722px 3px 7px !important; /* Overriding Bootstrap CSS*/
+    padding: 3px 7px 3px 7px !important; /* Overriding Bootstrap CSS*/
     font-size: medium !important; /* Overriding Bootstrap CSS*/
 }
 
@@ -471,6 +471,11 @@ html, body {
     max-height: 40px;
 }
 
+.weather-sm {
+    font-size: small;
+    margin-top: 0;
+}
+
 .weather-title {
     color: #0085C5;
     text-decoration: underline;
@@ -485,6 +490,17 @@ html, body {
 }
 
 .hour-forcast p{
+    font-size: small;
+    text-transform: capitalize;
+    margin: 0;
+}
+
+.daily-forcast h5{
+    color: #01b9fe;
+    margin-top: 10px;
+}
+
+.daily-forcast p{
     font-size: small;
     text-transform: capitalize;
     margin: 0;
@@ -657,5 +673,17 @@ html, body {
     #radius-adjust {
         float: none;
         padding: 0;
+    }
+    .hour-forcast {
+        display:none
+    }
+    .weather {
+        display: none;
+    }
+    .weather-container {
+        border: none;
+    }
+    .daily-forcast {
+        display: inline;
     }
 }

@@ -423,15 +423,15 @@ async function addResultToPage (result) {
     const email = getEmail(result); //Gets the email of the result
     const website = getWebsite(result); //Gets the website of the result
 
-    let currWeather = weatherNow.current.weather[0].description; // current weather at location
-    let iconWeather = 'http://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
-    let currTemp = fixTemp(weatherNow.current.temp); //sets the temp to no decimal places
+    const currWeather = weatherNow.current.weather[0].description; // current weather at location
+    const iconWeather = 'http://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
+    const currTemp = fixTemp(weatherNow.current.temp); //sets the temp to no decimal places
 
     resultDiv.innerHTML = `
             <div class="result-title-container col-12">
                 <h2 class="blue bold result-row">
                     <a href="#map" onclick="moveMapToResult(this, map)" data-lat="${result.position.lat}" data-lng="${result.position.lng}">${result.title}</a>
-                    <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
+                    <span class="weather-sm d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"><br>${currWeather} - ${currTemp}ºc</span>
                 </h2>
             </div>
             <div class="row">
@@ -498,7 +498,7 @@ async function addResultToPage (result) {
 
                 </div>
 
-                <div class="col-md-5 d-none d-md-inline weather-container container-fluid">
+                <div class="col-md-5 col-sm-12 d-md-inline weather-container container-fluid">
                     <div class="weather">
                         <div>
                             <h4 class="weather-title">Current Weather</h4>
@@ -533,8 +533,38 @@ async function addResultToPage (result) {
                                 <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p>${convertTimestamptoTime(weatherNow.hourly[3].dt)}</p>
                             </div>
-                        </row>
+                        </div>
                     </div>
+
+                    <div class="more-info d-none d-md-none daily-forcast">
+                        <h5>Daily Forcast</h5>
+                        <div class="row">
+                            <div class="col-3 hourly-box">
+                            <p>${weatherNow.daily[0].weather[0].description}</p>
+                            <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>Today</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.daily[1].weather[0].description}</p>
+                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>Tomorrow</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                            <p>${weatherNow.daily[2].weather[0].description}</p>
+                            <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>DAY</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.daily[3].weather[0].description}</p>
+                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>DAY</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>  
             <div class="row">
@@ -548,10 +578,8 @@ async function addResultToPage (result) {
 
 // Changes the More info button to Less Info when clicked
 function moreInfo(elem) {
-    let hello = document.createElement('div');
-    hello.innerHTML = 'hello';
     let parent = elem.parentElement.parentElement.parentElement.getElementsByClassName('more-info');
-    console.log(elem.parentElement.parentElement.parentElement.getElementsByClassName('more-info'))
+
     if(elem.innerText === 'More Info'){
         elem.innerText = `Less Info`;
         parent[0].classList.remove('d-none');
@@ -559,6 +587,7 @@ function moreInfo(elem) {
         parent[2].classList.remove('d-none');
         parent[3].classList.remove('d-none');
         parent[4].classList.remove('d-none');
+        parent[5].classList.remove('d-none');
     } else {
         elem.innerText = 'More Info';
         parent[0].classList.add('d-none');
@@ -566,6 +595,7 @@ function moreInfo(elem) {
         parent[2].classList.add('d-none');
         parent[3].classList.add('d-none');
         parent[4].classList.add('d-none');
+        parent[5].classList.add('d-none');
     };
 };
 
@@ -644,87 +674,6 @@ function getEmail(result) {
 function fixTemp(temp) {
     return parseInt(temp, 10);
 };
-
-function addMoreInfo(result) {
-
-    const phone = getPhone (result); //Gets the contact number of the result
-    const hours = getHours(result); //Gets the hours the result is open
-    const distance = getDistance(result.distance); //Gets the distance to result in miles
-    const email = getEmail(result); //Gets the email of the result
-    const website = getWebsite(result); //Gets the website of the result
-
-    const modalOfInfo = document.body.querySelector('[data-modal-info]');
-    let modalHead = document.createElement('div');
-    modalHead.classList.add('modal-header');
-    modalHead.classList.add('result-modal-header');
-
-    modalHead.innerHTML = `
-        <h5 class="result-modal-title modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
-        <button type="button" class="result-modal-close btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-    `;
-
-    let modalBody = document.createElement('div');
-    modalBody.classList.add('result-modal');
-    modalBody.classList.add('modal-body');
-
-    modalBody.innerHTML = `
-            <div class="row">
-                <div class="col-9">
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Address:</p>
-                    </div>
-                    <div class="col-9">
-                        <p class="result-data result-address">${result.title}</p>
-                        <p class="result-data result-address">${result.address.district}</p>
-                        <p class="result-data result-address">${result.address.county}</p>
-                        <p class="result-data">${result.address.postalCode}</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Services:</p>
-                    </div>
-                    <div class="col-9">
-                      <p class="result-data">Water, Electric, Waste</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Phone:</p>
-                    </div>
-                    <div class="col-9">
-                        <p class="result-data">${phone}</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                        <p class="result-label">Email:</p>
-                    </div>
-                    <div class="col-9">
-                        <p class="result-data">${email}</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Website:</p>
-                    </div>
-                    <div class="col-9">
-                      <p class="result-data">${website}</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="weather"></div>
-                </div>
-              </div>
-          </div>
-    `;
-
-    modalOfInfo.appendChild(modalHead);
-    modalOfInfo.appendChild(modalBody);
-};
-
 
 //Create the radius div and set the innerHTML
 function makeRadius() {
