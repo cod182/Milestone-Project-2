@@ -136,8 +136,17 @@ function classChange(){
     resultsContain.classList.add('search-results-after'); // Adds the class to the search results section
     locate.classList.remove('locate-before'); //Remove class from locate
     locate.classList.add('locate-after'); //Add class to locate
-
 };
+
+function classChangeRev() {
+    searchBox.classList.add('search-box-before'); //Remove class from searchBox
+    searchBox.classList.remove('search-box-after'); //Add class to searchBox
+    greetSec.classList.add('greeting-box-before'); //Remove class from greetSec
+    greetSec.classList.remove('greeting-box-after'); //Add class to greetSec
+    resultsContain.classList.remove('search-results-after'); // Adds the class to the search results section
+    locate.classList.add('locate-before'); //Remove class from locate
+    locate.classList.remove('locate-after'); //Add class to locate
+}
 
 function getSearchData(){
     search = searchBox.value;
@@ -162,18 +171,38 @@ function getLatLng(search, cb){
     const urlGeo = 'https://geocode.search.hereapi.com/v1/geocode?q=';
     const urlComp = urlGeo + search + '&in=countryCode:GBR' + '&apiKey=' + hereApiKey; //combining the api url with the search term and limiting to GBR
     
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", urlComp);
+    // var xhr = new XMLHttpRequest();
+    // xhr.open("GET", urlComp);
     
-    xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-            console.log(xhr.status);
-            console.log(JSON.parse(xhr.responseText));
-            const data = JSON.parse(xhr.responseText);
-            cb(data); //Call back to getCoords
-            };
-    };
-    xhr.send();
+    // xhr.onreadystatechange = function () {
+    //         if (xhr.readyState === 4) {
+    //         console.log(xhr.status);
+    //         console.log(JSON.parse(xhr.responseText));
+    //         const data = JSON.parse(xhr.responseText);
+    //         cb(data); //Call back to getCoords
+    //         };
+    // };
+    // xhr.send();
+
+    fetch(urlComp)
+    .then(response => {
+                if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+    })
+    .then(data => {
+        cb(data); //Call back to getCoords
+        return data;
+    })
+    .catch(error => {
+        firstTime = true; //sets firstTime to false so it doesn't run again
+        classChangeRev(); //Run function to Reverse added classes
+        searchBox.value = '';
+        console.error('There has been a problem with your fetch operation:', error);
+        alert('Search Term Invalid. Please Enter A New Search')
+    });
+
 };
 
 // Puts the coordinates into a string and starts the discoverSearch function
