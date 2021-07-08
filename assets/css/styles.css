@@ -111,6 +111,11 @@ html, body {
     font-size: small !important;  /* Overriding Bootstrap CSS*/
 }
 
+.btn-weather {
+    min-width: fit-content;
+    color: white;
+}
+
 .navbar {
     background-image: url(../images/modal-banner.png);
     background-repeat: no-repeat;
@@ -474,6 +479,7 @@ html, body {
 .weather-sm {
     font-size: small;
     margin-top: 0;
+    text-transform: capitalize;
 }
 
 .weather-title {
@@ -495,6 +501,10 @@ html, body {
     margin: 0;
 }
 
+.weather-description {
+    min-height: 38px;
+}
+
 .daily-forcast h5{
     color: #01b9fe;
     margin-top: 10px;
@@ -504,6 +514,96 @@ html, body {
     font-size: small;
     text-transform: capitalize;
     margin: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Below for the weather forcase switching checkbox */
+.switch-weather {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+    height: 34px;
+}
+  
+.switch-weather input {
+    display:none;
+}
+  
+.slider-weather {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    -webkit-transition: .5s;
+    transition: .5s;
+    border: 1px solid black;
+}
+  
+.slider-weather:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 100px;
+    left: 5px;
+    bottom: 3px;
+    background-color: #0085C5;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+input:checked + .slider-weather {
+    background-color: #fff;
+}
+  
+input:focus + .slider-weather {
+    box-shadow: 0 0 1px #399845;
+}
+  
+input:checked + .slider-weather:before {
+    -webkit-transform: translateX(90px);
+    -ms-transform: translateX(90px);
+    transform: translateX(90px);
+}
+    
+.on-weather {
+    color: black;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 75%;
+    font-size: 17px;
+    font-family: Roboto, sans-serif;
+}
+
+.off-weather {
+    color: black;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 25%;
+    font-size: 17px;
+    font-family: Roboto, sans-serif;
+}
+  
+input:checked+ .slider-weather .on-weather{
+    display: inline;
+}
+  
+input:checked + .slider-weather .off-weather {
+    display: inline;
+}
+  
+.slider-weather.round-weather {
+    border-radius: 10px;
+}
+  
+.slider-weather.round-weather:before {
+    border-radius: 10px;
 }
 
 #about {

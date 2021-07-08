@@ -95,14 +95,6 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
             document.getElementById('radius').value = '16093';
         };
 
-        searchBox.value = '';
-        radius = '16093';
-        numOfResults = null;
-        searchLatLng = []; //Set array to empty each time function run
-        resultsContain.innerHTML = ""; //Set String empty each time function run
-        mapContainer.innerHTML = ""; //Set String empty each time function run
-        geoSearch = true;
-
         const options = {
             enableHighAccuracy: true,
             timeout: 5000,
@@ -119,6 +111,13 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
             searchLatLng.push(position.coords.latitude); //push the lat to searchLatLng
             searchLatLng.push(position.coords.longitude);//push the lng to searchLatLng
             coords = searchLatLng.toString(); //Set variable coords to  SearchLatLng as a String
+            searchBox.value = '';
+            radius = '16093';
+            numOfResults = null;
+            searchLatLng = []; //Set array to empty each time function run
+            resultsContain.innerHTML = ""; //Set String empty each time function run
+            mapContainer.innerHTML = ""; //Set String empty each time function run
+            geoSearch = true;  
             discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
     };
 
@@ -127,6 +126,11 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
         console.warn(`ERROR(${err.code}): ${err.message}`); //Console log error
         classChangeRev();
         firstTime = true;
+        numOfResults = null;
+        searchLatLng = []; //Set array to empty each time function run
+        resultsContain.innerHTML = ''; //Set String empty each time function run
+        mapContainer.innerHTML = ''; //Set String empty each time function run
+        searchBox.value = '';
         swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning')
       };
 
@@ -483,62 +487,100 @@ async function addResultToPage (result) {
                         </div>
                     </div>
                     <div class="more-info d-none hour-forcast">
-                        <h5>Hourly Forcast</h5>
+                        <label class="switch-weather">
+                            <span class='d-none'>0</span>
+                            <input type="checkbox" onclick="dailyHour(this)">
+                            <div class="slider-weather round-weather">
+                                <span class="on-weather bold">Daily</span>
+                                <span class="off-weather bold">Hourly</span>
+                            </div>
+                        </label>
+<!-- Hourly Weather md+ display -->
                         <div class="row">
                             <div class="col-3 hourly-box">
-                                <p>${weatherNow.hourly[0].weather[0].description}</p>
+                                <p class="weather-description">${weatherNow.hourly[0].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertTimestamptoTime(weatherNow.hourly[0].dt)}</p>
+                                <p>${convertUnixToTime(weatherNow.hourly[0].dt)}</p>
                             </div>
 
                             <div class="col-3 hourly-box">
-                                <p>${weatherNow.hourly[1].weather[0].description}</p>
+                                <p class="weather-description">${weatherNow.hourly[1].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertTimestamptoTime(weatherNow.hourly[1].dt)}</p>
+                                <p>${convertUnixToTime(weatherNow.hourly[1].dt)}</p>
                             </div>
 
                             <div class="col-3 hourly-box">
-                                <p>${weatherNow.hourly[2].weather[0].description}</p>
+                                <p class="weather-description">${weatherNow.hourly[2].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertTimestamptoTime(weatherNow.hourly[2].dt)}</p>
+                                <p>${convertUnixToTime(weatherNow.hourly[2].dt)}</p>
                             </div>
 
                             <div class="col-3 hourly-box">
-                                <p>${weatherNow.hourly[3].weather[0].description}</p>
+                                <p class="weather-description">${weatherNow.hourly[3].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertTimestamptoTime(weatherNow.hourly[3].dt)}</p>
+                                <p>${convertUnixToTime(weatherNow.hourly[3].dt)}</p>
+                            </div>
+                        </div>
+<!-- Daily Weather md+ display -->
+                        <div class="row hidden">
+                            <div class="col-3 daily-box">
+                                <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[0].temp.max)}ºc</p>
+                            </div>
+
+                            <div class="col-3 daily-box">
+                                <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[1].temp.max)}ºc</p>
+                            </div>
+
+                            <div class="col-3 daily-box">
+                                <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p class="bold">${convertUnixToDay(weatherNow.daily[2].dt)}</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[2].temp.max)}ºc</p>
+                            </div>
+
+                            <div class="col-3 daily-box">
+                                <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[3].temp.max)}ºc</p>
                             </div>
                         </div>
                     </div>
-
+<!-- Small more info weather Display -->
                     <div class="more-info d-none d-md-none daily-forcast">
                         <h5>Daily Forcast</h5>
                         <div class="row">
                             <div class="col-3 hourly-box">
-                                <p>${weatherNow.daily[0].weather[0].description}</p>
+                                <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertUnixToDay(weatherNow.daily[0].dt)}</p>
+                                <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
                                 <p>Temp:${fixTemp(weatherNow.daily[0].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
-                                <p>${weatherNow.daily[1].weather[0].description}</p>
+                                <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertUnixToDay(weatherNow.daily[1].dt)}</p>
+                                <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
                                 <p>Temp:${fixTemp(weatherNow.daily[1].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
-                            <p>${weatherNow.daily[2].weather[0].description}</p>
-                            <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                            <p>${convertUnixToDay(weatherNow.daily[2].dt)}</p>
-                            <p>Temp:${fixTemp(weatherNow.daily[2].temp.max)}ºc</p>
+                                <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertUnixToDay(weatherNow.daily[2].dt)}</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[2].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
-                                <p>${weatherNow.daily[3].weather[0].description}</p>
+                                <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertUnixToDay(weatherNow.daily[3].dt)}</p>
+                                <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
                                 <p>Temp:${fixTemp(weatherNow.daily[3].temp.max)}ºc</p>
                             </div>
                         </div>
@@ -578,10 +620,28 @@ function moreInfo(elem) {
     };
 };
 
-//converts unix timecode to hours
-function convertTimestamptoTime(unixTimestamp) {
+//switches between the hourly and daily weather forcast
+function dailyHour(elem) {
+    let weatherHour = elem.parentElement.nextElementSibling;
+    let weatherDay = elem.parentElement.nextElementSibling.nextElementSibling;
     
-            dateObj = new Date(unixTimestamp * 1000);
+    if(elem.previousElementSibling.innerHTML === '0'){
+        console.log('clicked')
+        weatherHour.classList.add('hidden');
+        weatherDay.classList.remove('hidden');
+        elem.previousElementSibling.innerHTML = '1';
+    }else{
+        console.log('clicked else')
+        weatherHour.classList.remove('hidden');
+        weatherDay.classList.add('hidden');
+        elem.previousElementSibling.innerHTML = '0';
+    }
+};
+
+//converts unix timecode to hours
+function convertUnixToTime(unix) {
+    
+            dateObj = new Date(unix * 1000);
 
             hours = dateObj.getUTCHours(); // Get hours from the timestamp
             minutes = dateObj.getUTCMinutes(); // Get minutes from the timestamp
@@ -593,12 +653,10 @@ function convertTimestamptoTime(unixTimestamp) {
 };
 
 function convertUnixToDay(unix) {
+        const milliseconds = unix * 1000;
+        const dateObject = new Date(milliseconds);
 
-const milliseconds = unix * 1000 
-
-const dateObject = new Date(milliseconds)
-
-return dateObject.toLocaleString("en-gb", {weekday: "long"})
+    return dateObject.toLocaleString("en-gb", {weekday: "long"})
 };
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
