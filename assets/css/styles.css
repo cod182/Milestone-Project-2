@@ -684,7 +684,7 @@ input:checked + .slider-weather .off-weather {
 
 .contact-modal-content {
     color: black;
-    border-radius: 50px !important; /* Overriding Bootstrap CSS*/
+    border-radius: 10px !important; /* Overriding Bootstrap CSS*/
 }
 
 .contact-modal-title {

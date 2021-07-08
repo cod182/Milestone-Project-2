@@ -16,6 +16,7 @@ let darkToggle = document.getElementById('dark-toggle');
 let numOfResults = null;
 const aboutText = document.getElementById('about-text');
 let map = null; //map variable
+let darkMode = localStorage.getItem('darkMode');
 
 // Changes the about message every 5 seconds
 var text = [];
@@ -48,7 +49,15 @@ function changeText() {
     }, 500);
 };
 
-let darkMode = localStorage.getItem('darkMode')
+//Dark mode toggle
+darkToggle.addEventListener('click', () => { //listens for dark button clicked
+    darkMode = localStorage.getItem('darkMode')
+    if(darkMode !== 'enabled') { //if body has a class
+        enableDark(); // add classes
+    } else {    // if body has no class
+        disableDark(); //remove classed
+    }
+});
 
 // Classes to remove for Light mode
 const disableDark = () => {
@@ -57,9 +66,8 @@ const disableDark = () => {
     searchBox.classList.remove('dark-search');
     locate.classList.remove('white-text');
     localStorage.setItem('darkMode', null);
-
-
 };
+
 //Classes to add for Dark mode
 const enableDark = () => {
     document.body.classList.add('dark');
@@ -74,19 +82,9 @@ if(darkMode === 'enabled') {
     enableDark();
 };
 
-//Dark mode toggle
-darkToggle.addEventListener('click', () => { //listens for dark button clicked
-    darkMode = localStorage.getItem('darkMode')
-    if(darkMode !== 'enabled') { //if body has a class
-        enableDark(); // add classes
-    } else {    // if body has no class
-        disableDark(); //remove classed
-    }
-});
-
 // Get location using geolocation and run a search based on resulting Lat/Lng
 locate.addEventListener('click', function(event){ //Event listener on the locate button
-
+    searchLatLng = []; //Set array to empty each time function run
     if (firstTime) { // If this this the first run, run the below code
         classChange(); //Run function to add classed
         firstTime = false;
@@ -108,7 +106,6 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
 
 //If navigator.geolocation is sucsessful, this function is called
 function success(position) {  
-    console.log(position);
         searchLatLng.push(position.coords.latitude); //push the lat to searchLatLng
         searchLatLng.push(position.coords.longitude);//push the lng to searchLatLng
         coords = searchLatLng.toString(); //Set variable coords to  SearchLatLng as a String
@@ -118,6 +115,7 @@ function success(position) {
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
         geoSearch = true;  
+        classChange(); //Run function to add classed
         discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
 };
 
@@ -138,7 +136,6 @@ function error(err) {
 //When enter is pressed, the search box shrinks, the map is added and getData runs
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
     if (event.key === "Enter") { // If key up is Enter then...
-        
         radius = '16093';
         geoSearch = false;
         numOfResults = null;
@@ -179,11 +176,13 @@ function getSearchData(){
             firstTime = false; //sets firstTime to false so it doesn't run again
             getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
         } else {
+            classChange(); //Run function to add classed
             document.getElementById('radius-value').innerHTML = '10'; //sets the radius-value back to default
             document.getElementById('radius').value = '16093'; //sets the radius back to default
             getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
         };
     } else {
+        classChangeRev();
         swal('No Search Entered','Please try again','warning'); //Message displayed if no search term is entered
     };
 };
@@ -287,7 +286,7 @@ function moveMapToLocation(map){
     map.addObject(SearchLocation);
 };
 
-  // Adds markers for each of the discovered search location
+// Adds markers for each of the discovered search location
 function addMapMarker(map, results, ui) {
     results.forEach(function(result){
         const lat = result.position.lat;
@@ -405,7 +404,7 @@ async function addResultToPage (result) {
 
     const currWeather = weatherNow.current.weather[0].description; // current weather at location
     const iconWeather = 'https://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
-    const currTemp = fixTemp(weatherNow.current.temp); //sets the temp to no decimal places
+    const currTemp = getAbslouteValue(weatherNow.current.temp); //sets the temp to no decimal places
 
     resultDiv.innerHTML = `
             <div class="result-title-container col-12">
@@ -528,28 +527,28 @@ async function addResultToPage (result) {
                                 <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
-                                <p>Temp:${fixTemp(weatherNow.daily[0].temp.max)}ºc</p>
+                                <p>Temp:${getAbslouteValue(weatherNow.daily[0].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 daily-box">
                                 <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
-                                <p>Temp:${fixTemp(weatherNow.daily[1].temp.max)}ºc</p>
+                                <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 daily-box">
                                 <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p class="bold">${convertUnixToDay(weatherNow.daily[2].dt)}</p>
-                                <p>Temp:${fixTemp(weatherNow.daily[2].temp.max)}ºc</p>
+                                <p>Temp:${getAbslouteValue(weatherNow.daily[2].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 daily-box">
                                 <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
-                                <p>Temp:${fixTemp(weatherNow.daily[3].temp.max)}ºc</p>
+                                <p>Temp:${getAbslouteValue(weatherNow.daily[3].temp.max)}ºc</p>
                             </div>
                         </div>
                     </div>
@@ -561,28 +560,28 @@ async function addResultToPage (result) {
                                 <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
-                                <p>Temp:${fixTemp(weatherNow.daily[0].temp.max)}ºc</p>
+                                <p>Temp:${getAbslouteValue(weatherNow.daily[0].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
-                                <p>Temp:${fixTemp(weatherNow.daily[1].temp.max)}ºc</p>
+                                <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p>${convertUnixToDay(weatherNow.daily[2].dt)}</p>
-                                <p>Temp:${fixTemp(weatherNow.daily[2].temp.max)}ºc</p>
+                                <p>Temp:${getAbslouteValue(weatherNow.daily[2].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
-                                <p>Temp:${fixTemp(weatherNow.daily[3].temp.max)}ºc</p>
+                                <p>Temp:${getAbslouteValue(weatherNow.daily[3].temp.max)}ºc</p>
                             </div>
                         </div>
                     </div>
@@ -604,21 +603,31 @@ function moreInfo(elem) {
 
     if(elem.innerText === 'More Info'){
         elem.innerText = `Less Info`;
+        removeMoreInfoClasses(parent);
+    } else {
+        elem.innerText = 'More Info';
+        addMoreInfoClasses(parent);
+    };
+};
+
+//Removes the classes in order to show more info on the result
+function removeMoreInfoClasses(parent) {
         parent[0].classList.remove('d-none');
         parent[1].classList.remove('d-none');
         parent[2].classList.remove('d-none');
         parent[3].classList.remove('d-none');
         parent[4].classList.remove('d-none');
         parent[5].classList.remove('d-none');
-    } else {
-        elem.innerText = 'More Info';
+};
+
+//Adds the classes in order to hide more info on the result
+function addMoreInfoClasses(parent) {
         parent[0].classList.add('d-none');
         parent[1].classList.add('d-none');
         parent[2].classList.add('d-none');
         parent[3].classList.add('d-none');
         parent[4].classList.add('d-none');
         parent[5].classList.add('d-none');
-    };
 };
 
 //switches between the hourly and daily weather forcast
@@ -716,7 +725,7 @@ function getEmail(result) {
 };
 
 //converts the string temp to a number with 2 digits
-function fixTemp(temp) {
+function getAbslouteValue(temp) {
     return parseInt(temp, 10);
 };
 
