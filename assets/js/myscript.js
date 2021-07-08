@@ -161,7 +161,7 @@ function getSearchData(){
             getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
         };
     } else {
-        alert('Please Enter A Search Term') //Message displayed if no search term is entered
+        swal('No Search Entered','Please try again','warning'); //Message displayed if no search term is entered
     };
 };
 
@@ -171,25 +171,12 @@ function getLatLng(search, cb){
     const urlGeo = 'https://geocode.search.hereapi.com/v1/geocode?q=';
     const urlComp = urlGeo + search + '&in=countryCode:GBR' + '&apiKey=' + hereApiKey; //combining the api url with the search term and limiting to GBR
     
-    // var xhr = new XMLHttpRequest();
-    // xhr.open("GET", urlComp);
-    
-    // xhr.onreadystatechange = function () {
-    //         if (xhr.readyState === 4) {
-    //         console.log(xhr.status);
-    //         console.log(JSON.parse(xhr.responseText));
-    //         const data = JSON.parse(xhr.responseText);
-    //         cb(data); //Call back to getCoords
-    //         };
-    // };
-    // xhr.send();
-
     fetch(urlComp)
     .then(response => {
-                if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        return response.json();
     })
     .then(data => {
         cb(data); //Call back to getCoords
@@ -200,7 +187,7 @@ function getLatLng(search, cb){
         classChangeRev(); //Run function to Reverse added classes
         searchBox.value = '';
         console.error('There has been a problem with your fetch operation:', error);
-        alert('Search Term Invalid. Please Enter A New Search')
+        swal('Search Term Invalid','Please try again','warning') //pop up wanring displayed if search term is bad
     });
 
 };
@@ -257,7 +244,7 @@ function addMapEl(results) {
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     const ui = H.ui.UI.createDefault(map, defaultLayers);
     
-    addResults(results);
+    addResults(results); //runs function to start adding results to the page
     moveMapToLocation(map); //Run function to move map to searched
     addMapMarker(map, results, ui);
 };
