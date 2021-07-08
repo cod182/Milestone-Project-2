@@ -87,52 +87,53 @@ darkToggle.addEventListener('click', () => { //listens for dark button clicked
 // Get location using geolocation and run a search based on resulting Lat/Lng
 locate.addEventListener('click', function(event){ //Event listener on the locate button
 
-        if (firstTime) { // If this this the first run, run the below code
-            classChange(); //Run function to add classed
-            firstTime = false;
-        } else {
-            document.getElementById('radius-value').innerHTML = '10';
-            document.getElementById('radius').value = '16093';
-        };
-
-        const options = {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0
-          };
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(success, error, options);
-        };
-    });
-
-    //If navigator.geolocation is sucsessful, this function is called
-    function success(position) {        
-            searchLatLng.push(position.coords.latitude); //push the lat to searchLatLng
-            searchLatLng.push(position.coords.longitude);//push the lng to searchLatLng
-            coords = searchLatLng.toString(); //Set variable coords to  SearchLatLng as a String
-            searchBox.value = '';
-            radius = '16093';
-            numOfResults = null;
-            searchLatLng = []; //Set array to empty each time function run
-            resultsContain.innerHTML = ""; //Set String empty each time function run
-            mapContainer.innerHTML = ""; //Set String empty each time function run
-            geoSearch = true;  
-            discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+    if (firstTime) { // If this this the first run, run the below code
+        classChange(); //Run function to add classed
+        firstTime = false;
+    } else {
+        document.getElementById('radius-value').innerHTML = '10';
+        document.getElementById('radius').value = '16093';
     };
 
-    //If navigator.geolocation has an error, this function is called
-    function error(err) {
-        console.warn(`ERROR(${err.code}): ${err.message}`); //Console log error
-        classChangeRev();
-        firstTime = true;
-        numOfResults = null;
-        searchLatLng = []; //Set array to empty each time function run
-        resultsContain.innerHTML = ''; //Set String empty each time function run
-        mapContainer.innerHTML = ''; //Set String empty each time function run
-        searchBox.value = '';
-        swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning')
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
       };
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    };
+});
+
+//If navigator.geolocation is sucsessful, this function is called
+function success(position) {  
+    console.log(position);
+        searchLatLng.push(position.coords.latitude); //push the lat to searchLatLng
+        searchLatLng.push(position.coords.longitude);//push the lng to searchLatLng
+        coords = searchLatLng.toString(); //Set variable coords to  SearchLatLng as a String
+        searchBox.value = ''; //Clears the searchBox
+        radius = '16093'; 
+        numOfResults = null;
+        resultsContain.innerHTML = ""; //Set String empty each time function run
+        mapContainer.innerHTML = ""; //Set String empty each time function run
+        geoSearch = true;  
+        discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+};
+
+//If navigator.geolocation has an error, this function is called
+function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`); //Console log error
+    classChangeRev();
+    firstTime = true;
+    numOfResults = null;
+    searchLatLng = []; //Set array to empty each time function run
+    resultsContain.innerHTML = ''; //Set String empty each time function run
+    mapContainer.innerHTML = ''; //Set String empty each time function run
+    searchBox.value = '';
+    swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning')
+  };
+
 
 //When enter is pressed, the search box shrinks, the map is added and getData runs
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
@@ -626,12 +627,10 @@ function dailyHour(elem) {
     let weatherDay = elem.parentElement.nextElementSibling.nextElementSibling;
     
     if(elem.previousElementSibling.innerHTML === '0'){
-        console.log('clicked')
         weatherHour.classList.add('hidden');
         weatherDay.classList.remove('hidden');
         elem.previousElementSibling.innerHTML = '1';
     }else{
-        console.log('clicked else')
         weatherHour.classList.remove('hidden');
         weatherDay.classList.add('hidden');
         elem.previousElementSibling.innerHTML = '0';
