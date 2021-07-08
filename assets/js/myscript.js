@@ -86,6 +86,7 @@ darkToggle.addEventListener('click', () => { //listens for dark button clicked
 
 // Get location using geolocation and run a search based on resulting Lat/Lng
 locate.addEventListener('click', function(event){ //Event listener on the locate button
+
         if (firstTime) { // If this this the first run, run the below code
             classChange(); //Run function to add classed
             firstTime = false;
@@ -93,6 +94,7 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
             document.getElementById('radius-value').innerHTML = '10';
             document.getElementById('radius').value = '16093';
         };
+
         searchBox.value = '';
         radius = '16093';
         numOfResults = null;
@@ -101,16 +103,32 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
         mapContainer.innerHTML = ""; //Set String empty each time function run
         geoSearch = true;
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            searchLatLng.push(position.coords.latitude);
-            searchLatLng.push(position.coords.longitude);
-            coords = searchLatLng.toString();
-            discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
-        })
-      }
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+          };
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error, options);
+        };
     });
+
+    //If navigator.geolocation is sucsessful, this function is called
+    function success(position) {        
+            searchLatLng.push(position.coords.latitude); //push the lat to searchLatLng
+            searchLatLng.push(position.coords.longitude);//push the lng to searchLatLng
+            coords = searchLatLng.toString(); //Set variable coords to  SearchLatLng as a String
+            discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+    };
+
+    //If navigator.geolocation has an error, this function is called
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`); //Console log error
+        classChangeRev();
+        firstTime = true;
+        swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning')
+      };
 
 //When enter is pressed, the search box shrinks, the map is added and getData runs
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
@@ -381,7 +399,7 @@ async function addResultToPage (result) {
     const website = getWebsite(result); //Gets the website of the result
 
     const currWeather = weatherNow.current.weather[0].description; // current weather at location
-    const iconWeather = 'http://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
+    const iconWeather = 'https://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
     const currTemp = fixTemp(weatherNow.current.temp); //sets the temp to no decimal places
 
     resultDiv.innerHTML = `
@@ -469,25 +487,25 @@ async function addResultToPage (result) {
                         <div class="row">
                             <div class="col-3 hourly-box">
                                 <p>${weatherNow.hourly[0].weather[0].description}</p>
-                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p>${convertTimestamptoTime(weatherNow.hourly[0].dt)}</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p>${weatherNow.hourly[1].weather[0].description}</p>
-                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p>${convertTimestamptoTime(weatherNow.hourly[1].dt)}</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p>${weatherNow.hourly[2].weather[0].description}</p>
-                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p>${convertTimestamptoTime(weatherNow.hourly[2].dt)}</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p>${weatherNow.hourly[3].weather[0].description}</p>
-                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p>${convertTimestamptoTime(weatherNow.hourly[3].dt)}</p>
                             </div>
                         </div>
@@ -498,30 +516,30 @@ async function addResultToPage (result) {
                         <div class="row">
                             <div class="col-3 hourly-box">
                                 <p>${weatherNow.daily[0].weather[0].description}</p>
-                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p>${convertUnixToDay(weatherNow.daily[0].dt)}</p>
-                                <p>High of:${fixTemp(weatherNow.daily[0].temp.max)}ºc</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[0].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p>${weatherNow.daily[1].weather[0].description}</p>
-                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p>${convertUnixToDay(weatherNow.daily[1].dt)}</p>
-                                <p>High of:${fixTemp(weatherNow.daily[1].temp.max)}ºc</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[1].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                             <p>${weatherNow.daily[2].weather[0].description}</p>
-                            <img src="${'http://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                            <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                             <p>${convertUnixToDay(weatherNow.daily[2].dt)}</p>
-                            <p>High of:${fixTemp(weatherNow.daily[2].temp.max)}ºc</p>
+                            <p>Temp:${fixTemp(weatherNow.daily[2].temp.max)}ºc</p>
                             </div>
 
                             <div class="col-3 hourly-box">
                                 <p>${weatherNow.daily[3].weather[0].description}</p>
-                                <img src="${'http://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
                                 <p>${convertUnixToDay(weatherNow.daily[3].dt)}</p>
-                                <p>High of:${fixTemp(weatherNow.daily[3].temp.max)}ºc</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[3].temp.max)}ºc</p>
                             </div>
                         </div>
                     </div>

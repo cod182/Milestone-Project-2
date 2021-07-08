@@ -10,7 +10,7 @@
 
 A deployed link to the site can be found [here](https://cod182.github.io/Milestone-Project-2/)
 
-![Preivew]()
+![Preivew](assets/images/readme/responsive-site-image.png)
 
 
 # UX
@@ -61,20 +61,20 @@ The business vision is to help people locate an appropriate campsite to book whe
 
 ## Original
 
-- [Mobile >576px](assets/images/wireframes/_576px.png)
-- [Mobile >576px](assets/images/wireframes/_576px.png) 
-- [Mobile ≥616px](assets/images/wireframes/≥616.png)
-- [Tablet ≥768px](assets/images/wireframes/≥616.png)
-- [Desktop ≥992px](assets/images/wireframes/≥992px.png)
-- [Desktop ≥1400px](assets/images/wireframes/≥1440px.png)
+- [Mobile >576px](assets/images/readme/wireframes/_576px.png)
+- [Mobile >576px](assets/images/readme/wireframes/_576px.png) 
+- [Mobile ≥616px](assets/images/readme/wireframes/≥616.png)
+- [Tablet ≥768px](assets/images/readme/wireframes/≥616.png)
+- [Desktop ≥992px](assets/images/readme/wireframes/≥992px.png)
+- [Desktop ≥1400px](assets/images/readme/wireframes/≥1440px.png)
 
 ## Re-design
 
-- [Mobile >576px](assets/images/wireframes/redesigne/_576px.png)
-- [Mobile ≥616px](assets/images/wireframes/≥616.png)
-- [Tablet ≥768px](assets/images/wireframes/≥616.png)
-- [Desktop ≥992px](assets/images/wireframes/≥992px.png)
-- [Desktop ≥1400px](assets/images/wireframes/≥1440px.png)
+- [Mobile >576px](assets/images/readme/wireframes/redesigne/_576px.png)
+- [Mobile ≥616px](assets/images/readme/wireframes/≥616.png)
+- [Tablet ≥768px](assets/images/readme/wireframes/≥616.png)
+- [Desktop ≥992px](assets/images/readme/wireframes/≥992px.png)
+- [Desktop ≥1400px](assets/images/readme/wireframes/≥1440px.png)
 
 ## Surface
 
@@ -112,6 +112,10 @@ The fonts to be user are roboto
 - CSS
 - Javascript
 - Here Maps API
+- OpenWeather API
+- EmailJS API
+- Font Awesome CDN
+- SWAL CDN
 
 # Testing
 
