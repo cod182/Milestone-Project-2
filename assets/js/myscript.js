@@ -1,6 +1,7 @@
 const hereApiKey = 'cAo6Cjf5wlcux7gJjPODw_tNNN5lglP7Ayka-t9R7J4'; //Here Maps Api Key
 
 const searchBox = document.getElementById('search-box');
+let search = ''; //Gets the value of the search
 const greetSec = document.getElementById('greeting-box');
 const loate = document.getElementById('locate'); //Geo Locate button
 const mapContainer = document.getElementById('map-container')
@@ -12,10 +13,9 @@ let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
 let firstRadius = true;
 let darkToggle = document.getElementById('dark-toggle');
-let numOfResults = [];
+let numOfResults = null;
 const aboutText = document.getElementById('about-text');
 let map = null; //map variable
-let firstWeather;
 
 // Changes the about message every 5 seconds
 var text = [];
@@ -95,7 +95,7 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
         };
         searchBox.value = '';
         radius = '16093';
-        numOfResults = [];
+        numOfResults = null;
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
@@ -115,17 +115,10 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
 //When enter is pressed, the search box shrinks, the map is added and getData runs
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
     if (event.key === "Enter") { // If key up is Enter then...
-        if (firstTime) { // If this this the first run, run the below code
-            classChange(); //Run function to add classed
-            firstTime = false;
-        } else {
-            document.getElementById('radius-value').innerHTML = '10';
-            document.getElementById('radius').value = '16093';
-        };
+        
         radius = '16093';
-        firstWeather = true;
         geoSearch = false;
-        numOfResults = [];
+        numOfResults = null;
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
@@ -147,8 +140,20 @@ function classChange(){
 };
 
 function getSearchData(){
-    const search = searchBox.value; //Gets the value of the search
-    getLatLng(search, getCoords);
+    search = searchBox.value;
+    if (search){
+        if (firstTime) { // If this this the first run, run the below code
+            classChange(); //Run function to add classed
+            firstTime = false; //sets firstTime to false so it doesn't run again
+            getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
+        } else {
+            document.getElementById('radius-value').innerHTML = '10'; //sets the radius-value back to default
+            document.getElementById('radius').value = '16093'; //sets the radius back to default
+            getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
+        };
+    } else {
+        alert('Please Enter A Search Term') //Message displayed if no search term is entered
+    };
 };
 
 
@@ -223,7 +228,7 @@ function addMapEl(results) {
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     const ui = H.ui.UI.createDefault(map, defaultLayers);
     
-    addResults(results, map);
+    addResults(results);
     moveMapToLocation(map); //Run function to move map to searched
     addMapMarker(map, results, ui);
 };
@@ -324,59 +329,8 @@ async function addResults(results) {
     });
 
 };
-
-//takes the result and gets an XML document of info related, then calls back for addReultsToPage
-// function getWeather(result) {
-    // RESULTS OUT OF ORDER
-
-//     return new Promise(resolve => {
-//         const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
-//         var xhr = new XMLHttpRequest();
-//         xhr.open("GET", weatherUrl);
-//         let weatherResult = null;
-
-//         xhr.onreadystatechange = function () {
-//             if (xhr.readyState === 3) {
-//                 console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState); //LOG status and ready State
-//             }else if (xhr.readyState === 4) {
-//                 console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState);
-//                 let parser = new DOMParser();
-//                 let xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
-//                 weatherResult = xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
-
-//             } };
-//         xhr.send();
-//         setTimeout(() => {
-//           resolve(weatherResult);
-//         }, 3000);
-//       });
-    
-//     };
-
+//Gets the weather at the position of result
 async function getWeather(result) {
-
-// RESULTS OUT OF ORDER
-//Here Maps API
-    // const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
-
-    // return await fetch(weatherUrl)
-    // .then(response => {
-    //     if (!response.ok) {
-    //         throw new Error('Network response was not ok');
-    //       }
-    //     return response.text();
-    // })
-    // .then(data => {
-    //     let parser = new DOMParser();
-    //     let xmlDoc = parser.parseFromString(data, 'text/xml'); //
-    //     return xmlDoc.getElementsByTagName('observation')[0]; //get the first tag of type observation and assign it to weather variable
-    // })
-    // .catch(error => {
-    //     console.error('There has been a problem with your fetch operation:', error);
-    //   });
-
-
-// RESULTS OUT OF ORDER
 //Open Weather API
     const openApi = '2e87b4183a4f602f8d20b6eca0cffef3';
     const weatherURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + result.position.lat + '&lon=' + result.position.lng + '&units=metric&appid=' + openApi;
@@ -394,24 +348,11 @@ async function getWeather(result) {
     .catch(error => {
         console.error('There has been a problem with your fetch operation:', error);
     });
-
-// RESULTS OUT OF ORDER
-
-    // try {
-    //     const weatherURL = 'https://api.openweathermap.org/data/2.5/weather?q='+ result.address.city + '&units=metric&appid=966dc856d7503b6af207c5b5d50e5703';
-    //     const reposResponse = await fetch(weatherURL);
-    //     const weather = await reposResponse.json();
-    
-    // return weather;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
 };
 
 //Adds the result given to the DOM
 async function addResultToPage (result) {
     let weatherNow = await getWeather(result);
-    console.log(weatherNow);
 
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
@@ -431,7 +372,7 @@ async function addResultToPage (result) {
             <div class="result-title-container col-12">
                 <h2 class="blue bold result-row">
                     <a href="#map" onclick="moveMapToResult(this, map)" data-lat="${result.position.lat}" data-lng="${result.position.lng}">${result.title}</a>
-                    <span class="weather-sm d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"><br>${currWeather} - ${currTemp}ºc</span>
+                    <span class="weather-sm d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon">${currWeather} - ${currTemp}ºc</span>
                 </h2>
             </div>
             <div class="row">
