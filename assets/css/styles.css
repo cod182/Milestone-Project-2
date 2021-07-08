@@ -103,8 +103,8 @@ html, body {
     max-height: 30px;
     max-width: 100px;
     margin: auto;
-    padding: 0 2px 0 2px !important; /* Overriding Bootstrap CSS*/
-    font-size: small !important; /* Overriding Bootstrap CSS*/
+    padding: 3px 7px 3px 7px !important; /* Overriding Bootstrap CSS*/
+    font-size: medium !important; /* Overriding Bootstrap CSS*/
 }
 
 .btn-radius {
@@ -121,6 +121,11 @@ html, body {
 
 #logo {
     height: 110px;
+}
+
+#logo:hover {
+    box-shadow: 0 0 15px #01b9fe;
+    border-radius: 50%;
 }
 
 #logo-md {
@@ -364,6 +369,11 @@ html, body {
     margin-bottom: 10px;
 }
 
+.loading {
+    max-height: 40px;
+    margin: 0 50% 0 50%;
+}
+
 .search-results-after {
     border-radius: 16px;
     margin: 0 auto;
@@ -419,11 +429,37 @@ html, body {
 
 .result-modal {
     padding: 30px;
+    color: #000;
+}
+
+.result-modal-header {
+    background-image: url(../images/modal-banner.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50px 50px 0 0 !important; /* Overriding Bootstrap CSS*/
+}
+
+.result-modal-content {
+    color: black;
+    border-radius: 50px !important; /* Overriding Bootstrap CSS*/
+}
+
+.result-modal-title {
+    margin: 0 auto;
+    font-size: xx-large;
+    background-color: rgb(255 255 255 / 85%);
+    border-radius: 20px;
+}
+
+.result-modal-close {
+    position: absolute;
+    right: 10px;
 }
 
 .weather-container {
     border: 2px solid black;
-    border-radius: 4%;
+    border-radius: 20px;
     margin-left: -3%;
     padding: 10px 5px 10px 5px;
     text-align: center;
@@ -435,9 +471,39 @@ html, body {
     max-height: 40px;
 }
 
+.weather-sm {
+    font-size: small;
+    margin-top: 0;
+}
+
 .weather-title {
     color: #0085C5;
     text-decoration: underline;
+}
+
+.weather-current {
+    text-transform: capitalize;
+}
+
+.hour-forcast h5{
+    color: #01b9fe;
+}
+
+.hour-forcast p{
+    font-size: small;
+    text-transform: capitalize;
+    margin: 0;
+}
+
+.daily-forcast h5{
+    color: #01b9fe;
+    margin-top: 10px;
+}
+
+.daily-forcast p{
+    font-size: small;
+    text-transform: capitalize;
+    margin: 0;
 }
 
 #about {
@@ -558,6 +624,11 @@ html, body {
 }
 
 /* Media Queries */
+@media screen and (min-width:1200px) {
+    .about-text {
+        font-size: larger;
+    }
+}
 
 @media screen and (max-width:991px) {
     .about-link {
@@ -602,5 +673,17 @@ html, body {
     #radius-adjust {
         float: none;
         padding: 0;
+    }
+    .hour-forcast {
+        display:none
+    }
+    .weather {
+        display: none;
+    }
+    .weather-container {
+        border: none;
+    }
+    .daily-forcast {
+        display: inline;
     }
 }

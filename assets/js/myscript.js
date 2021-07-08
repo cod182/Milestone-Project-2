@@ -1,6 +1,7 @@
 const hereApiKey = 'cAo6Cjf5wlcux7gJjPODw_tNNN5lglP7Ayka-t9R7J4'; //Here Maps Api Key
 
 const searchBox = document.getElementById('search-box');
+let search = ''; //Gets the value of the search
 const greetSec = document.getElementById('greeting-box');
 const loate = document.getElementById('locate'); //Geo Locate button
 const mapContainer = document.getElementById('map-container')
@@ -12,7 +13,7 @@ let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
 let firstRadius = true;
 let darkToggle = document.getElementById('dark-toggle');
-let numOfResults = [];
+let numOfResults = null;
 const aboutText = document.getElementById('about-text');
 let map = null; //map variable
 
@@ -85,6 +86,7 @@ darkToggle.addEventListener('click', () => { //listens for dark button clicked
 
 // Get location using geolocation and run a search based on resulting Lat/Lng
 locate.addEventListener('click', function(event){ //Event listener on the locate button
+
         if (firstTime) { // If this this the first run, run the below code
             classChange(); //Run function to add classed
             firstTime = false;
@@ -92,38 +94,49 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
             document.getElementById('radius-value').innerHTML = '10';
             document.getElementById('radius').value = '16093';
         };
+
         searchBox.value = '';
         radius = '16093';
-        numOfResults = [];
+        numOfResults = null;
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
         geoSearch = true;
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            searchLatLng.push(position.coords.latitude);
-            searchLatLng.push(position.coords.longitude);
-            coords = searchLatLng.toString();
-            discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
-        })
-      }
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+          };
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error, options);
+        };
     });
+
+    //If navigator.geolocation is sucsessful, this function is called
+    function success(position) {        
+            searchLatLng.push(position.coords.latitude); //push the lat to searchLatLng
+            searchLatLng.push(position.coords.longitude);//push the lng to searchLatLng
+            coords = searchLatLng.toString(); //Set variable coords to  SearchLatLng as a String
+            discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+    };
+
+    //If navigator.geolocation has an error, this function is called
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`); //Console log error
+        classChangeRev();
+        firstTime = true;
+        swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning')
+      };
 
 //When enter is pressed, the search box shrinks, the map is added and getData runs
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
     if (event.key === "Enter") { // If key up is Enter then...
-        if (firstTime) { // If this this the first run, run the below code
-            classChange(); //Run function to add classed
-            firstTime = false;
-        } else {
-            document.getElementById('radius-value').innerHTML = '10';
-            document.getElementById('radius').value = '16093';
-        };
+        
         radius = '16093';
         geoSearch = false;
-        numOfResults = [];
+        numOfResults = null;
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         mapContainer.innerHTML = ""; //Set String empty each time function run
@@ -141,12 +154,33 @@ function classChange(){
     resultsContain.classList.add('search-results-after'); // Adds the class to the search results section
     locate.classList.remove('locate-before'); //Remove class from locate
     locate.classList.add('locate-after'); //Add class to locate
-
 };
 
+function classChangeRev() {
+    searchBox.classList.add('search-box-before'); //Remove class from searchBox
+    searchBox.classList.remove('search-box-after'); //Add class to searchBox
+    greetSec.classList.add('greeting-box-before'); //Remove class from greetSec
+    greetSec.classList.remove('greeting-box-after'); //Add class to greetSec
+    resultsContain.classList.remove('search-results-after'); // Adds the class to the search results section
+    locate.classList.add('locate-before'); //Remove class from locate
+    locate.classList.remove('locate-after'); //Add class to locate
+}
+
 function getSearchData(){
-    const search = searchBox.value; //Gets the value of the search
-    getLatLng(search, getCoords);
+    search = searchBox.value;
+    if (search){
+        if (firstTime) { // If this this the first run, run the below code
+            classChange(); //Run function to add classed
+            firstTime = false; //sets firstTime to false so it doesn't run again
+            getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
+        } else {
+            document.getElementById('radius-value').innerHTML = '10'; //sets the radius-value back to default
+            document.getElementById('radius').value = '16093'; //sets the radius back to default
+            getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
+        };
+    } else {
+        swal('No Search Entered','Please try again','warning'); //Message displayed if no search term is entered
+    };
 };
 
 
@@ -155,18 +189,25 @@ function getLatLng(search, cb){
     const urlGeo = 'https://geocode.search.hereapi.com/v1/geocode?q=';
     const urlComp = urlGeo + search + '&in=countryCode:GBR' + '&apiKey=' + hereApiKey; //combining the api url with the search term and limiting to GBR
     
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", urlComp);
-    
-    xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-            console.log(xhr.status);
-            console.log(JSON.parse(xhr.responseText));
-            const data = JSON.parse(xhr.responseText);
-            cb(data); //Call back to getCoords
-            };
-    };
-    xhr.send();
+    fetch(urlComp)
+    .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        return response.json();
+    })
+    .then(data => {
+        cb(data); //Call back to getCoords
+        return data;
+    })
+    .catch(error => {
+        firstTime = true; //sets firstTime to false so it doesn't run again
+        classChangeRev(); //Run function to Reverse added classes
+        searchBox.value = '';
+        console.error('There has been a problem with your fetch operation:', error);
+        swal('Search Term Invalid','Please try again','warning') //pop up wanring displayed if search term is bad
+    });
+
 };
 
 // Puts the coordinates into a string and starts the discoverSearch function
@@ -221,7 +262,7 @@ function addMapEl(results) {
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     const ui = H.ui.UI.createDefault(map, defaultLayers);
     
-    addResults(results, map);
+    addResults(results); //runs function to start adding results to the page
     moveMapToLocation(map); //Run function to move map to searched
     addMapMarker(map, results, ui);
 };
@@ -299,6 +340,7 @@ function addMapMarker(map, results, ui) {
         </div>
         `);
         locationMarker.addEventListener('tap', event => {
+            ui.getBubbles().forEach(bub => ui.removeBubble(bub));
             const bubble = new H.ui.InfoBubble(
                 {lat: lat, lng: lng},
                 {
@@ -313,33 +355,39 @@ function addMapMarker(map, results, ui) {
 };
 
 //loops through the results to give results to pass on
-function addResults(results, map) { 
+async function addResults(results) { 
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
-        getWeather(result, addResultToPage); //get the weather results from result
+        addResultToPage(result);
     });
 
 };
+//Gets the weather at the position of result
+async function getWeather(result) {
+//Open Weather API
+    const openApi = '2e87b4183a4f602f8d20b6eca0cffef3';
+    const weatherURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + result.position.lat + '&lon=' + result.position.lng + '&units=metric&appid=' + openApi;
 
-//takes the result and gets an XML document of info related, then calls back for addReultsToPage
-function getWeather(result, cb) {
-    const weatherUrl = 'https://weather.cc.api.here.com/weather/1.0/report.xml?apiKey=' + hereApiKey + '&product=observation&latitude=' + result.position.lat + '&longitude=' + result.position.lng + '&oneobservation=true';
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", weatherUrl);
+    return await fetch(weatherURL)
+    .then(response => {
+                if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+    })
+    .then(data => {
+        return data;
+    })
+    .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+    });
+};
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            console.log('getWeather','Status - ' + xhr.status, 'readyState - ' + xhr.readyState);
-            let parser = new DOMParser();
-            let xmlDoc = parser.parseFromString(xhr.response, 'text/xml');
-            cb(result, xmlDoc.getElementsByTagName('observation')[0]); //get the first tag of type observation and assign it to weather variable
-        }};
-    xhr.send();
-    };
+//Adds the result given to the DOM
+async function addResultToPage (result) {
+    let weatherNow = await getWeather(result);
 
-//Addes the result given to the DOM
-function addResultToPage (result, weather) {
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
@@ -347,21 +395,23 @@ function addResultToPage (result, weather) {
     const phone = getPhone (result); //Gets the contact number of the location
     const hours = getHours(result); //Gets the hours the location is open
     const distance = getDistance(result.distance); //Gets the distance to location in KM
+    const email = getEmail(result); //Gets the email of the result
+    const website = getWebsite(result); //Gets the website of the result
 
-    let currWeather = weather.childNodes[3].innerHTML; // current weather at location
-    let iconWeather = weather.childNodes[59].innerHTML; //current weather icon at location
-    let currTemp = fixTemp(weather.childNodes[9].innerHTML);
+    const currWeather = weatherNow.current.weather[0].description; // current weather at location
+    const iconWeather = 'https://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
+    const currTemp = fixTemp(weatherNow.current.temp); //sets the temp to no decimal places
 
     resultDiv.innerHTML = `
-            <div class="result-title-container col-12" data-result="data-result">
+            <div class="result-title-container col-12">
                 <h2 class="blue bold result-row">
                     <a href="#map" onclick="moveMapToResult(this, map)" data-lat="${result.position.lat}" data-lng="${result.position.lng}">${result.title}</a>
-                    <span class="d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"></span>
+                    <span class="weather-sm d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon">${currWeather} - ${currTemp}ºc</span>
                 </h2>
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-9">
-
+                <div class="col-sm-12 col-md-7">
+                
                     <div class="row">
                         <div class="col-3 result-row">
                             <p class="result-label">Distance:</p>
@@ -378,7 +428,8 @@ function addResultToPage (result, weather) {
                         <div class="col-9 result-data-container">
                             <p class="result-data result-address">${result.title}</p>
                             <p class="result-data result-address">${result.address.district}</p>
-                            <p class="result-data result-address">${result.address.county}</p>
+                            <p class="result-data result-address more-info d-none">${result.address.county}</p>
+                            <p class="result-data result-address more-info d-none">${result.address.city}</p>
                             <p class="result-data">${result.address.postalCode}</p>
                         </div>
                     </div>
@@ -392,6 +443,15 @@ function addResultToPage (result, weather) {
                         </div>
                     </div>
 
+                    <div class="row more-info d-none">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Email:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${email}</p>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-3 result-row">
                             <p class="result-label">Opening Hours:</p>
@@ -400,9 +460,20 @@ function addResultToPage (result, weather) {
                             <p class="result-data">${hours}</p>
                         </div>
                     </div>
+
+                    <div class="row more-info d-none">
+                        <div class="col-3 result-row">
+                            <p class="result-label">Website:</p>
+                        </div>
+                        <div class="col-9 result-data-container">
+                            <p class="result-data">${website}</p>
+                        </div>
+                    </div>
+
+
                 </div>
 
-                <div class="col-md-3 d-none d-md-inline weather-container">
+                <div class="col-md-5 col-sm-12 d-md-inline weather-container container-fluid">
                     <div class="weather">
                         <div>
                             <h4 class="weather-title">Current Weather</h4>
@@ -411,18 +482,124 @@ function addResultToPage (result, weather) {
                             <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
                         </div>
                     </div>
+                    <div class="more-info d-none hour-forcast">
+                        <h5>Hourly Forcast</h5>
+                        <div class="row">
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.hourly[0].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertTimestamptoTime(weatherNow.hourly[0].dt)}</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.hourly[1].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertTimestamptoTime(weatherNow.hourly[1].dt)}</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.hourly[2].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertTimestamptoTime(weatherNow.hourly[2].dt)}</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.hourly[3].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertTimestamptoTime(weatherNow.hourly[3].dt)}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="more-info d-none d-md-none daily-forcast">
+                        <h5>Daily Forcast</h5>
+                        <div class="row">
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.daily[0].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertUnixToDay(weatherNow.daily[0].dt)}</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[0].temp.max)}ºc</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.daily[1].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertUnixToDay(weatherNow.daily[1].dt)}</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[1].temp.max)}ºc</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                            <p>${weatherNow.daily[2].weather[0].description}</p>
+                            <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                            <p>${convertUnixToDay(weatherNow.daily[2].dt)}</p>
+                            <p>Temp:${fixTemp(weatherNow.daily[2].temp.max)}ºc</p>
+                            </div>
+
+                            <div class="col-3 hourly-box">
+                                <p>${weatherNow.daily[3].weather[0].description}</p>
+                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                                <p>${convertUnixToDay(weatherNow.daily[3].dt)}</p>
+                                <p>Temp:${fixTemp(weatherNow.daily[3].temp.max)}ºc</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>  
             <div class="row">
                 <div class="col-md-5 result-row">
-                    <button class="btn btn-blue btn-info" data-info-modal data-bs-toggle="modal" data-bs-target="#resultMoreInfo">More Info</button>
+                    <button class="btn btn-blue btn-info more-info-button" onclick="moreInfo(this)">More Info</button>
                 </div>
             </div>
     `;
     resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
-    addMoreInfo(result)
-};   
+};
 
+// Changes the More info button to Less Info when clicked
+function moreInfo(elem) {
+    let parent = elem.parentElement.parentElement.parentElement.getElementsByClassName('more-info');
+
+    if(elem.innerText === 'More Info'){
+        elem.innerText = `Less Info`;
+        parent[0].classList.remove('d-none');
+        parent[1].classList.remove('d-none');
+        parent[2].classList.remove('d-none');
+        parent[3].classList.remove('d-none');
+        parent[4].classList.remove('d-none');
+        parent[5].classList.remove('d-none');
+    } else {
+        elem.innerText = 'More Info';
+        parent[0].classList.add('d-none');
+        parent[1].classList.add('d-none');
+        parent[2].classList.add('d-none');
+        parent[3].classList.add('d-none');
+        parent[4].classList.add('d-none');
+        parent[5].classList.add('d-none');
+    };
+};
+
+//converts unix timecode to hours
+function convertTimestamptoTime(unixTimestamp) {
+    
+            dateObj = new Date(unixTimestamp * 1000);
+
+            hours = dateObj.getUTCHours(); // Get hours from the timestamp
+            minutes = dateObj.getUTCMinutes(); // Get minutes from the timestamp
+
+            hoursMin = hours.toString().padStart(2, '0') + ':' +
+                minutes.toString().padStart(2, '0'); //combine hours and minutes
+            
+                return hoursMin;
+};
+
+function convertUnixToDay(unix) {
+
+const milliseconds = unix * 1000 
+
+const dateObject = new Date(milliseconds)
+
+return dateObject.toLocaleString("en-gb", {weekday: "long"})
+};
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
 function getPhone(result) {
@@ -459,10 +636,12 @@ function getWebsite(result) {
         if (result.contacts[0].www){ //if website exists in contacts
             return result.contacts[0].www[0].value; //display website 
         } else if (result.contacts[0].www) { //if no website 1, check for website 2
-            return result.contacts[0].www[1].value; //display website
+            return `<a href="${result.contacts[0].www[1].value}" alt="${result.title}" target="_blank"</a>`; //display website
+        } else {
+            return `<i class="fas fa-phone"></i><span class="result-data">Website not available</span>`;
         }
     } else { // if no website
-        return `<i class="fas fa-phone"></i><span class="result-data">- Call to confirm</span>`;
+        return `<i class="fas fa-phone"></i><span class="result-data">Website not available</span>`;
     };
 };
 
@@ -482,157 +661,7 @@ function getEmail(result) {
 //converts the string temp to a number with 2 digits
 function fixTemp(temp) {
     return parseInt(temp, 10);
-}
-
-function addMoreInfo(result) {
-
-    const phone = getPhone (result); //Gets the contact number of the result
-    const hours = getHours(result); //Gets the hours the result is open
-    const distance = getDistance(result.distance); //Gets the distance to result in miles
-    const email = getEmail(result); //Gets the email of the result
-    const website = getWebsite(result); //Gets the website of the result
-
-    const modalOfInfo = document.body.querySelector('[data-modal-info]');
-    let modalHead = document.createElement('div');
-    modalHead.classList.add('modal-header');
-
-    modalHead.innerHTML = `
-        <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">${result.title}</h5>
-        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-    `;
-
-    let modalBody = document.createElement('div');
-    modalBody.classList.add('result-modal');
-    modalBody.classList.add('modal-body');
-
-    modalBody.innerHTML = `
-            <div class="row">
-                <div class="col-9">
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Address:</p>
-                    </div>
-                    <div class="col-9">
-                        <p class="result-data result-address">${result.title}</p>
-                        <p class="result-data result-address">${result.address.district}</p>
-                        <p class="result-data result-address">${result.address.county}</p>
-                        <p class="result-data">${result.address.postalCode}</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Services:</p>
-                    </div>
-                    <div class="col-9">
-                      <p class="result-data">Water, Electric, Waste</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Phone:</p>
-                    </div>
-                    <div class="col-9">
-                        <p class="result-data">${phone}</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                        <p class="result-label">Email:</p>
-                    </div>
-                    <div class="col-9">
-                        <p class="result-data">${email}</p>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3 result-row">
-                      <p class="result-label">Website:</p>
-                    </div>
-                    <div class="col-9">
-                      <p class="result-data">${website}</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="weather"></div>
-                </div>
-              </div>
-          </div>
-    `;
-
-    modalOfInfo.appendChild(modalHead);
-    modalOfInfo.appendChild(modalBody);
 };
-
-//Create Modal
-
-// function createInfoModal() {
-    
-//     const infoModalContainer = document.getElementById('resultMoreInfo');
-//     let infoModal = document.createElement('div');
-//     infoModal.classList.add('modal-dialog'); //Adds the class to the div
-//     infoModal.classList.add('modal-dialog-centered'); //Adds the class to the div
-
-//     infoModal.innerHTML = `
-//         <div class="modal-content">
-//         <div class="modal-header">
-//             <h5 class="modal-title roboto result-title blue bold" id="resultMoreInfoLabel">Location</h5>
-//             <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-//         </div>
-//         <div class="modal-body result-modal">
-//             <div class="row">
-//                 <div class="col-9">
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Address:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">123 example street</p>
-//                     <p class="result-data">Example city</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Services:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">Water, Electric, Waste</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Phone:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">02938 273748</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Email:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">location@email.com</p>
-//                     </div>
-//                 </div>
-//                 <div class="row">
-//                     <div class="col-3 result-row">
-//                     <p class="result-label">Website:</p>
-//                     </div>
-//                     <div class="col-9">
-//                     <p class="result-data">www.location.com</p>
-//                     </div>
-//                 </div>
-//                 </div>
-//                 <div class="col-3">
-//                 <div class="weather"></div>
-//                 </div>
-//             </div>
-//         </div>
-//         </div>
-//     `;
-
-//     infoModalContainer.appendChild(infoModal);
-// };
 
 //Create the radius div and set the innerHTML
 function makeRadius() {
@@ -694,15 +723,15 @@ function makeRadius() {
 //gets coordinates and focuses the map on that location
 function moveMapToResult(event, map) {
 
-    let lat  = event.dataset.lat;
-    let lng = event.dataset.lng;
+    let lat  = event.dataset.lat; //set the lat from the dataset lat
+    let lng = event.dataset.lng;//set the lng from the dataset lng
 
     map.setCenter({ //Sets the Lat & Lng of the map
         lat: lat, 
         lng: lng
     });
     map.setZoom(14); //Sets the Zoom level of the map
-    console.log('Move to: ' + lat,lng);
+    console.log('Move map to: lat ' + lat + ',lng ' + lng);
 };
 
 
