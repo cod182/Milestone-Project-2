@@ -735,9 +735,9 @@ function makeRadius() {
         let radiusArea = document.createElement('div');// Create new Div
         radiusArea.classList.add('row');
         radiusArea.innerHTML = `
-            <div class="row" id="radius-container">
+            <div class="row radius-container" id="radius-container">
                 <div class="col-md-6 col-sm-12 gx-0">
-                    <div id="radius-adjust">
+                    <div class="radius-adjust" id="radius-adjust">
                         <label for="radius">Radius: </label>
                         <input type="range" step="8000" min="1" max="80490" value="16093"  class="slider" id="radius">
                         <p class="d-inline" id="radius-val"><span id="radius-value">10</span> Miles</p>

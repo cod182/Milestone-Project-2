@@ -116,36 +116,29 @@ html, body {
     color: white;
 }
 
+.btn-contact {
+    width: 100%;
+}
+
 .navbar {
     background-image: url(../images/modal-banner.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position-y:top;
-    min-height: 120px;
+    min-height: 200px;
 }
 
-#logo {
-    height: 110px;
+.logo {
+    height: 170px;
 }
 
-#logo:hover {
+.logo:hover {
     box-shadow: 0 0 15px #01b9fe;
     border-radius: 50%;
 }
 
-#logo-md {
+.logo-md {
     height: 80px;
-}
-
-#brand-title {
-    text-align: center;
-    margin: 0 auto;
-    font-family: Roberto, 'sans-serif';
-    font-weight: bolder;
-    font-size: 50px;
-    background-color: rgb(255 255 255 / 85%);
-    border-radius: 20px;
-    padding: 0 10px 0 10px;
 }
 
 .navbar-collapse {
@@ -171,23 +164,53 @@ html, body {
 .about-link {
     background-color: #399845;
     border-radius: 20px;
-    padding: 0 10px 0 10px !important; /* Overriding Bootstrap CSS*/
-    margin: 43px 10px 0 0 !important; /* Overriding Bootstrap CSS*/
+    padding: 0 10px 0 10px;
+    margin: 71px 10px 0 0;
     float: right;
+    display: inline;
+    text-decoration: none;
+    transition: color .15s ease-in-out,
+    background-color .15s ease-in-out,
+    border-color .15s ease-in-out;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    font-size: larger;
+    color: white;
+}
+
+.about-link:hover,
+.about-link:focus,
+.about-link:active,
+.about-link:active:focus {
+    color: #00BAFE;
 }
 
 .contact-link {
     background-color: #399845;
     border-radius: 20px;
-    padding: 0 10px 0 10px !important; /* Overriding Bootstrap CSS*/
-    margin: 43px 0 0 10px !important; /* Overriding Bootstrap CSS*/
+    padding: 0 10px 0 10px;
+    margin: 71px 10px 0 0;
+    float: right;
+    display: inline;
+    text-decoration: none;
+    transition: color .15s ease-in-out,
+    background-color .15s ease-in-out,
+    border-color .15s ease-in-out;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    font-size: larger;
+    color: white;
 }
 
-.nav-link:hover,
-.nav-link:focus,
-.nav-link:active,
-.nav-link:active:focus {
-    color: #00BAFE !important; /* Overriding Bootstrap CSS*/
+.contact-link:hover,
+.contact-link:focus,
+.contact-link:active,
+.contact-link:active:focus {
+    color: #00BAFE;
 }
 
 .greeting-box-before {
@@ -201,7 +224,7 @@ html, body {
     margin: 0 auto;
 }
 
-#locate {
+.locate {
     background: transparent;
     border: none;
     font-size: large;
@@ -221,14 +244,14 @@ html, body {
     font-size: large;
 }
 
-#locate:hover,
-#locate:focus,
-#locate:active,
-#loate:active:focus {
+.locate:hover,
+.locate:focus,
+.locate:active,
+.loate:active:focus {
     color: #00BAFE;
 }
 
-#locate:visited {
+.locate:visited {
     color: #0085C5;
     min-height: 67px;
 }
@@ -305,7 +328,7 @@ html, body {
     color: white;
 }
 
-#radius-container {
+.radius-container {
     text-align: center;
     font-size: 12px;
     background-color: #00BAFE;
@@ -316,7 +339,7 @@ html, body {
     font-weight: bold;
 }
 
-#radius-adjust {
+.radius-adjust {
     float: right;
 }
 
@@ -325,48 +348,43 @@ html, body {
     padding-left: 3vw;
 }
 
-/* Slider CSS by w3c */
+/* Slider CSS by w3c to start*/
 
 .slidecontainer {
-    width: 100%; /* Width of the outside container */
+    width: 100%;
   }
   
-  /* The slider itself */
   .slider {
-    -webkit-appearance: none;  /* Override default CSS styles */
+    -webkit-appearance: none;
     appearance: none;
-    height: 5px; /* Specified height */
-    background: #d3d3d3; /* Grey background */
-    outline: none; /* Remove outline */
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    height: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
     transition: opacity .2s;
   }
   
-  /* Mouse-over effects */
   .slider:hover {
-    opacity: 1; /* Fully shown on mouse-over */
+    opacity: 1;
   }
   
-  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
   .slider::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
+    -webkit-appearance: none;
     appearance: none;
-    width: 10px; /* Set a specific slider handle width */
-    height: 10px; /* Slider handle height */
+    width: 10px;
+    height: 10px;
     border-radius: 50px;
-    background: #4fbc6f; /* Blue background */
-    cursor: pointer; /* Cursor on hover */
+    background: #4fbc6f;
+    cursor: pointer;
   }
   
   .slider::-moz-range-thumb {
-    width: 25px; /* Set a specific slider handle width */
-    height: 25px; /* Slider handle height */
-    background: #4fbc6f; /* Green background */
-    cursor: pointer; /* Cursor on hover */
+    width: 25px;
+    height: 25px; 
+    background: #4fbc6f;
+    cursor: pointer;
   }
-
-  /* END OF SLIDER */
 
 .map {
     width: 100vw;
@@ -430,36 +448,6 @@ html, body {
 
 .result-address {
     margin-bottom: 0;
-}
-
-.result-modal {
-    padding: 30px;
-    color: #000;
-}
-
-.result-modal-header {
-    background-image: url(../images/modal-banner.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 50px 50px 0 0 !important; /* Overriding Bootstrap CSS*/
-}
-
-.result-modal-content {
-    color: black;
-    border-radius: 50px !important; /* Overriding Bootstrap CSS*/
-}
-
-.result-modal-title {
-    margin: 0 auto;
-    font-size: xx-large;
-    background-color: rgb(255 255 255 / 85%);
-    border-radius: 20px;
-}
-
-.result-modal-close {
-    position: absolute;
-    right: 10px;
 }
 
 .weather-container {
@@ -657,7 +645,7 @@ input:checked + .slider-weather .off-weather {
     /* font-size:calc(10px + 1.5vw); */
 }
 
-#footer {
+.footer {
     height: 10vh;
     background-image: url(../images/modal-banner.png);
     background-position: top;
@@ -699,28 +687,30 @@ input:checked + .slider-weather .off-weather {
     right: 10px;
 }
 
-.contact-label {
-    vertical-align: top;
-    font-size: x-large;
-    font-family: 'Roboto', 'sans-serif';
-    width: 25%;
-    color: darkslategrey;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
 .contact-input {
+    text-align: center;
     margin-top: 5px;
     margin-bottom: 5px;
-    min-width: 74%;
+    min-width: 100%;
     vertical-align: text-top;
 }
 
+.contact-reasons { 
+    width: 400px; 
+    text-align-last:center; 
+}
+
 .contact-message {
+    text-align: center;
     margin-top: 5px;
     margin-bottom: 5px;
-    min-width: 74%;
+    min-width: 100%;
     min-height: 40%;
+}
+
+.message-status {
+    text-align: center;
+    margin: 0;
 }
 
 /* Media Queries */
@@ -732,16 +722,16 @@ input:checked + .slider-weather .off-weather {
 
 @media screen and (max-width:991px) {
     .about-link {
-        margin: 5px 0 0 0 !important; /* Overriding Bootstrap CSS*/
-        padding: 0 10px 0 10px !important; /* Overriding Bootstrap CSS*/
+        margin: 5px 0 0 0;
+        padding: 0 10px 0 10px;
         width: fit-content;
         float: right;
     }
     
     .contact-link {
-        margin: 2px 0 0 0 !important; /* Overriding Bootstrap CSS*/
+        margin: 2px 0 0 0;
         text-align: right;
-        padding: 0 10px 0 10px !important; /* Overriding Bootstrap CSS*/
+        padding: 0 10px 0 10px;
         width: fit-content;
         float: right;
     }
@@ -763,14 +753,17 @@ input:checked + .slider-weather .off-weather {
     .dark-box {
         border: none;
     }
+    .navbar {
+        min-height: 120px;
+    }
 }
 
 @media screen and (max-width:767px) {
-    #result-no-container {
+    .result-no-container {
         float: none;
         padding: 0;
     }
-    #radius-adjust {
+    .radius-adjust {
         float: none;
         padding: 0;
     }
