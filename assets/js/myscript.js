@@ -391,35 +391,94 @@ async function getWeather(result) {
         console.error('There has been a problem with your fetch operation:', error);
     });
 };
-
+let resultBuilding = [];
 //Adds the result given to the DOM
 async function addResultToPage (result) {
+    resultBuilding = [];
     let weatherNow = await getWeather(result);
+    let resultDiv = createResultDiv();
+    createResultTitleInfo(result, weatherNow);// Append to result div
+    createResultBodyInfo(result,weatherNow);
+    let resultReady = resultBuilding.join('').toString();
+    console.log(resultReady);
+    resultDiv.innerHTML = resultReady; //Appends resultDiv as a child of resultsContain
 
+    resultsContain.appendChild(resultDiv);
+};
+
+//Creates a New div with 2 classes
+function createResultDiv(){
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
+    return resultDiv
+};
 
-    const phone = getPhone (result); //Gets the contact number of the location
-    const hours = getHours(result); //Gets the hours the location is open
-    const distance = getDistance(result.distance); //Gets the distance to location in KM
-    const email = getEmail(result); //Gets the email of the result
-    const website = getWebsite(result); //Gets the website of the result
-
+//Create title section storedd in title
+function createResultTitleInfo(result, weatherNow) {
+    resultBuilding = []
     const currWeather = weatherNow.current.weather[0].description; // current weather at location
     const iconWeather = 'https://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
     const currTemp = getAbslouteValue(weatherNow.current.temp); //sets the temp to no decimal places
-
-    resultDiv.innerHTML = `
+    
+    let title = `
             <div class="result-title-container col-12">
                 <h2 class="blue bold result-row">
                     <a href="#map" onclick="moveMapToResult(this, map)" data-lat="${result.position.lat}" data-lng="${result.position.lng}">${result.title}</a>
                     <span class="weather-sm d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon">${currWeather} - ${currTemp}ºc</span>
                 </h2>
             </div>
+            `;
+            resultBuilding.push(title);
+};
+
+//Creates Body of Results
+function createResultBodyInfo(result, weatherNow) {
+    let body = [];
+    let weatherArr = [];
+    createBodyInfo(body,result);
+    createBodyInfoWeather(weatherNow, weatherArr);
+    createBodyMoreInfoButton(weatherArr); //Create the More info button in the body for displaying more info
+
+    body.push(weatherArr.join('').toString()); //Joins all the weather arrays together and pusheds them into the body array
+    let bodyReady = body.join('').toString(); // Joins all the arrays togather and pushes stores them in bodyReady variable
+    resultBuilding.push(bodyReady); //Pushes the Body Ready variable into the resultBuilding Array
+};
+
+function createBodyInfo(body,result) {
+    createBodyInfoOuter(body); //Run the function to create the outer container for the body, then pushed into body
+    createBodyInfoDistance(result, body); //Run the function to create the distance div for the body, then pushed into body
+    createBodyInfoAddress(result, body); //Run the function to create the address div for the body, then pushed into body
+    createBodyInfoPhone(result, body); //Run the function to create the phone div for the body, then pushed into body
+    createBodyInfoEmail(result, body); //Run the function to create the email div for the body, then pushed into body
+    createBodyInfoHours(result, body); //Run the function to create the opening hours div for the body, then pushed into body
+    createBodyInfoWebsite(result, body); //Run the function to create the website div for the body, then pushed into body
+};
+
+function createBodyInfoWeather(weatherNow, weatherArr) {
+    createBodyInfoCurrentWeather(weatherNow, weatherArr); //Run the function to create the current weather div for the body, then pushed into weatherArr
+    createBodyInfoWeatherToggle(weatherArr); //Run the function to create the weather toggle div for the body, then pushed into weatherArr
+    createBodyInfoWeatherHourForcast1(weatherNow, weatherArr); //Run the function to create the hour weather forcast day 1+2 div for the body, then pushed into weatherArr
+    createBodyInfoWeatherHourForcast2(weatherNow, weatherArr); //Run the function to create the hour weather forcast day 2+3 div for the body, then pushed into weatherArr
+    createBodyInfoWeatherDailyForcast1(weatherNow, weatherArr); //Run the function to create the daily weather forcast day 1+2 div for the body,then pushed into weatherArr
+    createBodyInfoWeatherDailyForcast2(weatherNow, weatherArr); //Run the function to create the daily weather forcast day 2+3 div for the body,then pushed into weatherArr
+    createBodyInfoWeatherDailyForcastSmall1(weatherNow, weatherArr); //Create the small daily weather forcast day +2 div for the body,then pushed into weatherArr
+    createBodyInfoWeatherDailyForcastSmall2(weatherNow, weatherArr); //Create the small daily weather forcast day +2 div for the body,then pushed into weatherArrweatherArr
+};
+
+//Staarts off the body section of More Info
+function createBodyInfoOuter(body) {
+    let bodyInfoOuter = `
             <div class="row">
-                <div class="col-sm-12 col-md-7">
-                
+                <div class="col-sm-12 col-md-7"> 
+    `;
+    body.push(bodyInfoOuter);
+};
+
+//Gets the Distance section of More Info
+function createBodyInfoDistance(result, body) {
+    const distance = getDistance(result.distance); //Gets the distance to location in KM
+    let bodyInfoDistance = `
                     <div class="row">
                         <div class="col-3 result-row">
                             <p class="result-label">Distance:</p>
@@ -428,177 +487,272 @@ async function addResultToPage (result) {
                             <p class="result-data">${distance} Miles</p>
                         </div>
                     </div>
+    `;
+    body.push(bodyInfoDistance);
+};
 
-                    <div class="row">
-                        <div class="col-3 result-row">
-                            <p class="result-label">Address:</p>
-                        </div>
-                        <div class="col-9 result-data-container">
-                            <p class="result-data result-address">${result.title}</p>
-                            <p class="result-data result-address">${result.address.district}</p>
-                            <p class="result-data result-address more-info d-none">${result.address.county}</p>
-                            <p class="result-data result-address more-info d-none">${result.address.city}</p>
-                            <p class="result-data">${result.address.postalCode}</p>
-                        </div>
+//Gets the address section of More Info
+function createBodyInfoAddress(result, body) {
+    let bodyInfoAddress = `
+                <div class="row">
+                    <div class="col-3 result-row">
+                        <p class="result-label">Address:</p>
                     </div>
-
-                    <div class="row">
-                        <div class="col-3 result-row">
-                            <p class="result-label">Phone:</p>
-                        </div>
-                        <div class="col-9 result-data-container">
-                            <p class="result-data">${phone}</p>
-                        </div>
+                    <div class="col-9 result-data-container">
+                        <p class="result-data result-address">${result.title}</p>
+                        <p class="result-data result-address">${result.address.district}</p>
+                        <p class="result-data result-address more-info d-none">${result.address.county}</p>
+                        <p class="result-data result-address more-info d-none">${result.address.city}</p>
+                        <p class="result-data">${result.address.postalCode}</p>
                     </div>
-
-                    <div class="row more-info d-none">
-                        <div class="col-3 result-row">
-                            <p class="result-label">Email:</p>
-                        </div>
-                        <div class="col-9 result-data-container">
-                            <p class="result-data">${email}</p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-3 result-row">
-                            <p class="result-label">Opening Hours:</p>
-                        </div>
-                        <div class="col-9 result-data-container">
-                            <p class="result-data">${hours}</p>
-                        </div>
-                    </div>
-
-                    <div class="row more-info d-none">
-                        <div class="col-3 result-row">
-                            <p class="result-label">Website:</p>
-                        </div>
-                        <div class="col-9 result-data-container">
-                            <p class="result-data">${website}</p>
-                        </div>
-                    </div>
-
-
                 </div>
+    `;
+    body.push(bodyInfoAddress);
+};
 
-                <div class="col-md-5 col-sm-12 d-md-inline weather-container container-fluid">
-                    <div class="weather">
-                        <div>
-                            <h4 class="weather-title">Current Weather</h4>
-                            <img src="${iconWeather}" alt="weather Icon">
-                            <p class="weather-current">${currWeather}</p>
-                            <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
-                        </div>
-                    </div>
-                    <div class="more-info d-none hour-forcast">
-                        <label class="switch-weather">
-                            <span class='d-none'>0</span>
-                            <input type="checkbox" onclick="showHidedailyHour(this)">
-                            <div class="slider-weather round-weather">
-                                <span class="on-weather bold">Daily</span>
-                                <span class="off-weather bold">Hourly</span>
-                            </div>
-                        </label>
-<!-- Hourly Weather md+ display -->
-                        <div class="row">
-                            <div class="col-3 hourly-box">
-                                <p class="weather-description">${weatherNow.hourly[0].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertUnixToTime(weatherNow.hourly[0].dt)}</p>
-                            </div>
-
-                            <div class="col-3 hourly-box">
-                                <p class="weather-description">${weatherNow.hourly[1].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertUnixToTime(weatherNow.hourly[1].dt)}</p>
-                            </div>
-
-                            <div class="col-3 hourly-box">
-                                <p class="weather-description">${weatherNow.hourly[2].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertUnixToTime(weatherNow.hourly[2].dt)}</p>
-                            </div>
-
-                            <div class="col-3 hourly-box">
-                                <p class="weather-description">${weatherNow.hourly[3].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertUnixToTime(weatherNow.hourly[3].dt)}</p>
-                            </div>
-                        </div>
-<!-- Daily Weather md+ display -->
-                        <div class="row d-none">
-                            <div class="col-3 daily-box">
-                                <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
-                                <p>Temp:${getAbslouteValue(weatherNow.daily[0].temp.max)}ºc</p>
-                            </div>
-
-                            <div class="col-3 daily-box">
-                                <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
-                                <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
-                            </div>
-
-                            <div class="col-3 daily-box">
-                                <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p class="bold">${convertUnixToDay(weatherNow.daily[2].dt)}</p>
-                                <p>Temp:${getAbslouteValue(weatherNow.daily[2].temp.max)}ºc</p>
-                            </div>
-
-                            <div class="col-3 daily-box">
-                                <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
-                                <p>Temp:${getAbslouteValue(weatherNow.daily[3].temp.max)}ºc</p>
-                            </div>
-                        </div>
-                    </div>
-<!-- Small more info weather Display -->
-                    <div class="more-info d-none d-md-none daily-forcast">
-                        <h5>Daily Forcast</h5>
-                        <div class="row">
-                            <div class="col-3 hourly-box">
-                                <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
-                                <p>Temp:${getAbslouteValue(weatherNow.daily[0].temp.max)}ºc</p>
-                            </div>
-
-                            <div class="col-3 hourly-box">
-                                <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
-                                <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
-                            </div>
-
-                            <div class="col-3 hourly-box">
-                                <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p>${convertUnixToDay(weatherNow.daily[2].dt)}</p>
-                                <p>Temp:${getAbslouteValue(weatherNow.daily[2].temp.max)}ºc</p>
-                            </div>
-
-                            <div class="col-3 hourly-box">
-                                <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
-                                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                                <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
-                                <p>Temp:${getAbslouteValue(weatherNow.daily[3].temp.max)}ºc</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>  
+//Gets the Phone  section of More Info
+function createBodyInfoPhone(result, body) {
+    const phone = getPhone (result); //Gets the contact number of the location
+    let bodyInfoPhone = `
             <div class="row">
-                <div class="col-md-5 result-row">
-                    <button class="button btn-blue btn--info" onclick="moreInfo(this)">More Info</button>
+                <div class="col-3 result-row">
+                  <p class="result-label">Phone:</p>
+                </div>
+                <div class="col-9 result-data-container">
+                 <p class="result-data">${phone}</p>
                 </div>
             </div>
     `;
-    resultsContain.appendChild(resultDiv); //Appends resultDiv as a child of resultsContain
+    body.push(bodyInfoPhone);
+};
+
+//Gets the Email address section of More Info
+function createBodyInfoEmail(result, body) {
+    const email = getEmail(result); //Gets the email of the result
+    let bodyInfoEmail = `
+            <div class="row more-info d-none">
+                <div class="col-3 result-row">
+                    <p class="result-label">Email:</p>
+                </div>
+                <div class="col-9 result-data-container">
+                    <p class="result-data">${email}</p>
+                </div>
+            </div>
+    `;
+    body.push(bodyInfoEmail);
+};
+
+//Gets the Hours section of More Info
+function createBodyInfoHours(result, body) {
+    const hours = getHours(result); //Gets the hours the location is open
+    let bodyInfoHours = `
+            <div class="row">
+                <div class="col-3 result-row">
+                    <p class="result-label">Opening Hours:</p>
+                </div>
+                <div class="col-9 result-data-container">
+                    <p class="result-data">${hours}</p>
+                </div>
+            </div>
+    `;
+    body.push(bodyInfoHours);
+};
+
+//Gets the website section of More Info
+function createBodyInfoWebsite(result, body) {
+    const website = getWebsite(result); //Gets the website of the result
+        let bodyInfoWebsite = `
+            <div class="row more-info d-none">
+                <div class="col-3 result-row">
+                    <p class="result-label">Website:</p>
+                </div>
+                <div class="col-9 result-data-container">
+                    <p class="result-data">${website}</p>
+                </div>
+            </div>
+        </div>
+        `;
+    body.push(bodyInfoWebsite);
+};
+
+//Gets the current weather section of More Info
+function createBodyInfoCurrentWeather(weatherNow, weatherArr) {
+    const currWeather = weatherNow.current.weather[0].description; // current weather at location
+    const iconWeather = 'https://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
+    const currTemp = getAbslouteValue(weatherNow.current.temp); //sets the temp to no decimal places
+    let bodyInfoCurrentWeather = `
+            <div class="col-md-5 col-sm-12 d-md-inline weather-container container-fluid">
+                <div class="weather">
+                    <div>
+                        <h4 class="weather-title">Current Weather</h4>
+                        <img src="${iconWeather}" alt="weather Icon">
+                        <p class="weather-current">${currWeather}</p>
+                        <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
+                    </div>
+                </div>
+        `;
+        weatherArr.push(bodyInfoCurrentWeather);
+};
+
+// Creates the weather Toggle for the more info secion
+function createBodyInfoWeatherToggle(weatherArr){
+    let bodyInfoWeatherToggle = `
+            <div class="more-info d-none hour-forcast">
+                <label class="switch-weather">
+                    <span class='d-none'>0</span>
+                    <input type="checkbox" onclick="showHidedailyHour(this)">
+                    <div class="slider-weather round-weather">
+                        <span class="on-weather bold">Daily</span>
+                        <span class="off-weather bold">Hourly</span>
+                    </div>
+                </label>
+        `;
+        weatherArr.push(bodyInfoWeatherToggle);
+};
+
+//Gets the hourly weather section 1+2 of More Info
+function createBodyInfoWeatherHourForcast1(weatherNow, weatherArr) {
+     let bodyInfoWeatherHourForcast1 = `
+     <!-- Hourly Weather md+ display -->
+            <div class="row">
+                <div class="col-3 hourly-box">
+                    <p class="weather-description">${weatherNow.hourly[0].weather[0].description}</p>
+                    <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                    <p>${convertUnixToTime(weatherNow.hourly[0].dt)}</p>
+                </div>
+
+                <div class="col-3 hourly-box">
+                    <p class="weather-description">${weatherNow.hourly[1].weather[0].description}</p>
+                    <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                    <p>${convertUnixToTime(weatherNow.hourly[1].dt)}</p>
+                </div>
+        `;
+        weatherArr.push(bodyInfoWeatherHourForcast1);
+};
+
+//Gets the hourly weather section 3+4 of More Info
+function createBodyInfoWeatherHourForcast2(weatherNow, weatherArr) {
+    let bodyInfoWeatherHourForcast2 = `
+            <div class="col-3 hourly-box">
+                <p class="weather-description">${weatherNow.hourly[2].weather[0].description}</p>
+                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                <p>${convertUnixToTime(weatherNow.hourly[2].dt)}</p>
+            </div>
+
+            <div class="col-3 hourly-box">
+                <p class="weather-description">${weatherNow.hourly[3].weather[0].description}</p>
+                <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
+                <p>${convertUnixToTime(weatherNow.hourly[3].dt)}</p>
+            </div>
+        </div>
+       `;
+       weatherArr.push(bodyInfoWeatherHourForcast2);
+};
+
+//Gets the daily weather section 1+2 of More Info
+function createBodyInfoWeatherDailyForcast1(weatherNow, weatherArr){
+    let bodyInfoWeatherDailyForcast1 = `
+    <!-- Daily Weather md+ display -->
+        <div class="row d-none">
+            <div class="col-3 daily-box">
+                <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
+                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
+                <p>Temp:${getAbslouteValue(weatherNow.daily[0].temp.max)}ºc</p>
+            </div>
+
+            <div class="col-3 daily-box">
+                <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
+                <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
+                <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
+            </div>
+       `;
+       weatherArr.push(bodyInfoWeatherDailyForcast1);
+};
+
+//Gets the daily weather section 3+4 of More Info
+function createBodyInfoWeatherDailyForcast2(weatherNow, weatherArr){
+    let bodyInfoWeatherDailyForcast2 = `
+                <div class="col-3 daily-box">
+                    <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
+                    <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                    <p class="bold">${convertUnixToDay(weatherNow.daily[2].dt)}</p>
+                    <p>Temp:${getAbslouteValue(weatherNow.daily[2].temp.max)}ºc</p>
+                </div>
+
+                <div class="col-3 daily-box">
+                    <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
+                    <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                    <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
+                    <p>Temp:${getAbslouteValue(weatherNow.daily[3].temp.max)}ºc</p>
+                </div>
+            </div>
+        </div>
+       `;
+       weatherArr.push(bodyInfoWeatherDailyForcast2);
+};
+
+//Gets the small daily weather section 1+2 of More Info
+function createBodyInfoWeatherDailyForcastSmall1(weatherNow, weatherArr) {
+    let bodyInfoWeatherDailyForcastSmall1 = `
+    <!-- Small more info weather Display -->
+        <div class="more-info d-none d-md-none daily-forcast">
+            <h5>Daily Forcast</h5>
+            <div class="row">
+                <div class="col-3 hourly-box">
+                    <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
+                    <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                    <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
+                    <p>Temp:${getAbslouteValue(weatherNow.daily[0].temp.max)}ºc</p>
+                </div>
+
+                <div class="col-3 hourly-box">
+                    <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
+                    <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                    <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
+                    <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
+                </div>
+       `;
+       weatherArr.push(bodyInfoWeatherDailyForcastSmall1);
+};
+
+//Gets the small daily weather section 3+4 of More Info
+function createBodyInfoWeatherDailyForcastSmall2(weatherNow, weatherArr) {
+    let bodyInfoWeatherDailyForcastSmall2 = `
+                        <div class="col-3 hourly-box">
+                            <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
+                            <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                            <p>${convertUnixToDay(weatherNow.daily[2].dt)}</p>
+                            <p>Temp:${getAbslouteValue(weatherNow.daily[2].temp.max)}ºc</p>
+                        </div>
+
+                        <div class="col-3 hourly-box">
+                            <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
+                            <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
+                            <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
+                            <p>Temp:${getAbslouteValue(weatherNow.daily[3].temp.max)}ºc</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>  
+       `;
+       weatherArr.push(bodyInfoWeatherDailyForcastSmall2);
+};
+
+//Creates the more info button and closes the body
+function createBodyMoreInfoButton(weatherArr) {
+    let bodyMoreInfoButton = `
+        <div class="row">
+            <div class="col-md-5 result-row">
+                <button class="button btn-blue btn--info" onclick="moreInfo(this)">More Info</button>
+            </div>
+
+    </div>
+    `
+    weatherArr.push(bodyMoreInfoButton);
 };
 
 // Changes the More info button to Less Info when clicked
