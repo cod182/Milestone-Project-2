@@ -106,6 +106,8 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
       };
 
     if (navigator.geolocation) {
+        searchLatLng = []; //Set array to empty each time function run
+        loading();
         navigator.geolocation.getCurrentPosition(success, error, options);
     };
 });
@@ -119,7 +121,6 @@ function success(position) {
         radius = '16093'; 
         numOfResults = null;
         resultsContain.innerHTML = ""; //Set String empty each time function run
-        mapContainer.innerHTML = ""; //Set String empty each time function run
         geoSearch = true;  
         classChange(); //Run function to add classed
         discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
@@ -132,6 +133,7 @@ function error(err) {
     firstTime = true;
     numOfResults = null;
     searchLatLng = []; //Set array to empty each time function run
+    radiusArea.innerHTML = ``;
     resultsContain.innerHTML = ''; //Set String empty each time function run
     mapContainer.innerHTML = ''; //Set String empty each time function run
     searchBox.value = '';
@@ -142,12 +144,12 @@ function error(err) {
 //When enter is pressed, the search box shrinks, the map is added and getData runs
 searchBox.addEventListener("keyup", function(event) { //Event listener to key up event
     if (event.key === "Enter") { // If key up is Enter then...
+        loading(); //Adds a loading animation until the page is populated
         radius = '16093';
         geoSearch = false;
         numOfResults = null;
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
-        mapContainer.innerHTML = ""; //Set String empty each time function run
         getSearchData(event) //Run function to get search results
     }
     
@@ -188,6 +190,7 @@ function getSearchData(){
         };
     } else {
         classChangeRev();
+        radiusArea.innerHTML = ``;
         swal('No Search Entered','Please try again','warning'); //Message displayed if no search term is entered
     };
 };
@@ -244,12 +247,18 @@ function discoverSearch(coords, cb) {
         console.log(JSON.parse(xhr.responseText));
         const results = JSON.parse(xhr.responseText).items;
         cb(results); // Callback for addReults function
+        } else if (xhr.status === 400) {
+            swal('400 - Bad Request','There has been a problem with your request, reloading page','warning');
+            setTimeout(function(){ 
+                window.location.reload(true);
+            }, 1500);
         }};
     xhr.send();
 };
 
 //Add map div and initilise the Here Map in section map
 function addMapEl(results) {
+    mapContainer.innerHTML = '';
     let mapDiv = document.createElement('div'); //Create a new div called resultDiv
     mapContainer.appendChild(mapDiv); //Appends resultDiv as a child of resultsContain
     mapDiv.id ='map'; //Add map ID to mapDiv
@@ -961,7 +970,7 @@ function radiusUpdate(numRes,radiusSlide){
             radiusArea.innerHTML = ``;
             numRes.innerHTML = [];
             radiusArea.innerHTML = ""; //Set String empty each time function run
-            mapContainer.innerHTML = ""; //Set String empty each time function run
+            loading(); //Adds a loading animation until the page is populated
             radius = radiusSlide.value;
             discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
         } else {
@@ -969,7 +978,7 @@ function radiusUpdate(numRes,radiusSlide){
             radiusArea.innerHTML = ``;
             numRes.innerHTML = [];
             resultsContain.innerHTML = ""; //Set String empty each time function run
-            mapContainer.innerHTML = ""; //Set String empty each time function run
+            loading(); //Adds a loading animation until the page is populated
             radius = radiusSlide.value;
             getSearchData(searchBox.value) //Run function to get search results
         }
@@ -990,4 +999,20 @@ function moveMapToResult(event, map) {
     console.log('Move map to: lat ' + lat + ',lng ' + lng);
 };
 
-
+//Puts a loading spinner in the map dive while results are being searched fo
+function loading() {
+    mapContainer.innerHTML = `
+                        <div class="loading-container">
+                            <div class="spinner circles">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                `;
+};

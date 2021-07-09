@@ -100,11 +100,15 @@ The fonts to be user are roboto
 
 ### Existing Features
 
-
+- Searching for results based on a area/city/postcode
+- Searching for results based on geolocation
+- set the radius of the results from 5 - 50 miles
+- View the Current/Hourly/Daily weather for each result
+- Contact website own via a contact panel
 
 ### Features to be implemented
 
-
+- Diirections to the selected result
 
 ## Technoogies used
 
@@ -115,7 +119,7 @@ The fonts to be user are roboto
 - OpenWeather API
 - EmailJS API
 - Font Awesome CDN
-- SWAL CDN
+
 
 # Testing
 
