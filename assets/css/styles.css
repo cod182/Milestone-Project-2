@@ -11,14 +11,36 @@ html, body {
 .dark-mode-switch {
     position:absolute;
     right: 5px;
-    top: 5px;
+    top: 150px;
 }
 
-.dark {
+.dark-text {
+    position: absolute;
+    top: 207px;
+    right: 56px;
+    width: 89px;
+    font-weight: bold;
+}
+
+.dark-arrow {
+    position: absolute;
+    top: 184px;
+    right: -2px;
+}
+
+.dark-arrow img {
+    width: 60px;
+}
+
+.dark-arrow--invert {
+    filter: invert(100%);
+}
+
+.body--dark {
     background-color:#262829;
 }
 
-.white-text {
+.body--white-text {
     color: white;
 }
 
@@ -71,21 +93,41 @@ html, body {
 
 /* Buttons */
 
+.button {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
 .btn-blue {
-    color: #000 !important; /* Overriding Bootstrap CSS*/
-    font-weight: bold !important; /* Overriding Bootstrap CSS*/;
-    border-color: #00BAFE !important; /* Overriding Bootstrap CSS*/;
-    background-color: #00BAFE !important; /* Overriding Bootstrap CSS*/;
-    margin: 5px auto !important; /* Overriding Bootstrap CSS*/;
+    color: #000 ;
+    font-weight: bold;
+    border-color: #00BAFE;
+    background-color: #00BAFE;
+    margin: 5px auto;
 }
 
 .btn-blue:hover,
 .btn-blue:focus,
 .btn-blue:active,
 .btn-blue:active:focus {
-    border-color: #0083b3 !important; /* Overriding Bootstrap CSS*/;
-    background-color: #0083b3 !important; /* Overriding Bootstrap CSS*/;
-    color: white !important; /* Overriding Bootstrap CSS*/;
+    border-color: #0083b3;
+    background-color: #0083b3;
+    color: white;
 }
 
 .btn-close {
@@ -99,16 +141,21 @@ html, body {
     background-color: rgb(158 158 158 / 85%);
 }
 
-.btn-info {
+.btn--info {
     max-height: 30px;
     max-width: 100px;
     margin: auto;
-    padding: 3px 7px 3px 7px !important; /* Overriding Bootstrap CSS*/
-    font-size: medium !important; /* Overriding Bootstrap CSS*/
+    padding: 3px 7px 3px 7px;
+    font-size: medium;
 }
 
 .btn-radius {
-    font-size: small !important;  /* Overriding Bootstrap CSS*/
+    font-weight: 500;
+    max-height: 30px;
+    max-width: 100px;
+    margin: auto;
+    padding: 3px 7px 3px 7px;
+    font-size: small;
 }
 
 .btn-weather {
@@ -116,14 +163,14 @@ html, body {
     color: white;
 }
 
-.btn-contact {
+.btn--full-width {
     width: 100%;
 }
 
 .navbar {
-    background-image: url(../images/modal-banner.png);
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-image: url(../images/header-banner.png);
+    background-repeat:repeat-x;
+    background-size: container;
     background-position-y:top;
     min-height: 200px;
 }
@@ -153,7 +200,7 @@ html, body {
 }
 
 .nav-link {
-    color: white !important; /* Overriding Bootstrap CSS*/
+    color: white;
     font-size: larger;
 }
 
@@ -228,6 +275,10 @@ html, body {
     background: transparent;
     border: none;
     font-size: large;
+}
+
+.locate--white {
+    color: white;
 }
 
 .locate-after {
@@ -320,11 +371,11 @@ html, body {
     margin: auto;
 }
 
-.dark-search{
+.searchbox--dark{
     background-color: gray;
 }
 
-.dark-search::placeholder {
+.searchbox--dark::placeholder {
     color: white;
 }
 
@@ -346,6 +397,7 @@ html, body {
 .result-num-container {
     float: left;
     padding-left: 3vw;
+    margin: 4px auto;
 }
 
 /* Slider CSS by w3c to start*/
@@ -415,6 +467,7 @@ html, body {
 .result-box:focus,
 .result-box:active:focus {
     box-shadow: 8px 7px #01b9fe;
+    transform: scale(1.01);
 }
 
 .result-row {
@@ -451,8 +504,6 @@ html, body {
 }
 
 .weather-container {
-    border: 2px solid black;
-    border-radius: 20px;
     margin-left: -3%;
     padding: 10px 5px 10px 5px;
     text-align: center;
@@ -504,11 +555,7 @@ html, body {
     margin: 0;
 }
 
-.hidden {
-    display: none !important;
-}
-
-/* Below for the weather forcase switching checkbox */
+/* Below for the weather forcast switching checkbox */
 .switch-weather {
     position: relative;
     display: inline-block;
@@ -594,7 +641,7 @@ input:checked + .slider-weather .off-weather {
     border-radius: 10px;
 }
 
-#about {
+.about-container {
     background-color:#399845 ;
     border-radius: 30px;
     min-height: 30vh;
@@ -603,9 +650,9 @@ input:checked + .slider-weather .off-weather {
 }
 
 .about-header {
-    background-image: url(../images/modal-banner.png);
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-image: url(../images/header-banner.png);
+    background-repeat:repeat-x;
+    background-size: container;
     background-position-y:center;
     border-radius: 30px 30px 0 0;
     min-height: 10%;
@@ -647,10 +694,10 @@ input:checked + .slider-weather .off-weather {
 
 .footer {
     height: 10vh;
-    background-image: url(../images/modal-banner.png);
+    background-image: url(../images/header-banner.png);
     background-position: top;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat:repeat-x;
+    background-size: container;
 }
 
 .facebook-link {
@@ -663,7 +710,7 @@ input:checked + .slider-weather .off-weather {
 }
 
 .contact-modal-header {
-    background-image: url(../images/modal-banner.png);
+    background-image: url(../images/header-banner.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -772,9 +819,6 @@ input:checked + .slider-weather .off-weather {
     }
     .weather {
         display: none;
-    }
-    .weather-container {
-        border: none;
     }
     .daily-forcast {
         display: inline;

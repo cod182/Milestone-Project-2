@@ -18,6 +18,16 @@
           emailjs.init("user_g1KRgEDq9ymwiRfNP9t9s");
       })();
     </script>
+    <script defer src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>    
+    <script defer src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script defer src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script defer src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script defer src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <script defer src="https://kit.fontawesome.com/5351067769.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script defer src="assets/js/send-email.js"></script>
+    <script defer src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script defer src="assets/js/myscript.js"></script>
 </head>
 <body>
     <header>
@@ -39,7 +49,17 @@
                     <a href="" class="green bold contact-link" data-bs-toggle="modal" data-bs-target="#contactUsModal">Contact Us</a>
                   </li>
                   <li>
-                    <span class="dark-mode-switch d-inline" id="dark-toggle"><span class="d-inline d-lg-none bold white">Dark Mode <i class="fas fa-long-arrow-alt-right"></i></span><i class="dark-box bold far fa-sun"></i></span>
+                    <span class="dark-mode-switch d-inline" id="dark-toggle">
+                      <span class="d-inline d-lg-none bold white">
+                        Dark Mode 
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                      </span>
+                      <i class="dark-box bold far fa-sun"></i>
+                    </span>
+                    <span>
+                      <div class="d-none d-lg-inline dark-text" id="dark-info-text"><p>Dark Mode</p></div>
+                      <div class="d-none d-lg-inline dark-arrow" id="dark-info-arrow"><img src="assets/images/dark-arrow.png" alt="arrow for dark mode"></div>
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -62,7 +82,7 @@
       </div>
     </div>
 
-    <section id="about">
+    <section id="about" class="about-container">
       <div class="container-fluid">
         <div class="row">
           <div class="about-header">
@@ -110,22 +130,12 @@
               <div>
                 <textarea class="contact-message"  cols="10" rows="5" id="contact-message" name="message" placeholder="Enter Message Here..." required></textarea>
               </div>
-              <button type="submit" class="btn btn-blue btn-contact" id="contact-submit">Send Message!</button>
+              <button type="submit" class="button btn-blue btn--full-width" id="contact-submit">Send Message!</button>
               <span id="message-status"></span>
             </form>
           </div>
         </div>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>    
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
-    <script src="https://kit.fontawesome.com/5351067769.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="assets/js/send-email.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="assets/js/myscript.js"></script>
 </body>
 </html>

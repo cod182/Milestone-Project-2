@@ -53,33 +53,37 @@ function changeText() {
 darkToggle.addEventListener('click', () => { //listens for dark button clicked
     darkMode = localStorage.getItem('darkMode')
     if(darkMode !== 'enabled') { //if body has a class
-        enableDark(); // add classes
+        enableDarkMode(); // add classes
     } else {    // if body has no class
-        disableDark(); //remove classed
+        disableDarkMode(); //remove classed
     }
 });
 
 // Classes to remove for Light mode
-const disableDark = () => {
-    document.body.classList.remove('dark');
-    document.body.classList.remove('white-text');
-    searchBox.classList.remove('dark-search');
-    locate.classList.remove('white-text');
+function disableDarkMode() {
+    document.body.classList.remove('body--dark');
+    document.body.classList.remove('body--white-text');
+    searchBox.classList.remove('searchbox--dark');
+    locate.classList.remove('locate--white');
+    document.getElementById('dark-info-text').innerHTML = 'Dark Mode'
+    document.getElementById('dark-info-arrow').classList.remove('dark-arrow--invert');
     localStorage.setItem('darkMode', null);
 };
 
 //Classes to add for Dark mode
-const enableDark = () => {
-    document.body.classList.add('dark');
-    document.body.classList.add('white-text');
-    searchBox.classList.add('dark-search');
-    locate.classList.add('white-text');
+function enableDarkMode() {
+    document.body.classList.add('body--dark');
+    document.body.classList.add('body--white-text');
+    searchBox.classList.add('searchbox--dark');
+    locate.classList.add('locate--white');
+    document.getElementById('dark-info-text').innerHTML = 'Light Mode'
+    document.getElementById('dark-info-arrow').classList.add('dark-arrow--invert');
     localStorage.setItem('darkMode','enabled');
 };
 
 //Checks if dark mode is enabled in local storage
 if(darkMode === 'enabled') {
-    enableDark();
+    enableDarkMode();
 };
 
 // Get location using geolocation and run a search based on resulting Lat/Lng
@@ -359,7 +363,7 @@ function addMapMarker(map, results, ui) {
 };
 
 //loops through the results to give results to pass on
-async function addResults(results) { 
+function addResults(results) { 
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
@@ -489,7 +493,7 @@ async function addResultToPage (result) {
                     <div class="more-info d-none hour-forcast">
                         <label class="switch-weather">
                             <span class='d-none'>0</span>
-                            <input type="checkbox" onclick="dailyHour(this)">
+                            <input type="checkbox" onclick="showHidedailyHour(this)">
                             <div class="slider-weather round-weather">
                                 <span class="on-weather bold">Daily</span>
                                 <span class="off-weather bold">Hourly</span>
@@ -522,7 +526,7 @@ async function addResultToPage (result) {
                             </div>
                         </div>
 <!-- Daily Weather md+ display -->
-                        <div class="row hidden">
+                        <div class="row d-none">
                             <div class="col-3 daily-box">
                                 <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
                                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
@@ -590,7 +594,7 @@ async function addResultToPage (result) {
             </div>  
             <div class="row">
                 <div class="col-md-5 result-row">
-                    <button class="btn btn-blue btn-info more-info-button" onclick="moreInfo(this)">More Info</button>
+                    <button class="button btn-blue btn--info" onclick="moreInfo(this)">More Info</button>
                 </div>
             </div>
     `;
@@ -631,19 +635,29 @@ function addMoreInfoClasses(parent) {
 };
 
 //switches between the hourly and daily weather forcast
-function dailyHour(elem) {
+function showHidedailyHour(elem) {
     let weatherHour = elem.parentElement.nextElementSibling;
     let weatherDay = elem.parentElement.nextElementSibling.nextElementSibling;
     
     if(elem.previousElementSibling.innerHTML === '0'){
-        weatherHour.classList.add('hidden');
-        weatherDay.classList.remove('hidden');
-        elem.previousElementSibling.innerHTML = '1';
+        showDailyWeather(elem, weatherHour, weatherDay);
     }else{
-        weatherHour.classList.remove('hidden');
-        weatherDay.classList.add('hidden');
-        elem.previousElementSibling.innerHTML = '0';
+        showHourlyWeather(elem, weatherHour, weatherDay);
     }
+};
+
+//shows the daily wather element, hiding the hourly weather element
+function showDailyWeather(elem, weatherHour, weatherDay) {
+        weatherHour.classList.add('d-none');
+        weatherDay.classList.remove('d-none');
+        elem.previousElementSibling.innerHTML = '1';
+};
+
+//shows the hourly wather element, daily the hourly weather element
+function showHourlyWeather(elem, weatherHour, weatherDay) {
+        weatherHour.classList.remove('d-none');
+        weatherDay.classList.add('d-none');
+        elem.previousElementSibling.innerHTML = '0';
 };
 
 //converts unix timecode to hours
@@ -735,13 +749,13 @@ function makeRadius() {
         let radiusArea = document.createElement('div');// Create new Div
         radiusArea.classList.add('row');
         radiusArea.innerHTML = `
-            <div class="row radius-container" id="radius-container">
+            <div class="row m-0 radius-container" id="radius-container">
                 <div class="col-md-6 col-sm-12 gx-0">
                     <div class="radius-adjust" id="radius-adjust">
                         <label for="radius">Radius: </label>
                         <input type="range" step="8000" min="1" max="80490" value="16093"  class="slider" id="radius">
                         <p class="d-inline" id="radius-val"><span id="radius-value">10</span> Miles</p>
-                        <button id="radius-update" class="btn btn-info btn-radius">Update</button>
+                        <button id="radius-update" class="button btn-radius btn-blue">Update</button>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12 gx-0">
