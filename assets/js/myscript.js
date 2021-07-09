@@ -19,37 +19,8 @@ let numOfResults = null;
 const aboutText = document.getElementById('about-text');
 let map = null; //map variable
 let darkMode = localStorage.getItem('darkMode');
+let resultBuilding = []; //Where the results are stored as the HTML is built
 
-// Changes the about message every 5 seconds
-var text = [];
-    var counter = 0;
-
-    text.push(`
-    <p class="about-text white roboto">
-        We are passionate about travelling and want to find you the perfect spot on your travels! Our site makes it easier for you to find the perfect location to rest your head. Whether you are in a tent, campervan or just after a room, we’ve got an easy to use method for finding you somewhere to stop. You could want a 5* stop with all the amenities or a patch of grass near to town, we’ve got you covered!
-    </p>
-    `);
-
-    text.push(`
-    <p class="about-text white roboto">
-        All you need to do it tap your location into the search box above and bingo! You’ll have all the stops around your location, tap on one to get a bit more info!
-        You can also tap the location button to get all the stops around you!
-    </p>
-    `);
-
-setInterval(changeText, 5000);
-
-function changeText() {
-    aboutText.classList.add('about-hide');
-    setTimeout(function () {
-        aboutText.innerHTML = text[counter];
-        aboutText.classList.remove('about-hide');
-        counter++;
-        if (counter >= text.length) {
-            counter = 0;
-        }
-    }, 500);
-};
 
 //Dark mode toggle
 darkToggle.addEventListener('click', () => { //listens for dark button clicked
@@ -92,7 +63,7 @@ if(darkMode === 'enabled') {
 locate.addEventListener('click', function(event){ //Event listener on the locate button
     searchLatLng = []; //Set array to empty each time function run
     if (firstTime) { // If this this the first run, run the below code
-        classChange(); //Run function to add classed
+        movePageAfterSearch(); //Run function to add classed
         firstTime = false;
     } else {
         document.getElementById('radius-value').innerHTML = '10';
@@ -108,12 +79,12 @@ locate.addEventListener('click', function(event){ //Event listener on the locate
     if (navigator.geolocation) {
         searchLatLng = []; //Set array to empty each time function run
         loading();
-        navigator.geolocation.getCurrentPosition(success, error, options);
+        navigator.geolocation.getCurrentPosition(locateSuccess, locateError, options);
     };
 });
 
 //If navigator.geolocation is sucsessful, this function is called
-function success(position) {  
+function locateSuccess(position) {  
         searchLatLng.push(position.coords.latitude); //push the lat to searchLatLng
         searchLatLng.push(position.coords.longitude);//push the lng to searchLatLng
         coords = searchLatLng.toString(); //Set variable coords to  SearchLatLng as a String
@@ -122,21 +93,21 @@ function success(position) {
         numOfResults = null;
         resultsContain.innerHTML = ""; //Set String empty each time function run
         geoSearch = true;  
-        classChange(); //Run function to add classed
-        discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+        movePageAfterSearch(); //Changes classed to move 
+        getResultsInArea(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
 };
 
 //If navigator.geolocation has an error, this function is called
-function error(err) {
+function locateError(err) {
     console.warn(`ERROR(${err.code}): ${err.message}`); //Console log error
-    classChangeRev();
+    undoMovePageAfterSearch(); //Reverses the classes that we changed
     firstTime = true;
-    numOfResults = null;
+    numOfResults = null; //Sets numOf Results to null
     searchLatLng = []; //Set array to empty each time function run
-    radiusArea.innerHTML = ``;
+    radiusArea.innerHTML = ``; //set radiusArea to empty
     resultsContain.innerHTML = ''; //Set String empty each time function run
     mapContainer.innerHTML = ''; //Set String empty each time function run
-    searchBox.value = '';
+    searchBox.value = ''; //Set searchBox value to empty
     swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning')
   };
 
@@ -155,8 +126,8 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
     
 });
 
-//Function to add and remove classed to prepare document for map and search results
-function classChange(){
+//Function to add and remove classed to prepare page for map and search results
+function movePageAfterSearch(){
     searchBox.classList.remove('search-box-before'); //Remove class from searchBox
     searchBox.classList.add('search-box-after'); //Add class to searchBox
     greetSec.classList.remove('greeting-box-before'); //Remove class from greetSec
@@ -165,8 +136,8 @@ function classChange(){
     locate.classList.remove('locate-before'); //Remove class from locate
     locate.classList.add('locate-after'); //Add class to locate
 };
-
-function classChangeRev() {
+//Function to add and remove classed to undo the perperation of page for map and search results
+function undoMovePageAfterSearch() {
     searchBox.classList.add('search-box-before'); //Remove class from searchBox
     searchBox.classList.remove('search-box-after'); //Add class to searchBox
     greetSec.classList.add('greeting-box-before'); //Remove class from greetSec
@@ -176,20 +147,21 @@ function classChangeRev() {
     locate.classList.remove('locate-after'); //Add class to locate
 }
 
+//gets the search term, preapares page and starts the funciton to get the Lat & Lang
 function getSearchData(){
     search = searchBox.value;
     if (search){
         if (firstTime) { // If this this the first run, run the below code
-            classChange(); //Run function to add classed
-            firstTime = false; //sets firstTime to false so it doesn't run again
+            movePageAfterSearch(); //Run function to add classed
             getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
+            firstTime = false; //sets firstTime to false so it doesn't run again
         } else {
-            classChange(); //Run function to add classed
-            radiusArea.innerHTML = ``;
+            movePageAfterSearch(); //Run function to add classed
+            radiusArea.innerHTML = ``; //radiusArea set to empty
             getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
         };
-    } else {
-        classChangeRev();
+    } else { //If not search term is entered
+        undoMovePageAfterSearch();
         radiusArea.innerHTML = ``;
         swal('No Search Entered','Please try again','warning'); //Message displayed if no search term is entered
     };
@@ -214,7 +186,7 @@ function getLatLng(search, cb){
     })
     .catch(error => {
         firstTime = true; //sets firstTime to false so it doesn't run again
-        classChangeRev(); //Run function to Reverse added classes
+        undoMovePageAfterSearch(); //Run function to Reverse added classes
         searchBox.value = '';
         console.error('There has been a problem, search term invalid:', error);
         swal('Search Term Invalid','Please try again','warning') //pop up wanring displayed if search term is bad
@@ -222,19 +194,19 @@ function getLatLng(search, cb){
 
 };
 
-// Puts the coordinates into a string and starts the discoverSearch function
+// Puts the coordinates into a string and starts the getResultsInArea function
 function getCoords(data) {
     const lat = data.items[0].position.lat;
     const lng = data.items[0].position.lng;
     searchLatLng.push(lat);
     searchLatLng.push(lng);
     coords = searchLatLng.toString();
-    discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+    getResultsInArea(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
 };
 
 // Runs a search to API using coords
-// Callback 1 for addResults function
-function discoverSearch(coords, cb) {
+// Callback 1 for addMapEl function
+function getResultsInArea(coords, cb) {
     const urlOrg = "https://discover.search.hereapi.com/v1/discover?q=";
     const url = urlOrg + 'campground' + '&in=circle:' + coords + ';r=' + radius + '&limit=100' + '&apiKey=' + hereApiKey;
 
@@ -280,7 +252,7 @@ function addMapEl(results) {
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     const ui = H.ui.UI.createDefault(map, defaultLayers);
     
-    addResults(results); //runs function to start adding results to the page
+    iterateResults(results); //runs function to start adding results to the page
     moveMapToLocation(map); //Run function to move map to searched
     addMapMarker(map, results, ui);
 };
@@ -373,7 +345,7 @@ function addMapMarker(map, results, ui) {
 };
 
 //loops through the results to give results to pass on
-function addResults(results) { 
+function iterateResults(results) { 
     numOfResults = results.length; //sets the number of results for the radius results
     makeRadius(); //Runs the makeRadis function
     results.forEach(function(result){
@@ -401,21 +373,24 @@ async function getWeather(result) {
         console.error('There has been a problem with your fetch operation:', error);
     });
 };
-let resultBuilding = [];
+
 //Adds the result given to the DOM
 async function addResultToPage (result) {
-    resultBuilding = [];
-    let weatherNow = await getWeather(result);
-    let resultDiv = createResultDiv();
-    createResultTitleInfo(result, weatherNow);// Append to result div
-    createResultBodyInfo(result,weatherNow);
-    let resultReady = resultBuilding.join('').toString();
-    resultDiv.innerHTML = resultReady; //Appends resultDiv as a child of resultsContain
+    resultBuilding = []; //empties the resultBuilding Array
+    let weatherNow = await getWeather(result); //Gets weather and waits for result befor moving on
+    
+    let resultDiv = createResultDiv(); //Creates a new result div and stores it as a variable
+    createResultTitleInfo(result, weatherNow);// Creates the title HTMl for the result div
+    createResultBodyInfo(result,weatherNow); //Creates all the body html for the result div
+    
+    let resultReady = resultBuilding.join('').toString(); //Joins all the arrays in resultBuilding and converts to a string, stores in resultReady
+    
+    resultDiv.innerHTML = resultReady; //Puts resultReady HTML into the resultDiv innerHTML
 
-    resultsContain.appendChild(resultDiv);
+    resultsContain.appendChild(resultDiv); //Appends resultDiv to resultContain, finalising the result on the page
 };
 
-//Creates a New div with 2 classes
+//Creates a New div with 2 classes for the result
 function createResultDiv(){
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
@@ -423,7 +398,7 @@ function createResultDiv(){
     return resultDiv
 };
 
-//Create title section storedd in title
+//Create title section stored in title for the result
 function createResultTitleInfo(result, weatherNow) {
     resultBuilding = []
     const currWeather = weatherNow.current.weather[0].description; // current weather at location
@@ -441,7 +416,7 @@ function createResultTitleInfo(result, weatherNow) {
             resultBuilding.push(title);
 };
 
-//Creates Body of Results
+//Creates Body of Result
 function createResultBodyInfo(result, weatherNow) {
     let body = [];
     let weatherArr = [];
@@ -454,6 +429,7 @@ function createResultBodyInfo(result, weatherNow) {
     resultBuilding.push(bodyReady); //Pushes the Body Ready variable into the resultBuilding Array
 };
 
+//Creates the information for the body of the result
 function createBodyInfo(body,result) {
     createBodyInfoOuter(body); //Run the function to create the outer container for the body, then pushed into body
     createBodyInfoDistance(result, body); //Run the function to create the distance div for the body, then pushed into body
@@ -464,24 +440,25 @@ function createBodyInfo(body,result) {
     createBodyInfoWebsite(result, body); //Run the function to create the website div for the body, then pushed into body
 };
 
+//Creates the weather information for the body of the result
 function createBodyInfoWeather(weatherNow, weatherArr) {
-    createBodyInfoCurrentWeather(weatherNow, weatherArr); //Run the function to create the current weather div for the body, then pushed into weatherArr
-    createBodyInfoWeatherToggle(weatherArr); //Run the function to create the weather toggle div for the body, then pushed into weatherArr
-    createBodyInfoWeatherHourForcast1(weatherNow, weatherArr); //Run the function to create the hour weather forcast day 1+2 div for the body, then pushed into weatherArr
-    createBodyInfoWeatherHourForcast2(weatherNow, weatherArr); //Run the function to create the hour weather forcast day 2+3 div for the body, then pushed into weatherArr
-    createBodyInfoWeatherDailyForcast1(weatherNow, weatherArr); //Run the function to create the daily weather forcast day 1+2 div for the body,then pushed into weatherArr
-    createBodyInfoWeatherDailyForcast2(weatherNow, weatherArr); //Run the function to create the daily weather forcast day 2+3 div for the body,then pushed into weatherArr
-    createBodyInfoWeatherDailyForcastSmall1(weatherNow, weatherArr); //Create the small daily weather forcast day +2 div for the body,then pushed into weatherArr
-    createBodyInfoWeatherDailyForcastSmall2(weatherNow, weatherArr); //Create the small daily weather forcast day +2 div for the body,then pushed into weatherArrweatherArr
+    createBodyInfoCurrentWeather(weatherNow, weatherArr); //Create the current weather div for the body, push into weatherArrweatherArr
+    createBodyInfoWeatherToggle(weatherArr); //Create the weather toggle div for the body, push into weatherArrweatherArr
+    createBodyInfoWeatherHourForcast1(weatherNow, weatherArr); //Create the hour weather forcast day 1+2 div for the body, push into weatherArrweatherArr
+    createBodyInfoWeatherHourForcast2(weatherNow, weatherArr); //Create the hour weather forcast day 2+3 div for the body, push into weatherArrweatherArr
+    createBodyInfoWeatherDailyForcast1(weatherNow, weatherArr); //Create the daily weather forcast day 1+2 div for the body, push into weatherArrweatherArr
+    createBodyInfoWeatherDailyForcast2(weatherNow, weatherArr); //Create the daily weather forcast day 2+3 div for the body, push into weatherArrweatherArr
+    createBodyInfoWeatherDailyForcastSmall1(weatherNow, weatherArr); //Create the small daily weather forcast day 1+2 div for the body, push into weatherArrweatherArr
+    createBodyInfoWeatherDailyForcastSmall2(weatherNow, weatherArr); //Create the small daily weather forcast day 3+4 div for the body, push into weatherArrweatherArr
 };
 
 //Staarts off the body section of More Info
 function createBodyInfoOuter(body) {
-    let bodyInfoOuter = `
+    let bodyInfoOuter = ` 
             <div class="row">
                 <div class="col-sm-12 col-md-7"> 
-    `;
-    body.push(bodyInfoOuter);
+    `; //Create the outer body HTML
+    body.push(bodyInfoOuter); //push into array
 };
 
 //Gets the Distance section of More Info
@@ -496,8 +473,8 @@ function createBodyInfoDistance(result, body) {
                             <p class="result-data">${distance} Miles</p>
                         </div>
                     </div>
-    `;
-    body.push(bodyInfoDistance);
+    `; //Create the distance HTML
+    body.push(bodyInfoDistance);//push into array
 };
 
 //Gets the address section of More Info
@@ -515,8 +492,8 @@ function createBodyInfoAddress(result, body) {
                         <p class="result-data">${result.address.postalCode}</p>
                     </div>
                 </div>
-    `;
-    body.push(bodyInfoAddress);
+    `; //Create the address HTML
+    body.push(bodyInfoAddress);//push into array
 };
 
 //Gets the Phone  section of More Info
@@ -531,8 +508,8 @@ function createBodyInfoPhone(result, body) {
                  <p class="result-data">${phone}</p>
                 </div>
             </div>
-    `;
-    body.push(bodyInfoPhone);
+    `; //Create the phone HTML
+    body.push(bodyInfoPhone);//push into array
 };
 
 //Gets the Email address section of More Info
@@ -547,8 +524,8 @@ function createBodyInfoEmail(result, body) {
                     <p class="result-data">${email}</p>
                 </div>
             </div>
-    `;
-    body.push(bodyInfoEmail);
+    `; //Create the email HTML
+    body.push(bodyInfoEmail);//push into array
 };
 
 //Gets the Hours section of More Info
@@ -563,8 +540,8 @@ function createBodyInfoHours(result, body) {
                     <p class="result-data">${hours}</p>
                 </div>
             </div>
-    `;
-    body.push(bodyInfoHours);
+    `; //Create the opem hours HTML
+    body.push(bodyInfoHours);//push into array
 };
 
 //Gets the website section of More Info
@@ -580,8 +557,8 @@ function createBodyInfoWebsite(result, body) {
                 </div>
             </div>
         </div>
-        `;
-    body.push(bodyInfoWebsite);
+        `; //Create the website HTML
+    body.push(bodyInfoWebsite);//push into array
 };
 
 //Gets the current weather section of More Info
@@ -599,8 +576,8 @@ function createBodyInfoCurrentWeather(weatherNow, weatherArr) {
                         <p class="weather-temp">Current Temp: <span>${currTemp}ºc</span></p>
                     </div>
                 </div>
-        `;
-        weatherArr.push(bodyInfoCurrentWeather);
+        `; //Create the current weather HTML
+        weatherArr.push(bodyInfoCurrentWeather);//push into array
 };
 
 // Creates the weather Toggle for the more info secion
@@ -615,8 +592,8 @@ function createBodyInfoWeatherToggle(weatherArr){
                         <span class="off-weather bold">Hourly</span>
                     </div>
                 </label>
-        `;
-        weatherArr.push(bodyInfoWeatherToggle);
+        `; //Create the weather toggle HTML
+        weatherArr.push(bodyInfoWeatherToggle);//push into array
 };
 
 //Gets the hourly weather section 1+2 of More Info
@@ -627,16 +604,16 @@ function createBodyInfoWeatherHourForcast1(weatherNow, weatherArr) {
                 <div class="col-3 hourly-box">
                     <p class="weather-description">${weatherNow.hourly[0].weather[0].description}</p>
                     <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                    <p>${convertUnixToTime(weatherNow.hourly[0].dt)}</p>
+                    <p>${convertUnixTimeToHour(weatherNow.hourly[0].dt)}</p>
                 </div>
 
                 <div class="col-3 hourly-box">
                     <p class="weather-description">${weatherNow.hourly[1].weather[0].description}</p>
                     <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                    <p>${convertUnixToTime(weatherNow.hourly[1].dt)}</p>
+                    <p>${convertUnixTimeToHour(weatherNow.hourly[1].dt)}</p>
                 </div>
-        `;
-        weatherArr.push(bodyInfoWeatherHourForcast1);
+        `; //Create the first 2 hourly forcast HTML
+        weatherArr.push(bodyInfoWeatherHourForcast1);//push into array
 };
 
 //Gets the hourly weather section 3+4 of More Info
@@ -645,17 +622,17 @@ function createBodyInfoWeatherHourForcast2(weatherNow, weatherArr) {
             <div class="col-3 hourly-box">
                 <p class="weather-description">${weatherNow.hourly[2].weather[0].description}</p>
                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                <p>${convertUnixToTime(weatherNow.hourly[2].dt)}</p>
+                <p>${convertUnixTimeToHour(weatherNow.hourly[2].dt)}</p>
             </div>
 
             <div class="col-3 hourly-box">
                 <p class="weather-description">${weatherNow.hourly[3].weather[0].description}</p>
                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.hourly[0].weather[0].icon + '.png'}" alt="weather Icon">
-                <p>${convertUnixToTime(weatherNow.hourly[3].dt)}</p>
+                <p>${convertUnixTimeToHour(weatherNow.hourly[3].dt)}</p>
             </div>
         </div>
-       `;
-       weatherArr.push(bodyInfoWeatherHourForcast2);
+       `; //Create the second 2 hourly forcast HTML
+       weatherArr.push(bodyInfoWeatherHourForcast2);//push into array
 };
 
 //Gets the daily weather section 1+2 of More Info
@@ -666,18 +643,18 @@ function createBodyInfoWeatherDailyForcast1(weatherNow, weatherArr){
             <div class="col-3 daily-box">
                 <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
+                <p class="bold">${convertUnixTimeToDay(weatherNow.daily[0].dt)}</p>
                 <p>Temp:${getAbslouteValue(weatherNow.daily[0].temp.max)}ºc</p>
             </div>
 
             <div class="col-3 daily-box">
                 <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
                 <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
+                <p class="bold">${convertUnixTimeToDay(weatherNow.daily[1].dt)}</p>
                 <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
             </div>
-       `;
-       weatherArr.push(bodyInfoWeatherDailyForcast1);
+       `; //Create the first 2 daily weather HTML
+       weatherArr.push(bodyInfoWeatherDailyForcast1);//push into array
 };
 
 //Gets the daily weather section 3+4 of More Info
@@ -686,20 +663,20 @@ function createBodyInfoWeatherDailyForcast2(weatherNow, weatherArr){
                 <div class="col-3 daily-box">
                     <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
                     <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                    <p class="bold">${convertUnixToDay(weatherNow.daily[2].dt)}</p>
+                    <p class="bold">${convertUnixTimeToDay(weatherNow.daily[2].dt)}</p>
                     <p>Temp:${getAbslouteValue(weatherNow.daily[2].temp.max)}ºc</p>
                 </div>
 
                 <div class="col-3 daily-box">
                     <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
                     <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                    <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
+                    <p class="bold">${convertUnixTimeToDay(weatherNow.daily[3].dt)}</p>
                     <p>Temp:${getAbslouteValue(weatherNow.daily[3].temp.max)}ºc</p>
                 </div>
             </div>
         </div>
-       `;
-       weatherArr.push(bodyInfoWeatherDailyForcast2);
+       `; //Create the second 2 daily weather HTML
+       weatherArr.push(bodyInfoWeatherDailyForcast2);//push into array
 };
 
 //Gets the small daily weather section 1+2 of More Info
@@ -712,18 +689,18 @@ function createBodyInfoWeatherDailyForcastSmall1(weatherNow, weatherArr) {
                 <div class="col-3 hourly-box">
                     <p class="weather-description">${weatherNow.daily[0].weather[0].description}</p>
                     <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                    <p class="bold">${convertUnixToDay(weatherNow.daily[0].dt)}</p>
+                    <p class="bold">${convertUnixTimeToDay(weatherNow.daily[0].dt)}</p>
                     <p>Temp:${getAbslouteValue(weatherNow.daily[0].temp.max)}ºc</p>
                 </div>
 
                 <div class="col-3 hourly-box">
                     <p class="weather-description">${weatherNow.daily[1].weather[0].description}</p>
                     <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                    <p class="bold">${convertUnixToDay(weatherNow.daily[1].dt)}</p>
+                    <p class="bold">${convertUnixTimeToDay(weatherNow.daily[1].dt)}</p>
                     <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
                 </div>
-       `;
-       weatherArr.push(bodyInfoWeatherDailyForcastSmall1);
+       `; //Create the first 2 small weather HTML
+       weatherArr.push(bodyInfoWeatherDailyForcastSmall1);//push into array
 };
 
 //Gets the small daily weather section 3+4 of More Info
@@ -732,14 +709,14 @@ function createBodyInfoWeatherDailyForcastSmall2(weatherNow, weatherArr) {
                         <div class="col-3 hourly-box">
                             <p class="weather-description">${weatherNow.daily[2].weather[0].description}</p>
                             <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                            <p>${convertUnixToDay(weatherNow.daily[2].dt)}</p>
+                            <p>${convertUnixTimeToDay(weatherNow.daily[2].dt)}</p>
                             <p>Temp:${getAbslouteValue(weatherNow.daily[2].temp.max)}ºc</p>
                         </div>
 
                         <div class="col-3 hourly-box">
                             <p class="weather-description">${weatherNow.daily[3].weather[0].description}</p>
                             <img src="${'https://openweathermap.org/img/w/' + weatherNow.daily[0].weather[0].icon + '.png'}" alt="weather Icon">
-                            <p class="bold">${convertUnixToDay(weatherNow.daily[3].dt)}</p>
+                            <p class="bold">${convertUnixTimeToDay(weatherNow.daily[3].dt)}</p>
                             <p>Temp:${getAbslouteValue(weatherNow.daily[3].temp.max)}ºc</p>
                         </div>
                     </div>
@@ -747,8 +724,8 @@ function createBodyInfoWeatherDailyForcastSmall2(weatherNow, weatherArr) {
 
             </div>
         </div>  
-       `;
-       weatherArr.push(bodyInfoWeatherDailyForcastSmall2);
+       `; //Create the second 2 daily weather HTML
+       weatherArr.push(bodyInfoWeatherDailyForcastSmall2);//push into array
 };
 
 //Creates the more info button and closes the body
@@ -756,30 +733,30 @@ function createBodyMoreInfoButton(weatherArr) {
     let bodyMoreInfoButton = `
         <div class="row">
             <div class="col-md-5 result-row">
-                <button class="button btn-blue btn--info" onclick="moreInfo(this)">More Info</button>
+                <button class="button btn-blue btn--info" onclick="moreResultInfo(this)">More Info</button>
             </div>
 
     </div>
-    `
-    weatherArr.push(bodyMoreInfoButton);
+    ` //Create the more info HTML and end of the body HTML
+    weatherArr.push(bodyMoreInfoButton);//push into array
 };
 
 // Changes the More info button to Less Info when clicked
-function moreInfo(elem) {
+function moreResultInfo(elem) {
     let parent = elem.parentElement.parentElement.parentElement.getElementsByClassName('more-info');
 
     if(elem.innerText === 'More Info'){
-        elem.innerText = `Less Info`;
-        removeMoreInfoClasses(parent);
+        elem.innerText = `Less Info`; //Changes the more info text to less into
+        removeMoreInfoClasses(parent); //removes the classes to show the extra info
     } else {
-        elem.innerText = 'More Info';
-        addMoreInfoClasses(parent);
+        elem.innerText = 'More Info'; //change the less info tet to more info
+        addMoreInfoClasses(parent); //adds classes to hide the extra info
     };
 };
 
 //Removes the classes in order to show more info on the result
 function removeMoreInfoClasses(parent) {
-        parent[0].classList.remove('d-none');
+        parent[0].classList.remove('d-none'); //Removes the class from the element
         parent[1].classList.remove('d-none');
         parent[2].classList.remove('d-none');
         parent[3].classList.remove('d-none');
@@ -789,7 +766,7 @@ function removeMoreInfoClasses(parent) {
 
 //Adds the classes in order to hide more info on the result
 function addMoreInfoClasses(parent) {
-        parent[0].classList.add('d-none');
+        parent[0].classList.add('d-none'); //Adds the class from the element
         parent[1].classList.add('d-none');
         parent[2].classList.add('d-none');
         parent[3].classList.add('d-none');
@@ -803,9 +780,9 @@ function showHidedailyHour(elem) {
     let weatherDay = elem.parentElement.nextElementSibling.nextElementSibling;
     
     if(elem.previousElementSibling.innerHTML === '0'){
-        showDailyWeather(elem, weatherHour, weatherDay);
+        showDailyWeather(elem, weatherHour, weatherDay); //adds/removes classes to show the daily weather and hide hourly
     }else{
-        showHourlyWeather(elem, weatherHour, weatherDay);
+        showHourlyWeather(elem, weatherHour, weatherDay);//adds/removes classes to show the hourly weather and hide daily
     }
 };
 
@@ -824,7 +801,7 @@ function showHourlyWeather(elem, weatherHour, weatherDay) {
 };
 
 //converts unix timecode to hours
-function convertUnixToTime(unix) {
+function convertUnixTimeToHour(unix) {
     
             dateObj = new Date(unix * 1000);
 
@@ -837,7 +814,7 @@ function convertUnixToTime(unix) {
                 return hoursMin;
 };
 
-function convertUnixToDay(unix) {
+function convertUnixTimeToDay(unix) {
         const milliseconds = unix * 1000;
         const dateObject = new Date(milliseconds);
 
@@ -972,7 +949,7 @@ function radiusUpdate(numRes,radiusSlide){
             radiusArea.innerHTML = ""; //Set String empty each time function run
             loading(); //Adds a loading animation until the page is populated
             radius = radiusSlide.value;
-            discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+            getResultsInArea(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
         } else {
             searchLatLng = []; //Set array to empty each time function run
             radiusArea.innerHTML = ``;
@@ -1015,4 +992,35 @@ function loading() {
                             </div>
                         </div>
                 `;
+};
+
+// Changes the about message every 5 seconds
+var text = [];
+    var counter = 0;
+
+    text.push(`
+    <p class="about-text white roboto">
+        We are passionate about travelling and want to find you the perfect spot on your travels! Our site makes it easier for you to find the perfect location to rest your head. Whether you are in a tent, campervan or just after a room, we’ve got an easy to use method for finding you somewhere to stop. You could want a 5* stop with all the amenities or a patch of grass near to town, we’ve got you covered!
+    </p>
+    `);
+
+    text.push(`
+    <p class="about-text white roboto">
+        All you need to do it tap your location into the search box above and bingo! You’ll have all the stops around your location, tap on one to get a bit more info!
+        You can also tap the location button to get all the stops around you!
+    </p>
+    `);
+
+setInterval(changeText, 5000);
+
+function changeText() {
+    aboutText.classList.add('about-hide');
+    setTimeout(function () {
+        aboutText.innerHTML = text[counter];
+        aboutText.classList.remove('about-hide');
+        counter++;
+        if (counter >= text.length) {
+            counter = 0;
+        }
+    }, 500);
 };

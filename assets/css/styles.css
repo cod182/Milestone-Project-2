@@ -156,6 +156,8 @@ html, body {
     margin: auto;
     padding: 3px 7px 3px 7px;
     font-size: small;
+    border: 1px solid black;
+    border-radius: 5px;
 }
 
 .btn-weather {
@@ -504,10 +506,7 @@ html, body {
 }
 
 .weather-container {
-    margin-left: -3%;
-    padding: 10px 5px 10px 5px;
     text-align: center;
-    margin: -4% 0% 0% -22px;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -860,6 +859,7 @@ input:checked + .slider-weather .off-weather {
     .about-text {
         font-size: larger;
     }
+
 }
 
 @media screen and (max-width:991px) {
