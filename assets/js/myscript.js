@@ -229,6 +229,7 @@ function getResultsInArea(coords, cb) {
 };
 
 //Add map div and initilise the Here Map in section map
+//boiler plate Provided by Here maps
 function addMapEl(results) {
     mapContainer.innerHTML = '';
     let mapDiv = document.createElement('div'); //Create a new div called resultDiv
@@ -258,6 +259,7 @@ function addMapEl(results) {
 };
 
  //Move the center of the map to specified locatioin
+ //boiler plate Provided by Here maps
 function moveMapToLocation(map){
     const lat = searchLatLng[0].toString(); //sets latitude from searhLatLng array
     const lng = searchLatLng[1].toString(); //sets longitude from searhLatLng array
@@ -273,6 +275,7 @@ function moveMapToLocation(map){
 };
 
 // Adds markers for each of the discovered search location
+//boiler plate Provided by Here maps
 function addMapMarker(map, results, ui) {
     results.forEach(function(result){
         const lat = result.position.lat;
@@ -280,68 +283,85 @@ function addMapMarker(map, results, ui) {
 
         var outerElement = document.createElement('div'),
             innerElement = document.createElement('div');
-
         outerElement.appendChild(innerElement);
     
-        // Add image to the DOM element
-        innerElement.innerHTML = `<img src="assets/images/location-icon-32.png">`;
-    
-        function changeOpacity(evt) {
-        evt.target.style.opacity = 0.6;
-        };
-    
-        function changeOpacityToOne(evt) {
-        evt.target.style.opacity = 1;
-        };
+        innerElement.innerHTML = `<img src="assets/images/location-icon-32.png">`; // Add image to the DOM element
+
+        let markerIcon = adjustMarkerIcon(outerElement);
   
-        //create dom icon and add/remove opacity listeners
-        var domIcon = new H.map.DomIcon(outerElement, {
-        // the function is called every time marker enters the viewport
-        onAttach: function(clonedElement, domIcon, domMarker) {
+        const locationMarker = new H.map.DomMarker({lat:lat, lng:lng}, {
+            icon: markerIcon //sets the icon as domIcon
+          });
+
+        let markerBody = makeMarkerHTML(result);
+        locationMarker.setData(markerBody);
+
+        clickMapMarker(ui,map,locationMarker,lat,lng)
+        
+        map.addObject(locationMarker);
+    });
+};
+
+//Addes opacity changes to the marker icon
+function adjustMarkerIcon(outerElement) {
+    var domIcon = new H.map.DomIcon(outerElement, { //create dom icon and add/remove opacity listeners
+        
+        onAttach: function(clonedElement) { // the function is called every time marker enters the viewport
             clonedElement.addEventListener('mouseover', changeOpacity);
             clonedElement.addEventListener('mouseout', changeOpacityToOne);
         },
-        // the function is called every time marker leaves the viewport
-        onDetach: function(clonedElement, domIcon, domMarker) {
+        
+        onDetach: function(clonedElement) { // the function is called every time marker leaves the viewport
             clonedElement.removeEventListener('mouseover', changeOpacity);
             clonedElement.removeEventListener('mouseout', changeOpacityToOne);
         }
         });
+    return domIcon
+};
 
-        const locationMarker = new H.map.DomMarker({lat:lat, lng:lng}, {
-            icon: domIcon
-          });
+//Derease Opacity of evt
+function changeOpacity(evt) {
+    evt.target.style.opacity = 0.6;
+};
 
-        const phone = getPhone (result); //send the result to the getPhone function
+//Increase opacity of evt
+function changeOpacityToOne(evt) {
+    evt.target.style.opacity = 1;
+};
 
-        locationMarker.setData(`
+//create the inner HTML for the marker and returns it
+function makeMarkerHTML(result) {
+    const phone = getPhone (result); //Gets the contact number of the location
+    body = `
+    <div class="col-12">
         <div class="col-12">
-            <div class="col-12">
-                <div class="row">
-                <div class="col-12 result-data-container">
-                    <p class="result-address"><b>${result.title}</b></p>
-                    <p class="result-address">${result.address.district}</p>
-                    <p class="result-address">${result.address.county}</p>
-                    <p class="">${result.address.postalCode}</p>
-                    <p class="">${phone}</p>
-                    </div>
+            <div class="row">
+            <div class="col-12 result-data-container">
+                <p class="result-address"><b>${result.title}</b></p>
+                <p class="result-address">${result.address.district}</p>
+                <p class="result-address">${result.address.county}</p>
+                <p class="">${result.address.postalCode}</p>
+                <p class="">${phone}</p>
                 </div>
-            </div> 
-        </div>
-        `);
-        locationMarker.addEventListener('tap', event => {
-            ui.getBubbles().forEach(bub => ui.removeBubble(bub));
-            const bubble = new H.ui.InfoBubble(
-                {lat: lat, lng: lng},
-                {
-                    content: event.target.getData()
-                }
-            );
-            ui.addBubble(bubble);
-        },false);
+            </div>
+        </div> 
+    </div>
+    `
+    return body;
+};
 
-        map.addObject(locationMarker);
-    });
+//When a map market is clicked get the data and show it
+function clickMapMarker(ui,map,locationMarker,lat,lng) {
+        locationMarker.addEventListener('tap', event => {
+        ui.getBubbles().forEach(bub => ui.removeBubble(bub));
+        const bubble = new H.ui.InfoBubble(
+            {lat: lat, lng: lng},
+            {
+                content: event.target.getData()
+            }
+        );
+        ui.addBubble(bubble);
+    },false);
 };
 
 //loops through the results to give results to pass on
