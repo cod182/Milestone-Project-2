@@ -284,7 +284,7 @@ html, body {
 .locate-after {
     left: 10vw;
     position: absolute;
-    top: 152px;
+    top: 232px;
     font-size: small;
 }
 
@@ -406,7 +406,7 @@ html, body {
     width: 100%;
   }
   
-  .slider {
+  .radius-slider {
     -webkit-appearance: none;
     appearance: none;
     height: 5px;
@@ -417,11 +417,11 @@ html, body {
     transition: opacity .2s;
   }
   
-  .slider:hover {
+  .radius-slider:hover {
     opacity: 1;
   }
   
-  .slider::-webkit-slider-thumb {
+  .radius-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 10px;
@@ -431,7 +431,7 @@ html, body {
     cursor: pointer;
   }
   
-  .slider::-moz-range-thumb {
+  .radius-slider::-moz-range-thumb {
     width: 25px;
     height: 25px; 
     background: #4fbc6f;

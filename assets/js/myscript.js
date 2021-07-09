@@ -7,7 +7,9 @@ const loate = document.getElementById('locate'); //Geo Locate button
 const mapContainer = document.getElementById('map-container')
 let radius = '16093'; //Default number for the search radius
 const mapContain = document.getElementById('map');
+const searchUpperContainer = document.getElementById('search-area-container');
 const resultsContain = document.getElementById('search-results');
+let radiusArea = document.createElement('div');// Create new Div
 let geoSearch = false;
 let searchLatLng = []; //Lat & Lng of search stored in an array here
 let firstTime = true;
@@ -181,8 +183,7 @@ function getSearchData(){
             getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
         } else {
             classChange(); //Run function to add classed
-            document.getElementById('radius-value').innerHTML = '10'; //sets the radius-value back to default
-            document.getElementById('radius').value = '16093'; //sets the radius back to default
+            radiusArea.innerHTML = ``;
             getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
         };
     } else {
@@ -212,7 +213,7 @@ function getLatLng(search, cb){
         firstTime = true; //sets firstTime to false so it doesn't run again
         classChangeRev(); //Run function to Reverse added classes
         searchBox.value = '';
-        console.error('There has been a problem with your fetch operation:', error);
+        console.error('There has been a problem, search term invalid:', error);
         swal('Search Term Invalid','Please try again','warning') //pop up wanring displayed if search term is bad
     });
 
@@ -400,7 +401,6 @@ async function addResultToPage (result) {
     createResultTitleInfo(result, weatherNow);// Append to result div
     createResultBodyInfo(result,weatherNow);
     let resultReady = resultBuilding.join('').toString();
-    console.log(resultReady);
     resultDiv.innerHTML = resultReady; //Appends resultDiv as a child of resultsContain
 
     resultsContain.appendChild(resultDiv);
@@ -899,15 +899,33 @@ function getAbslouteValue(temp) {
 
 //Create the radius div and set the innerHTML
 function makeRadius() {
-    if (firstRadius) { //if frist radius is true (First Run)
-        let radiusArea = document.createElement('div');// Create new Div
+    if(firstRadius){ //If the first run, classed and ID's are applied and innerHTML created
         radiusArea.classList.add('row');
-        radiusArea.innerHTML = `
-            <div class="row m-0 radius-container" id="radius-container">
+        radiusArea.setAttribute('id','radius-container')
+        firstRadius = false; //Set the variable to false
+        makeRadiusHTML(radiusArea); //Create the inner HTML for radius Area
+    } else{ //if not fist run, just creat the inner HTML for radius Area
+        makeRadiusHTML(radiusArea);
+    };
+        searchUpperContainer.prepend(radiusArea); //prepend the radius area
+
+        const numRes = document.getElementById('num-of-results'); //declare numREs in radius Area
+        numRes.innerHTML = numOfResults; //Set numRes in radius Area
+
+        const radiusSlide = radiusSliderUpdate(); //call function for the radius slider to update
+        radiusUpdate(numRes,radiusSlide); //call function for the radius update button providing slider and numRes
+
+    
+};
+
+//Create the inner HTML for radius Area
+function makeRadiusHTML(radiusArea) {
+    radiusArea.innerHTML = `
+            <div class="row mx-0 radius-container" id="radius-container">
                 <div class="col-md-6 col-sm-12 gx-0">
                     <div class="radius-adjust" id="radius-adjust">
                         <label for="radius">Radius: </label>
-                        <input type="range" step="8000" min="1" max="80490" value="16093"  class="slider" id="radius">
+                        <input type="range" step="8050" min="8000" max="80467" value="16093"  class="radius-slider" id="radius">
                         <p class="d-inline" id="radius-val"><span id="radius-value">10</span> Miles</p>
                         <button id="radius-update" class="button btn-radius btn-blue">Update</button>
                     </div>
@@ -919,39 +937,43 @@ function makeRadius() {
                 </div>
             </div>
         `;
-        const searchUpperContainer = document.getElementById('search-area-container');
-        searchUpperContainer.prepend(radiusArea);
-        firstRadius = false; //Set the variable to false
+};
 
-        let rval = document.getElementById('radius-value');
-        let radiusSlide = document.getElementById('radius');
+//Update the slider in the radius Area
+function radiusSliderUpdate() {
+    let radiusValue = document.getElementById('radius-value');
+    let radiusSlide = document.getElementById('radius');
 
-        radiusSlide.oninput = function() { //Displayed the radius selected when the slider is moved
-            let mls = getDistance(radiusSlide.value);
-            rval.innerHTML = Math.round(mls); //rounds the numer and siaplyed in rval
-        };
-
-        let radiusUpdateBtn = document.getElementById('radius-update');
-
-        radiusUpdateBtn.addEventListener('click', function () {
-            if(geoSearch) {
-                numRes.innerHTML = [];
-                resultsContain.innerHTML = ""; //Set String empty each time function run
-                mapContainer.innerHTML = ""; //Set String empty each time function run
-                radius = radiusSlide.value;
-                discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
-            } else {
-                searchLatLng = []; //Set array to empty each time function run
-                numRes.innerHTML = [];
-                resultsContain.innerHTML = ""; //Set String empty each time function run
-                mapContainer.innerHTML = ""; //Set String empty each time function run
-                radius = radiusSlide.value;
-                getSearchData(searchBox.value) //Run function to get search results
-            }
-        });
+    radiusSlide.oninput = function() { //Displayed the radius selected when the slider is moved
+        let mls = getDistance(radiusSlide.value);
+        radiusValue.innerHTML = Math.round(mls); //rounds the numer and siaplyed in radiusValue
     };
-    const numRes = document.getElementById('num-of-results');
-    numRes.innerHTML = numOfResults;  
+    return radiusSlide;
+};
+
+//Update the update button in the radius Area
+function radiusUpdate(numRes,radiusSlide){
+    
+    let radiusUpdateBtn = document.getElementById('radius-update');
+
+    radiusUpdateBtn.addEventListener('click', function () {
+        if(geoSearch) {
+            radiusArea.innerHTML = ``;
+            numRes.innerHTML = [];
+            radiusArea.innerHTML = ""; //Set String empty each time function run
+            mapContainer.innerHTML = ""; //Set String empty each time function run
+            radius = radiusSlide.value;
+            discoverSearch(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+        } else {
+            searchLatLng = []; //Set array to empty each time function run
+            radiusArea.innerHTML = ``;
+            numRes.innerHTML = [];
+            resultsContain.innerHTML = ""; //Set String empty each time function run
+            mapContainer.innerHTML = ""; //Set String empty each time function run
+            radius = radiusSlide.value;
+            getSearchData(searchBox.value) //Run function to get search results
+        }
+    });
 };
 
 //gets coordinates and focuses the map on that location
