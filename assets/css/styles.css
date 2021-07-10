@@ -6,6 +6,10 @@ html, body {
     padding: 0;
   }
 
+  body p a {
+      color: #212529;
+  }
+
   /* Dark Mode */
 
 .dark-mode-switch {
@@ -40,7 +44,7 @@ html, body {
     background-color:#262829;
 }
 
-.body--white-text {
+.body--white-text a p{
     color: white;
 }
 
@@ -508,6 +512,28 @@ html, body {
     font-size: min(12px);
     margin-left: 10px;
     margin-bottom: 0px;
+}
+
+.website-link {
+    text-decoration: none;
+}
+
+.website-link:hover,
+.website-link:active,
+.website-link:focus,
+.website-link:focus:active {
+    color: #00BAFE;
+}
+
+.phone-link {
+    text-decoration: none;
+}
+
+.phone-link:hover,
+.phone-link:active,
+.phone-link:focus,
+.phone-link:focus:active {
+    color: #00BAFE;
 }
 
 .result-address {

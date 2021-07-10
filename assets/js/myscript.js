@@ -856,9 +856,9 @@ function convertUnixTimeToDay(unix) {
 function getPhone(result) {
         if(result.contacts) { //if contacts exists in result
             if (result.contacts[0].phone){ //if phone exists in contacts
-                return result.contacts[0].phone[0].value; //display phone number
+                return `<a class="phone-link" href="tel:${result.contacts[0].phone[0].value}" >${result.contacts[0].phone[0].value}</a>`; //display phone number
             } else if (result.contacts[0].mobile) { //if no phone number, check for mobile number
-                return result.contacts[0].mobile[0].value; //display mobile number
+                return `<a class="phone-link" href="tel:${result.contacts[0].mobile[0].value}" >${result.contacts[0].mobile[0].value}</a>`; //display phone number
             }
         } else { // if no phone or mobile
             return `<i class="fas fa-phone-slash"></i>`; //display no phone icon
@@ -885,9 +885,9 @@ function getDistance(mDist) {
 function getWebsite(result) {
     if(result.contacts) { //if contacts exists in result
         if (result.contacts[0].www){ //if website exists in contacts
-            return result.contacts[0].www[0].value; //display website 
+            return `<a class="website-link" href="${result.contacts[0].www[0].value}" alt="${result.title}" target="_blank">${result.contacts[0].www[0].value}</a>`; //display website
         } else if (result.contacts[0].www) { //if no website 1, check for website 2
-            return `<a href="${result.contacts[0].www[1].value}" alt="${result.title}" target="_blank"</a>`; //display website
+            return `<a class="website-link" href="${result.contacts[0].www[1].value}" alt="${result.title}" target="_blank">${result.contacts[0].www[1].value}</a>`; //display website
         } else {
             return `<i class="fas fa-phone"></i><span class="result-data">Website not available</span>`;
         }
