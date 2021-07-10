@@ -862,6 +862,23 @@ input:checked + .slider-weather .off-weather {
     opacity:0.1;
 }
 
+.error-container {
+    height: 80vh;
+}
+
+.error-div {
+    text-align: center;
+}
+
+.error-div img {
+    width: 25%;
+    margin: 20px 0 20px 0 ;
+}
+
+.error-div h2 {
+    margin: 36px;
+}
+
 /* Media Queries */
 @media screen and (min-width:1200px) {
     .about-text {
