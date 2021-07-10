@@ -14,7 +14,7 @@ function sendEmail(contactForm) {
         function(response) {
             console.log('SUCCESS',response)
             // document.getElementById('contact-submit').remove();
-            document.getElementById('message-status').innerHTML =`<p class='green bold message-status'><em>Message Sent!</em> <i class="green fas fa-check-circle"></i></p>`;
+            document.getElementById('message-status').innerHTML =`<span class='green bold message-status'><em>Message Sent!</em> <i class="green fas fa-check-circle"></i></span>`;
             submitButton.classList.remove('btn-blue');
             submitButton.classList.add('btn-success');
             submitButton.disabled = true;
@@ -31,7 +31,7 @@ function sendEmail(contactForm) {
         },
         function(error) {
             console.log('FAILED', error)
-            document.getElementById('message-status').innerHTML =`<p class='red bold'><em>Error! Please try again.</em></p>`;
+            document.getElementById('message-status').innerHTML =`<span class='red bold'><em>Error! Please try again.</em></span>`;
         });
     return false;
 };
