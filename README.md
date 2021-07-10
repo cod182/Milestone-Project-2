@@ -192,7 +192,20 @@ The code was validated using [W3C CSS Validation Service](https://jigsaw.w3.org/
 
 - styles.css passed
 
+### Lighthouse Results
+- Home Page - Desktop
+
+![Home Page - Desktop](assets/images/readme/lighthouse-results/home-desktop.png)
+
+- Home Page - Mobile
+
+![Home Page - Mobile](assets/images/readme/lighthouse-results/home-mobile.png)
+
 ## Testing Results
+
+Testing process has been logged on a seperate readme file file found here: [Testing Logs](assets/images/readme/testing-logs.md)
+
+
 
 ### Bugs that occured
 

@@ -520,6 +520,7 @@ html, body {
 
 .website-link {
     text-decoration: none;
+    word-wrap: break-word;
 }
 
 .website-link:hover,
@@ -542,6 +543,7 @@ html, body {
 
 .email-link {
     text-decoration: none;
+    word-wrap: break-word;
 }
 
 .email-link:hover,
