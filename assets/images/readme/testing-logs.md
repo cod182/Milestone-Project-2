@@ -35,7 +35,7 @@ During testing, 3 issues arose as state below. These were resolved first by test
 - Bug: Website address going off page due to long address.
     - Solution: added word-wrap:breakwork to class of website address
 - Bug: Marker text was white, causing it to be invisible
-    - Solution: Added class to marker box, use specificity to set text to black
+    - Solution: Added class to marker box, use specificity to set p tags and a tags to black
 
 ### iPhone 6/7/8 357x667 & 667x357
 
