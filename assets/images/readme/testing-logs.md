@@ -28,7 +28,7 @@
 ## Chrome Developer Tools
 ### iPhone 5/SE 320x568 & 568x320
 
-During testing, 3 issues arose as state below. These were resolved first by testing solutions in Chrome Dev Tools, then implementing them in the project files.
+During testing, 4 issues arose as state below. These were resolved first by testing solutions in Chrome Dev Tools, then implementing them in the project files.
 
 - Bug: When the screen size switched to medium, the geolocation button would be behind the map container when a search happened.
     - Solution: Added a media query to move the button when the screen size went below 992px
@@ -41,8 +41,11 @@ During testing, 3 issues arose as state below. These were resolved first by test
 
 ### iPhone 6/7/8 357x667 & 667x357
 
+During testing, no issues were spotted
 
 ### iPhone 6/7/8 Plus 414x736 & 736x414
+
+During testing no issues were spotted, but a visual design changed was implemeted. The weather display was moved to under the title
 
 
 ### iPad 768x1024 & 1024x768
