@@ -4,7 +4,8 @@
 
 ## Project
 
-
+The purpose of the site will be to allow users to search for campsites/hotels around their searched area, or their location. The site will return the results within a set radius that can be adjusted. 
+Users will be able to view information on each result givena and see the location on a map.
 
 # Showcase
 
@@ -17,9 +18,9 @@ A deployed link to the site can be found [here](https://cod182.github.io/Milesto
 
 ## User Story
 
-The end user is someone who is looking for a campsite to stay at, near a specific location. The site will be aimed at the anyone looking to travel within the UK. The site will mainly be accessed on mobile/tablet devices due to ease of acces while travelling but will also be disgned for desktop.
+The end user is someone who is looking for a campsite to stay at, near a specific location. The site will be aimed at the anyone looking to travel within the UK. The site will mainly be accessed on mobile/tablet devices due to ease of access whilst travelling but will also be disgned for desktop.
 
-The end user will want to be able to find their nearest campsite quickly and get informatino on it. All information will need to be clearly displayed and easy to read. 
+The end user will want to be able to find their nearest campsite quickly, see where it is on a map and get as much information on it. All information will need to be clearly displayed and easy to read.
 
 ## Strategy
 
@@ -32,11 +33,14 @@ The end user will want to be able to find their nearest campsite quickly and get
 
 ### Technical Capabilities
 
+It is possible to create this site efficiently using the bootstrap framework and HTML/CSS/Javascript that I have learned.
+Api will also be used for getting maps, searche results and weather information
 
 
 ### Business Vision
 
-The business vision is to help people locate an appropriate campsite to book when looking either during or before their travels.
+- The business vision is to help people locate an appropriate campsite to book when looking either during or before their travels.
+- Simplicit and speed at the forefront so the user is not delayed in their search.
 
 
 ## Scope
@@ -59,40 +63,41 @@ The business vision is to help people locate an appropriate campsite to book whe
 
 ### Wireframes
 
+Wireframes were created at the start of the project using balsamiq. These were updated during the project as the design was altered and features were added.
+
 ## Original
 
 - [Mobile >576px](assets/images/readme/wireframes/_576px.png)
 - [Mobile >576px](assets/images/readme/wireframes/_576px.png) 
-- [Mobile ≥616px](assets/images/readme/wireframes/≥616.png)
 - [Tablet ≥768px](assets/images/readme/wireframes/≥616.png)
 - [Desktop ≥992px](assets/images/readme/wireframes/≥992px.png)
 - [Desktop ≥1400px](assets/images/readme/wireframes/≥1440px.png)
 
 ## Re-design
 
-- [Mobile >576px](assets/images/readme/wireframes/redesigne/_576px.png)
-- [Mobile ≥616px](assets/images/readme/wireframes/≥616.png)
-- [Tablet ≥768px](assets/images/readme/wireframes/≥616.png)
-- [Desktop ≥992px](assets/images/readme/wireframes/≥992px.png)
-- [Desktop ≥1400px](assets/images/readme/wireframes/≥1440px.png)
+- [Mobile >576px](assets/images/readme/wireframes/redesign/_576px.png)
+- [Tablet ≥768px](assets/images/readme/wireframes/redesign/≥768px.png)
+- [Desktop ≥992px](assets/images/readme/wireframes/redesign/≥992px.png)
+- [Desktop ≥1400px](assets/images/readme/wireframes/redesign/≥1440px.png)
 
 ## Surface
 
-The site will be a single page with dynamic content
+The site will be a single page with dynamic content containing a map, searched results and weather information
 
 ### Home
 
-The user will be presented with a navagation bar and a searc box greeting on initial load. Futhur down the page will be an about section.
+The user will be presented with a navagation bar and a search box greeting on initial load. Futher down the page will be an about section.
 Once a user enacts a search, the search box will shrink and move to the top of the page with a full width map replacing it, showing relevant map location.
-Below the map a search reults section will appear, giving limited information on each of the results shown on the map.
-When a search results is clicked on, a more information modal will appear.
-
+Below the map a search results section will appear, giving information on each of the results shown on the map with the current weather.
+When the result title is clicked, the map will focus on the result.
+When the more info button is pressed on a result, the result will expand revealing more information
+When a mark result marker is click, a pop up will appear giving some information.
 
 ## Visual Design
 	
 The colour scheme of the site will be bright with splashes of colour matching a wild/nature theme.
 
-![Preivew](assets/images/wireframes/color-scheme.png)
+![Preivew](assets/images/readme/wireframes/color-scheme.png)
 
 The fonts to be user are roboto
 
@@ -109,6 +114,8 @@ The fonts to be user are roboto
 ### Features to be implemented
 
 - Diirections to the selected result
+- Book the campsite/hotel through the result area
+- Save favourite places
 
 ## Technoogies used
 
@@ -125,16 +132,65 @@ The fonts to be user are roboto
 
 ## Planning
 
+At the beginning of the project I was aware of the audience for the website and their needs when visiting. I considered the devices that would be used when visiting and took note of ensuring the pages looked their best when visited. I also considered the path they would taken while using teh site.
+
+The devices I plan to test the websit with are:
+
+Chrome Developer Tools
+
+iPhone 5/SE (320x568)
+iPhone 6/7/8 (357x667)
+iPhone 6/7/8 Plus (414x736)
+iPad (768x1024)
+iPad Pro (1024x1366)
+Handheld Device Realworld Testing
+
+iPhone XS Max
+iPhone 12
+iPad Pro 11"
+Samsung Galaxy A40
+Screen Testing
+
+Laptop Screen 13" (1280x800)
+Safari
+Chrome
+Laptop Screen 16" (3072x1920)
+Safari
+Chrome
+Desktop Screen 22" (1680 × 1050)
+Safari
+Chrome
+iMac 5K Screen 27" (5120x2880)
+Safari
+Chrome
+
+The sequence I used for testing the user path of the site:
+
+1. Load site
+2. Click dark mode button
+3. scroll to about section to read
+4. Enter a search term
+5. Click on a random result title to focus map
+6. Click on the map marker for more information
+7. Go to result and click on more information
+8. toggle the Hourly/Daily weather
+9. Repeat 5-8 on a different result
+10. Click the geolocation search button
+11. Repeat 5-8 on a result
+12. Click Coontact Us Nav buton and send a message
 
 ## Running Tests
 
+During the testing processed I used Chrome Developed tools whenever an issue was discovered. This ensured the issues could be resolved before editing my html files. Validators were used to pick up any issues with the code, where a problem was discovered, it was resolved and re-tested until no issues were discovered. Google Lighthouse was then used to check the Perormance, Accesability, Best Practices and SEO levels. When issues were discovered that we causing scores to drop, html & css was edited in Chrome Developer Tools to ensure the resoltion worked, then commited in my html files. This was repeated until scores were at an accepable level.
 
 ### HTML5 
 The code was validated using [W3C Markup Validation Service](https://validator.w3.org/#validate_by_input)
-
+- index.html passed
+- 404.html passed
 ### CSS3 
 The code was validated using [W3C CSS Validation Service](https://jigsaw.w3.org/css-validator/#validate_by_input)
 
+- styles.css passed
 
 ## Testing Results
 
