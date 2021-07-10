@@ -92,6 +92,7 @@ function locateSuccess(position) {
         geoSearch = true;  
         movePageAfterSearch(); //Changes classed to move 
         getResultsInArea(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+        searchBox.scrollIntoView({behavior: "smooth"}); //Moves the window down so the searchBox is as the top
 };
 
 //If navigator.geolocation has an error, this function is called
@@ -114,6 +115,7 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         getSearchData(event) //Run function to get search results
+        searchBox.scrollIntoView({behavior: "smooth"}); //Moves the window down so the searchBox is as the top
     }
     
 });
