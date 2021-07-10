@@ -288,7 +288,6 @@ function addMapMarker(map, results, ui) {
           });
 
         let markerBody = makeMarkerHTML(result); //Create the inner html of the marker
-        console.log(markerBody)
         locationMarker.setData(markerBody);
 
         clickMapMarker(ui,map,locationMarker,lat,lng) //What happens when a marker is clicked

@@ -804,8 +804,9 @@ input:checked + .slider-weather .off-weather {
 }
 
 .contact-reasons { 
-    width: 400px; 
-    text-align-last:center; 
+    width: 100%;
+    text-align-last: center;
+    height: 30px;
 }
 
 .contact-message {

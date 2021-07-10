@@ -36,6 +36,8 @@ During testing, 3 issues arose as state below. These were resolved first by test
     - Solution: added word-wrap:breakwork to class of website address
 - Bug: Marker text was white, causing it to be invisible
     - Solution: Added class to marker box, use specificity to set p tags and a tags to black
+- Bug: Contact reason box extended out of the modal
+    - Solution: Changed width to 100% to match other. Also matched height to other input boxes
 
 ### iPhone 6/7/8 357x667 & 667x357
 
