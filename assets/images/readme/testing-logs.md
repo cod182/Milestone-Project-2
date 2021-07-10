@@ -47,7 +47,6 @@ During testing, no issues were spotted
 
 During testing no issues were spotted, but a visual design changed was implemeted. The weather display was moved to under the title
 
-
 ### iPad 768x1024 & 1024x768
 
 

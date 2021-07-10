@@ -598,7 +598,7 @@ function createBodyInfoCurrentWeather(weatherNow, weatherArr) {
     const iconWeather = 'https://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
     const currTemp = getAbslouteValue(weatherNow.current.temp); //sets the temp to no decimal places
     let bodyInfoCurrentWeather = `
-            <div class="col-md-5 col-sm-12 d-md-inline weather-container container-fluid">
+            <div class="col-md-5 col-xs-12 d-md-inline weather-container container-fluid">
                 <div class="weather">
                     <div>
                         <h4 class="weather-title">Current Weather</h4>
