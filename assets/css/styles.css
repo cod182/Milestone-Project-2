@@ -48,7 +48,7 @@ html, body {
     color: white;
 }
 
-.body--white-text p{
+.body--white-text a{
     color: white;
 }
 
@@ -537,6 +537,17 @@ html, body {
 .phone-link:active,
 .phone-link:focus,
 .phone-link:focus:active {
+    color: #00BAFE;
+}
+
+.email-link {
+    text-decoration: none;
+}
+
+.email-link:hover,
+.email-link:active,
+.email-link:focus,
+.email-link:focus:active {
     color: #00BAFE;
 }
 

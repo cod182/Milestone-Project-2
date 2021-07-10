@@ -859,8 +859,10 @@ function getPhone(result) {
                 return `<a class="phone-link" href="tel:${result.contacts[0].phone[0].value}" >${result.contacts[0].phone[0].value}</a>`; //display phone number
             } else if (result.contacts[0].mobile) { //if no phone number, check for mobile number
                 return `<a class="phone-link" href="tel:${result.contacts[0].mobile[0].value}" >${result.contacts[0].mobile[0].value}</a>`; //display phone number
+            } else {
+                return `<i class="fas fa-phone-slash"></i>`; //display no phone icon
             }
-        } else { // if no phone or mobile
+        } else { //if contacts doesn't exists in result
             return `<i class="fas fa-phone-slash"></i>`; //display no phone icon
         };
 };
@@ -900,7 +902,7 @@ function getWebsite(result) {
 function getEmail(result) {
     if(result.contacts) { //if contacts exists in result
         if (result.contacts[0].email){ //if email exists in contacts
-            return result.contacts[0].email[0].value; //display email 
+            return `<a class="email-link" href = "mailto:${result.contacts[0].email[0].value}">${result.contacts[0].email[0].value}</a>`; //display email 
         } else {
             return `<i class="fas fa-phone"></i><span class="result-data">- Please Call</span>`;
         }
