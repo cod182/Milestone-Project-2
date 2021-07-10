@@ -441,7 +441,7 @@ function createResultTitleInfo(result, weatherNow) {
                 <h2 class="blue bold result-row">
                     <a href="#map" onclick="moveMapToResult(this, map)" data-lat="${result.position.lat}" data-lng="${result.position.lng}">${result.title}</a>
                 </h2>
-                <div class="weather-sm d-inline d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"><p class="d-inline">${currWeather} - ${currTemp}ºc</p></div>
+                <div class="weather-sm d-block d-md-none"><img class="weather-icon-sm" src="${iconWeather}" alt="Weather Icon"><p class="d-inline">${currWeather} - ${currTemp}ºc</p></div>
             </div>
             `;
     resultBuilding.push(title);
