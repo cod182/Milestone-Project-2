@@ -170,7 +170,13 @@ The site was the made avaiable at the above url.
 # Credits
 
 - Help with localStorage provided by Kevin Powell on YouTube
-- No results found image from clipartmax
+- CSS loading provided by [crazyegg.com](https://www.crazyegg.com/blog/loading-spinners-css3-animation/)
+- No results found image from [clipartmax](https://www.clipartmax.com/middle/m2i8d3N4d3b1K9b1_sorry-no-results-found/)
+- error image from [clipartmax](https://www.clipartmax.com/download/m2i8K9b1N4H7d3G6_big-image-road-sign-no-entry/)
+- General help found on W3School.com
+- Alert boxes powered by sweetalert
+- HereMaps used for mapping a searching
+- OpenWeatherApi used for weather results
 ---
 ## This project is for educational purposes only
 
