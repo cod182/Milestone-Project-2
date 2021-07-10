@@ -212,6 +212,16 @@ Testing process has been logged on a seperate readme file file found here: [Test
 
 - Bug: When the screen size switched to medium, the geolocation button would be behind the map container when a search happened.
     - Solution: Added a media query to move the button when the screen size went below 992px
+- Bug: Website address going off page due to long address.
+    - Solution: added word-wrap:breakwork to class of website address
+- Bug: Marker text was white, causing it to be invisible
+    - Solution: Added class to marker box, use specificity to set p tags and a tags to black
+- Bug: Contact reason box extended out of the modal
+    - Solution: Changed width to 100% to match other. Also matched height to other input boxes
+- Bug: Weather in result hiding before it should
+    - Solution: Media query adjust from max-width:768px to 767px
+- Bug: class not taking effect on the element
+    - Solution: element was set as a div instead of a p tag. Changed to P and functionality returned
 
 ## Deployment
 
@@ -223,7 +233,7 @@ This was executed by:
 - Got to the Milestone-project-2 Repo
 - Clicking on Settings
 - Clicking on Pages
-- Selecting master from sources
+- Selecting main from sources
 - Clicking save
 
 The site was the made avaiable at the above url.
@@ -250,7 +260,8 @@ The site was the made avaiable at the above url.
 - Alert boxes powered by sweetalert
 - HereMaps used for mapping a searching
 - OpenWeatherApi used for weather results
----
+- Help with fetch provided by 
+- Simple slider taken from w3Schools and manipulated
 ## This project is for educational purposes only
 
 ### Created by Codie Stephens-Evans

@@ -70,31 +70,46 @@ During testing, no issues were spotted
 ---
 ## Handheld Device Realworld Testing - Testing Log
 ---
-### iPhone XS Max
+### iPhone XS Max (Safari)
+
+During testing, no issues were spotted
 
 ---
-### iPhone 12 Pro
+### iPhone 12 Pro (Safarai)
 
 ---
-### iPad Pro 11
+### iPad Pro 11 (Safari)
+
+During testing, no issues were spotted
 
 ---
-### Samsung A40
+### Samsung A40 (Chrome)
+
+During testing, no issues were spotted
 
 ---
 ## Screen Testing - Testing Log
 ---
 ### Laptop 13" Screen 1280x800
 
+During testing, it was spotted that the Dark Mode / Light Mode text wasn't changing to white
+- Bug: class not taking effect on the element
+    - Solution: element was set as a div instead of a p tag. Changed to P and functionality returned
+
 ---
 ### Laptop 16" Screen 3072x1920
 
+During testing, no issues were spotted
 
 ---
 ### Desktop 22" Screen 1680x1050
 
+During testing, no issues were spotted
+
 
 ---
 ### iMac 5k 27" Screen 5120x2880
+During testing, no issues were spotted
 
+---
 
