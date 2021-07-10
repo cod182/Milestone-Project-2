@@ -6,7 +6,7 @@ html, body {
     padding: 0;
   }
 
-  body p a {
+  body p a{
       color: #212529;
   }
 
@@ -44,7 +44,11 @@ html, body {
     background-color:#262829;
 }
 
-.body--white-text a p{
+.body--white-text p{
+    color: white;
+}
+
+.body--white-text p{
     color: white;
 }
 
