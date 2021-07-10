@@ -178,6 +178,7 @@ html, body {
 
 .logo {
     height: 170px;
+    width: 170px;
 }
 
 .logo:hover {
@@ -187,6 +188,7 @@ html, body {
 
 .logo-md {
     height: 80px;
+    width: 80px;
 }
 
 .navbar-collapse {
