@@ -170,7 +170,7 @@ The site was the made avaiable at the above url.
 # Credits
 
 - Help with localStorage provided by Kevin Powell on YouTube
-
+- No results found image from clipartmax
 ---
 ## This project is for educational purposes only
 

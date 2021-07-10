@@ -1,12 +1,11 @@
 const hereApiKey = 'cAo6Cjf5wlcux7gJjPODw_tNNN5lglP7Ayka-t9R7J4'; //Here Maps Api Key
-
-const searchBox = document.getElementById('search-box');
+const openApiKey = '2e87b4183a4f602f8d20b6eca0cffef3'; //OpenWeather Api Key
+const searchBox = document.getElementById('search-box'); //Assign the searchbox to searchBox
 let search = ''; //Gets the value of the search
-const greetSec = document.getElementById('greeting-box');
-const loate = document.getElementById('locate'); //Geo Locate button
-const mapContainer = document.getElementById('map-container')
+const greetSec = document.getElementById('greeting-box'); //Assign the greeting-box to GreetSec
+const locate = document.getElementById('locate'); //Assign Geo Locate button to loate
+const mapContainer = document.getElementById('map-container') //Assign the map-container to MapContainer
 let radius = '16093'; //Default number for the search radius
-const mapContain = document.getElementById('map');
 const searchUpperContainer = document.getElementById('search-area-container');
 const resultsContain = document.getElementById('search-results');
 let radiusArea = document.createElement('div');// Create new Div
@@ -162,7 +161,7 @@ function getSearchData(){
         };
     } else { //If not search term is entered
         undoMovePageAfterSearch();
-        radiusArea.innerHTML = ``;
+        radiusArea.innerHTML = ``; //clears the radius area
         swal('No Search Entered','Please try again','warning'); //Message displayed if no search term is entered
     };
 };
@@ -181,13 +180,13 @@ function getLatLng(search, cb){
         return response.json();
     })
     .then(data => {
-        cb(data); //Call back to getCoords
+        cb(data); //Call back to run getCoords function
         return data;
     })
     .catch(error => {
         firstTime = true; //sets firstTime to false so it doesn't run again
         undoMovePageAfterSearch(); //Run function to Reverse added classes
-        searchBox.value = '';
+        searchBox.value = ''; //sets the searchbox to empty
         console.error('There has been a problem, search term invalid:', error);
         swal('Search Term Invalid','Please try again','warning') //pop up wanring displayed if search term is bad
     });
@@ -196,11 +195,11 @@ function getLatLng(search, cb){
 
 // Puts the coordinates into a string and starts the getResultsInArea function
 function getCoords(data) {
-    const lat = data.items[0].position.lat;
-    const lng = data.items[0].position.lng;
-    searchLatLng.push(lat);
-    searchLatLng.push(lng);
-    coords = searchLatLng.toString();
+    const lat = data.items[0].position.lat; //set lat from the data item
+    const lng = data.items[0].position.lng;//set lng from the data item
+    searchLatLng.push(lat); //push the lat into searchLatLng
+    searchLatLng.push(lng);//push the lng into searchLatLng
+    coords = searchLatLng.toString(); //set the coords to a string of the searchLatLng array
     getResultsInArea(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
 };
 
@@ -218,7 +217,7 @@ function getResultsInArea(coords, cb) {
         console.log(xhr.status);
         console.log(JSON.parse(xhr.responseText));
         const results = JSON.parse(xhr.responseText).items;
-        cb(results); // Callback for addReults function
+        cb(results); // Callback to run addReults function
         } else if (xhr.status === 400) {
             swal('400 - Bad Request','There has been a problem with your request, reloading page','warning');
             setTimeout(function(){ 
@@ -287,18 +286,18 @@ function addMapMarker(map, results, ui) {
     
         innerElement.innerHTML = `<img src="assets/images/location-icon-32.png">`; // Add image to the DOM element
 
-        let markerIcon = adjustMarkerIcon(outerElement);
+        let markerIcon = adjustMarkerIcon(outerElement); //function to adjust map markers opacity
   
         const locationMarker = new H.map.DomMarker({lat:lat, lng:lng}, {
             icon: markerIcon //sets the icon as domIcon
           });
 
-        let markerBody = makeMarkerHTML(result);
+        let markerBody = makeMarkerHTML(result); //Create the inner html of the marker
         locationMarker.setData(markerBody);
 
-        clickMapMarker(ui,map,locationMarker,lat,lng)
+        clickMapMarker(ui,map,locationMarker,lat,lng) //What happens when a marker is clicked
         
-        map.addObject(locationMarker);
+        map.addObject(locationMarker); //Add the marker to the map
     });
 };
 
@@ -367,17 +366,35 @@ function clickMapMarker(ui,map,locationMarker,lat,lng) {
 //loops through the results to give results to pass on
 function iterateResults(results) { 
     numOfResults = results.length; //sets the number of results for the radius results
-    makeRadius(); //Runs the makeRadis function
-    results.forEach(function(result){
-        addResultToPage(result);
-    });
-
+    if(numOfResults < 1){ //If there are no results
+        makeRadius(); //Runs the makeRadis function
+        let noResults = noResultsFound(); //ruuns function to create noReults area
+        resultsContain.appendChild(noResults); //Appends resultDiv to resultContain, finalising the result on the page
+    } else {
+        makeRadius(); //Runs the makeRadis function
+        results.forEach(function(result){ //iterates through results
+            addResultToPage(result); //Create the search result seaction and populate with results
+        });
+    }
 };
+
+function noResultsFound(){
+    let noResultsDiv = document.createElement('div'); //Creates the noResultsDiv
+    //create the innerHTML for the noResultsDic
+    noResultsDiv.innerHTML = `
+        <div class="no-results-found"> <!--image from clipartmax.com -->
+            <img src="assets/images/no-results-image.png" alt="No results Found">
+            <h2>Oh No! <br>No results found, try increasing the search radius</h2>
+        </div>
+    `;
+
+    return noResultsDiv 
+};
+
 //Gets the weather at the position of result
 async function getWeather(result) {
 //Open Weather API
-    const openApi = '2e87b4183a4f602f8d20b6eca0cffef3';
-    const weatherURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + result.position.lat + '&lon=' + result.position.lng + '&units=metric&appid=' + openApi;
+    const weatherURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + result.position.lat + '&lon=' + result.position.lng + '&units=metric&appid=' + openApiKey;
 
     return await fetch(weatherURL)
     .then(response => {
@@ -398,13 +415,12 @@ async function getWeather(result) {
 async function addResultToPage (result) {
     resultBuilding = []; //empties the resultBuilding Array
     let weatherNow = await getWeather(result); //Gets weather and waits for result befor moving on
-    
     let resultDiv = createResultDiv(); //Creates a new result div and stores it as a variable
+
     createResultTitleInfo(result, weatherNow);// Creates the title HTMl for the result div
     createResultBodyInfo(result,weatherNow); //Creates all the body html for the result div
-    
+
     let resultReady = resultBuilding.join('').toString(); //Joins all the arrays in resultBuilding and converts to a string, stores in resultReady
-    
     resultDiv.innerHTML = resultReady; //Puts resultReady HTML into the resultDiv innerHTML
 
     resultsContain.appendChild(resultDiv); //Appends resultDiv to resultContain, finalising the result on the page
@@ -433,15 +449,15 @@ function createResultTitleInfo(result, weatherNow) {
                 </h2>
             </div>
             `;
-            resultBuilding.push(title);
+    resultBuilding.push(title);
 };
 
 //Creates Body of Result
 function createResultBodyInfo(result, weatherNow) {
-    let body = [];
-    let weatherArr = [];
-    createBodyInfo(body,result);
-    createBodyInfoWeather(weatherNow, weatherArr);
+    let body = []; //Empty the body array ready for hte new result
+    let weatherArr = []; //Empty the weatherArr ready for new result
+    createBodyInfo(body,result); //create the body info html
+    createBodyInfoWeather(weatherNow, weatherArr); //Create the body weather html
     createBodyMoreInfoButton(weatherArr); //Create the More info button in the body for displaying more info
 
     body.push(weatherArr.join('').toString()); //Joins all the weather arrays together and pusheds them into the body array

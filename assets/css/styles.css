@@ -451,6 +451,14 @@ html, body {
     margin: 0 50% 0 50%;
 }
 
+.no-results-found{
+    text-align: center;
+}
+
+.no-results-found img{
+    max-width: -webkit-fill-available;
+}
+
 .search-results-after {
     border-radius: 16px;
     margin: 0 auto;
