@@ -196,6 +196,9 @@ The code was validated using [W3C CSS Validation Service](https://jigsaw.w3.org/
 
 ### Bugs that occured
 
+- Bug: When the screen size switched to medium, the geolocation button would be behind the map container when a search happened.
+    - Solution: Added a media query to move the button when the screen size went below 992px
+
 ## Deployment
 
 The project is hosted in GitHub and built in GitPod.
