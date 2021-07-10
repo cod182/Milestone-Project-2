@@ -61,14 +61,10 @@ if(darkMode === 'enabled') {
 // Get location using geolocation and run a search based on resulting Lat/Lng
 locate.addEventListener('click', function(event){ //Event listener on the locate button
     searchLatLng = []; //Set array to empty each time function run
-    if (firstTime) { // If this this the first run, run the below code
-        movePageAfterSearch(); //Run function to add classed
-        firstTime = false;
-    } else {
-        document.getElementById('radius-value').innerHTML = '10';
-        document.getElementById('radius').value = '16093';
-    };
-
+    movePageAfterSearch(); //Run function to add classed
+    firstTime = false;
+    
+    //set the options for the navigator search
     const options = {
         enableHighAccuracy: true,
         timeout: 10000,
@@ -101,12 +97,7 @@ function locateError(err) {
     console.warn(`ERROR(${err.code}): ${err.message}`); //Console log error
     undoMovePageAfterSearch(); //Reverses the classes that we changed
     firstTime = true;
-    numOfResults = null; //Sets numOf Results to null
-    searchLatLng = []; //Set array to empty each time function run
-    radiusArea.innerHTML = ``; //set radiusArea to empty
-    resultsContain.innerHTML = ''; //Set String empty each time function run
-    mapContainer.innerHTML = ''; //Set String empty each time function run
-    searchBox.value = ''; //Set searchBox value to empty
+    resetPage();
     swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning')
   };
 
@@ -161,6 +152,7 @@ function getSearchData(){
         };
     } else { //If not search term is entered
         undoMovePageAfterSearch();
+        resetPage();
         radiusArea.innerHTML = ``; //clears the radius area
         swal('No Search Entered','Please try again','warning'); //Message displayed if no search term is entered
     };
@@ -185,6 +177,7 @@ function getLatLng(search, cb){
     })
     .catch(error => {
         firstTime = true; //sets firstTime to false so it doesn't run again
+        resetPage();
         undoMovePageAfterSearch(); //Run function to Reverse added classes
         searchBox.value = ''; //sets the searchbox to empty
         console.error('There has been a problem, search term invalid:', error);
@@ -1028,6 +1021,15 @@ function loading() {
                             </div>
                         </div>
                 `;
+};
+//Clears values to havea. reset page
+function resetPage(){
+    numOfResults = null; //Sets numOf Results to null
+    searchLatLng = []; //Set array to empty each time function run
+    radiusArea.innerHTML = ``; //set radiusArea to empty
+    resultsContain.innerHTML = ''; //Set String empty each time function run
+    mapContainer.innerHTML = ''; //Set String empty each time function run
+    searchBox.value = ''; //Set searchBox value to empty
 };
 
 // Changes the about message every 5 seconds
