@@ -37,7 +37,8 @@ function disableDarkMode() {
     document.body.classList.remove('body--white-text');
     searchBox.classList.remove('searchbox--dark');
     locate.classList.remove('locate--white');
-    document.getElementById('dark-info-text').innerHTML = 'Dark Mode'
+    document.getElementById('dark-info-text').innerHTML = 'Dark Mode';
+    document.getElementById('dark-info-text-md').innerHTML = 'Dark Mode';
     document.getElementById('dark-info-arrow').classList.remove('dark-arrow--invert');
     localStorage.setItem('darkMode', null);
 };
@@ -48,7 +49,8 @@ function enableDarkMode() {
     document.body.classList.add('body--white-text');
     searchBox.classList.add('searchbox--dark');
     locate.classList.add('locate--white');
-    document.getElementById('dark-info-text').innerHTML = 'Light Mode'
+    document.getElementById('dark-info-text').innerHTML = 'Light Mode';
+    document.getElementById('dark-info-text-md').innerHTML = 'Light Mode';
     document.getElementById('dark-info-arrow').classList.add('dark-arrow--invert');
     localStorage.setItem('darkMode','enabled');
 };
