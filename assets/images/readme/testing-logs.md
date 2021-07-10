@@ -35,6 +35,7 @@
 ### iPhone 5/SE 320x568 & 568x320
 
 During testing, 4 issues arose as state below. These were resolved first by testing solutions in Chrome Dev Tools, then implementing them in the project files.
+A noted inconvenince was that scrolling down the page was difficult with the map open and you needed to scroll from the top. To fix this, the window was made to scroll down slightly, allowing sscrolling from below easily
 
 - Bug: When the screen size switched to medium, the geolocation button would be behind the map container when a search happened.
     - Solution: Added a media query to move the button when the screen size went below 992px
