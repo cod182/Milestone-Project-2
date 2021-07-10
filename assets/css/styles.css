@@ -455,6 +455,14 @@ html, body {
     margin-bottom: 10px;
 }
 
+.map-marker-content{
+    width: 50px;
+}
+
+.map-marker-content p {
+    color: #212529;
+}
+
 .loading {
     max-height: 40px;
     margin: 0 50% 0 50%;

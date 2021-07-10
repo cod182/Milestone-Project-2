@@ -288,6 +288,7 @@ function addMapMarker(map, results, ui) {
           });
 
         let markerBody = makeMarkerHTML(result); //Create the inner html of the marker
+        console.log(markerBody)
         locationMarker.setData(markerBody);
 
         clickMapMarker(ui,map,locationMarker,lat,lng) //What happens when a marker is clicked
@@ -327,7 +328,7 @@ function changeOpacityToOne(evt) {
 function makeMarkerHTML(result) {
     const phone = getPhone (result); //Gets the contact number of the location
     body = `
-    <div class="col-12">
+    <div class="col-12 map-marker-content">
         <div class="col-12">
             <div class="row">
             <div class="col-12 result-data-container">

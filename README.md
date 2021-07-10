@@ -86,12 +86,12 @@ The site will be a single page with dynamic content containing a map, searched r
 
 ### Home
 
-The user will be presented with a navagation bar and a search box greeting on initial load. Futher down the page will be an about section.
+The user will be presented with a navigation bar and a search box greeting on initial load. Further down the page will be an about section.
 Once a user enacts a search, the search box will shrink and move to the top of the page with a full width map replacing it, showing relevant map location.
 Below the map a search results section will appear, giving information on each of the results shown on the map with the current weather.
 When the result title is clicked, the map will focus on the result.
 When the more info button is pressed on a result, the result will expand revealing more information
-When a mark result marker is click, a pop up will appear giving some information.
+When a mark result marker is clicked, a pop up will appear giving some information.
 
 ## Visual Design
 	
@@ -173,11 +173,12 @@ The sequence I used for testing the user path of the site:
 5. Click on a random result title to focus map
 6. Click on the map marker for more information
 7. Go to result and click on more information
-8. toggle the Hourly/Daily weather
-9. Repeat 5-8 on a different result
-10. Click the geolocation search button
-11. Repeat 5-8 on a result
-12. Click Coontact Us Nav buton and send a message
+8. Toggle the Hourly/Daily weather(Desktop Only)
+9. Adjust radius of search area and update
+10. Repeat 5-8 on a different result
+11. Click the geolocation search button
+12. Repeat 5-8 on a result
+13. Click Contact Us Nav buton and send a message
 
 ## Running Tests
 

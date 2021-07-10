@@ -19,16 +19,23 @@
 6. Click on the map marker for more information
 7. Go to result and click on more information
 8. Toggle the Hourly/Daily weather(Desktop Only)
-9. Repeat 5-8 on a different result
-10. Click the geolocation search button
-11. Repeat 5-8 on a result
-12. Click Coontact Us Nav buton and send a message
+9. Adjust radius of search area and update
+10. Repeat 5-8 on a different result
+11. Click the geolocation search button
+12. Repeat 5-8 on a result
+13. Click Contact Us Nav buton and send a message
 
 ## Chrome Developer Tools
 ### iPhone 5/SE 320x568 & 568x320
 
+During testing, 3 issues arose as state below. These were resolved first by testing solutions in Chrome Dev Tools, then implementing them in the project files.
+
+- Bug: When the screen size switched to medium, the geolocation button would be behind the map container when a search happened.
+    - Solution: Added a media query to move the button when the screen size went below 992px
 - Bug: Website address going off page due to long address.
     - Solution: added word-wrap:breakwork to class of website address
+- Bug: Marker text was white, causing it to be invisible
+    - Solution: Added class to marker box, use specificity to set text to black
 
 ### iPhone 6/7/8 357x667 & 667x357
 
