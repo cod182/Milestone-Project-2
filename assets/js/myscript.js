@@ -83,17 +83,17 @@ locate.addEventListener('click', function(){ //Event listener on the locate butt
 
 //If navigator.geolocation is sucsessful, this function is called
 function locateSuccess(position) {  
-        searchLatLng.push(position.coords.latitude); //push the lat to searchLatLng
-        searchLatLng.push(position.coords.longitude);//push the lng to searchLatLng
-        coords = searchLatLng.toString(); //Set variable coords to  SearchLatLng as a String
-        searchBox.value = ''; //Clears the searchBox
-        radius = '16093'; 
-        numOfResults = null;
-        resultsContain.innerHTML = ""; //Set String empty each time function run
-        geoSearch = true;  
-        movePageAfterSearch(); //Changes classed to move 
-        getResultsInArea(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
-        searchBox.scrollIntoView({behavior: "smooth"}); //Moves the window down so the searchBox is as the top
+    searchLatLng.push(position.coords.latitude); //push the lat to searchLatLng
+    searchLatLng.push(position.coords.longitude);//push the lng to searchLatLng
+    coords = searchLatLng.toString(); //Set variable coords to  SearchLatLng as a String
+    searchBox.value = ''; //Clears the searchBox
+    radius = '16093'; 
+    numOfResults = null;
+    resultsContain.innerHTML = ""; //Set String empty each time function run
+    geoSearch = true;  
+    movePageAfterSearch(); //Changes classed to move 
+    getResultsInArea(coords, addMapEl); //run discover function taking coords and run the addReults &  addMapEl function
+    searchBox.scrollIntoView({behavior: "smooth"}); //Moves the window down so the searchBox is as the top
 };
 
 //If navigator.geolocation has an error, this function is called
@@ -304,7 +304,7 @@ function addMapMarker(map, results, ui) {
     });
 };
 
-//Addes opacity changes to the marker icon
+//Addes opacity changes to the marker icon. Initial code provided by HereMaps
 function adjustMarkerIcon(outerElement) {
     var domIcon = new H.map.DomIcon(outerElement, { //create dom icon and add/remove opacity listeners
         
@@ -352,7 +352,7 @@ function makeMarkerHTML(result) {
     return body;
 };
 
-//When a map market is clicked get the data and show it
+//When a map marker is clicked get the data and show it
 function clickMapMarker(ui,map,locationMarker,lat,lng) {
         locationMarker.addEventListener('tap', event => {
         ui.getBubbles().forEach(bub => ui.removeBubble(bub));
@@ -616,7 +616,7 @@ function createBodyInfoCurrentWeather(weatherNow, weatherArr) {
                     </div>
                 </div>
         `; //Create the current weather HTML
-        weatherArr.push(bodyInfoCurrentWeather);//push into array
+    weatherArr.push(bodyInfoCurrentWeather);//push into array
 };
 
 // Creates the weather Toggle for the more info secion
@@ -632,7 +632,7 @@ function createBodyInfoWeatherToggle(weatherArr){
                     </div>
                 </label>
         `; //Create the weather toggle HTML
-        weatherArr.push(bodyInfoWeatherToggle);//push into array
+    weatherArr.push(bodyInfoWeatherToggle);//push into array
 };
 
 //Gets the hourly weather section 1+2 of More Info
@@ -652,7 +652,7 @@ function createBodyInfoWeatherHourForcast1(weatherNow, weatherArr) {
                     <p>${convertUnixTimeToHour(weatherNow.hourly[1].dt)}</p>
                 </div>
         `; //Create the first 2 hourly forcast HTML
-        weatherArr.push(bodyInfoWeatherHourForcast1);//push into array
+    weatherArr.push(bodyInfoWeatherHourForcast1);//push into array
 };
 
 //Gets the hourly weather section 3+4 of More Info
@@ -671,7 +671,7 @@ function createBodyInfoWeatherHourForcast2(weatherNow, weatherArr) {
             </div>
         </div>
        `; //Create the second 2 hourly forcast HTML
-       weatherArr.push(bodyInfoWeatherHourForcast2);//push into array
+    weatherArr.push(bodyInfoWeatherHourForcast2);//push into array
 };
 
 //Gets the daily weather section 1+2 of More Info
@@ -693,7 +693,7 @@ function createBodyInfoWeatherDailyForcast1(weatherNow, weatherArr){
                 <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
             </div>
        `; //Create the first 2 daily weather HTML
-       weatherArr.push(bodyInfoWeatherDailyForcast1);//push into array
+    weatherArr.push(bodyInfoWeatherDailyForcast1);//push into array
 };
 
 //Gets the daily weather section 3+4 of More Info
@@ -715,7 +715,7 @@ function createBodyInfoWeatherDailyForcast2(weatherNow, weatherArr){
             </div>
         </div>
        `; //Create the second 2 daily weather HTML
-       weatherArr.push(bodyInfoWeatherDailyForcast2);//push into array
+    weatherArr.push(bodyInfoWeatherDailyForcast2);//push into array
 };
 
 //Gets the small daily weather section 1+2 of More Info
@@ -739,7 +739,7 @@ function createBodyInfoWeatherDailyForcastSmall1(weatherNow, weatherArr) {
                     <p>Temp:${getAbslouteValue(weatherNow.daily[1].temp.max)}ºc</p>
                 </div>
        `; //Create the first 2 small weather HTML
-       weatherArr.push(bodyInfoWeatherDailyForcastSmall1);//push into array
+    weatherArr.push(bodyInfoWeatherDailyForcastSmall1);//push into array
 };
 
 //Gets the small daily weather section 3+4 of More Info
@@ -764,7 +764,7 @@ function createBodyInfoWeatherDailyForcastSmall2(weatherNow, weatherArr) {
             </div>
         </div>  
        `; //Create the second 2 daily weather HTML
-       weatherArr.push(bodyInfoWeatherDailyForcastSmall2);//push into array
+    weatherArr.push(bodyInfoWeatherDailyForcastSmall2);//push into array
 };
 
 //Creates the more info button and closes the body
@@ -795,22 +795,22 @@ function moreResultInfo(elem) {
 
 //Removes the classes in order to show more info on the result
 function removeMoreInfoClasses(parent) {
-        parent[0].classList.remove('d-none'); //Removes the class from the element
-        parent[1].classList.remove('d-none');
-        parent[2].classList.remove('d-none');
-        parent[3].classList.remove('d-none');
-        parent[4].classList.remove('d-none');
-        parent[5].classList.remove('d-none');
+    parent[0].classList.remove('d-none'); //Removes the class from the element
+    parent[1].classList.remove('d-none');
+    parent[2].classList.remove('d-none');
+    parent[3].classList.remove('d-none');
+    parent[4].classList.remove('d-none');
+    parent[5].classList.remove('d-none');
 };
 
 //Adds the classes in order to hide more info on the result
 function addMoreInfoClasses(parent) {
-        parent[0].classList.add('d-none'); //Adds the class from the element
-        parent[1].classList.add('d-none');
-        parent[2].classList.add('d-none');
-        parent[3].classList.add('d-none');
-        parent[4].classList.add('d-none');
-        parent[5].classList.add('d-none');
+    parent[0].classList.add('d-none'); //Adds the class from the element
+    parent[1].classList.add('d-none');
+    parent[2].classList.add('d-none');
+    parent[3].classList.add('d-none');
+    parent[4].classList.add('d-none');
+    parent[5].classList.add('d-none');
 };
 
 //switches between the hourly and daily weather forcast
@@ -827,52 +827,48 @@ function showHidedailyHour(elem) {
 
 //shows the daily wather element, hiding the hourly weather element
 function showDailyWeather(elem, weatherHour, weatherDay) {
-        weatherHour.classList.add('d-none');
-        weatherDay.classList.remove('d-none');
-        elem.previousElementSibling.innerHTML = '1';
+    weatherHour.classList.add('d-none');
+    weatherDay.classList.remove('d-none');
+    elem.previousElementSibling.innerHTML = '1';
 };
 
 //shows the hourly wather element, daily the hourly weather element
 function showHourlyWeather(elem, weatherHour, weatherDay) {
-        weatherHour.classList.remove('d-none');
-        weatherDay.classList.add('d-none');
-        elem.previousElementSibling.innerHTML = '0';
+    weatherHour.classList.remove('d-none');
+    weatherDay.classList.add('d-none');
+    elem.previousElementSibling.innerHTML = '0';
 };
 
-//converts unix timecode to hours
+//converts unix timecode to hours. Help with understanaidng this provided by geeksforgeeks.org
 function convertUnixTimeToHour(unix) {
+    let dateObj = new Date(unix * 1000);
+    let hours = dateObj.getUTCHours(); // Get hours from the timestamp
+    let minutes = dateObj.getUTCMinutes(); // Get minutes from the timestamp
+    let hoursMin = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0'); //combine hours and minutes
     
-            let dateObj = new Date(unix * 1000);
-
-            let hours = dateObj.getUTCHours(); // Get hours from the timestamp
-            let minutes = dateObj.getUTCMinutes(); // Get minutes from the timestamp
-
-            let hoursMin = hours.toString().padStart(2, '0') + ':' +
-                minutes.toString().padStart(2, '0'); //combine hours and minutes
-            
-                return hoursMin;
+    return hoursMin;
 };
 
 function convertUnixTimeToDay(unix) {
-        const milliseconds = unix * 1000;
-        const dateObject = new Date(milliseconds);
+    const milliseconds = unix * 1000;
+    const dateObject = new Date(milliseconds);
 
     return dateObject.toLocaleString("en-gb", {weekday: "long"});
 };
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
 function getPhone(result) {
-        if(result.contacts) { //if contacts exists in result
-            if (result.contacts[0].phone){ //if phone exists in contacts
-                return `<a class="phone-link" href="tel:${result.contacts[0].phone[0].value}" >${result.contacts[0].phone[0].value}</a>`; //display phone number
-            } else if (result.contacts[0].mobile) { //if no phone number, check for mobile number
-                return `<a class="phone-link" href="tel:${result.contacts[0].mobile[0].value}" >${result.contacts[0].mobile[0].value}</a>`; //display phone number
-            } else {
-                return `<i class="fas fa-phone-slash"></i>`; //display no phone icon
-            }
-        } else { //if contacts doesn't exists in result
+    if(result.contacts) { //if contacts exists in result
+        if (result.contacts[0].phone){ //if phone exists in contacts
+            return `<a class="phone-link" href="tel:${result.contacts[0].phone[0].value}" >${result.contacts[0].phone[0].value}</a>`; //display phone number
+        } else if (result.contacts[0].mobile) { //if no phone number, check for mobile number
+            return `<a class="phone-link" href="tel:${result.contacts[0].mobile[0].value}" >${result.contacts[0].mobile[0].value}</a>`; //display phone number
+        } else {
             return `<i class="fas fa-phone-slash"></i>`; //display no phone icon
-        };
+        }
+    } else { //if contacts doesn't exists in result
+        return `<i class="fas fa-phone-slash"></i>`; //display no phone icon
+    };
 };
 
 //Gets the hours the location is open, if none available, asks to call
@@ -941,8 +937,6 @@ function makeRadius() {
 
         const radiusSlide = radiusSliderUpdate(); //call function for the radius slider to update
         radiusUpdate(numRes,radiusSlide); //call function for the radius update button providing slider and numRes
-
-    
 };
 
 //Create the inner HTML for radius Area
@@ -980,7 +974,6 @@ function radiusSliderUpdate() {
 
 //Update the update button in the radius Area
 function radiusUpdate(numRes,radiusSlide){
-    
     let radiusUpdateBtn = document.getElementById('radius-update');
 
     radiusUpdateBtn.addEventListener('click', function () {
@@ -1005,7 +998,6 @@ function radiusUpdate(numRes,radiusSlide){
 
 //gets coordinates and focuses the map on that location
 function moveMapToResult(event, map) {
-
     let lat  = event.dataset.lat; //set the lat from the dataset lat
     let lng = event.dataset.lng;//set the lng from the dataset lng
 
@@ -1017,7 +1009,7 @@ function moveMapToResult(event, map) {
     console.log('Move map to: lat ' + lat + ',lng ' + lng);
 };
 
-//Puts a loading spinner in the map dive while results are being searched fo
+//Puts a loading spinner in the map dive while results are being searched for. HTML provided by Crazyegg.com
 function loading() {
     mapContainer.innerHTML = `
                         <div class="loading-container">
@@ -1034,6 +1026,7 @@ function loading() {
                         </div>
                 `;
 };
+
 //Clears values to havea. reset page
 function resetPage(){
     numOfResults = null; //Sets numOf Results to null
@@ -1044,29 +1037,25 @@ function resetPage(){
     searchBox.value = ''; //Set searchBox value to empty
 };
 
-// Changes the about message every 5 seconds
-var text = [];
-    var counter = 0;
+// Changes the about message every 5 seconds. Help with this code found on stackoverflow. user Goran Stoyanov
+//Required text in an array
+var text = [`<p class="about-text white roboto">
+    We are passionate about travelling and want to find you the perfect spot on your travels! Our site makes it easier for you to find the perfect location to rest your head. Whether you are in a tent, campervan or just after a room, we’ve got an easy to use method for finding you somewhere to stop. You could want a 5* stop with all the amenities or a patch of grass near to town, we’ve got you covered!
+    </p>`,
+    `<p class="about-text white roboto">
+    All you need to do it tap your location into the search box above and bingo! You’ll have all the stops around your location, tap on one to get a bit more info!
+    You can also tap the location button to get all the stops around you!
+    </p>`
+    ];
 
-    text.push(`
-    <p class="about-text white roboto">
-        We are passionate about travelling and want to find you the perfect spot on your travels! Our site makes it easier for you to find the perfect location to rest your head. Whether you are in a tent, campervan or just after a room, we’ve got an easy to use method for finding you somewhere to stop. You could want a 5* stop with all the amenities or a patch of grass near to town, we’ve got you covered!
-    </p>
-    `);
-
-    text.push(`
-    <p class="about-text white roboto">
-        All you need to do it tap your location into the search box above and bingo! You’ll have all the stops around your location, tap on one to get a bit more info!
-        You can also tap the location button to get all the stops around you!
-    </p>
-    `);
+var textCounter = 0;
 
 setInterval(changeText, 5000);
 
 function changeText() {
     aboutText.classList.add('about-hide');
     setTimeout(function () {
-        aboutText.innerHTML = text[counter];
+        aboutText.innerHTML = text[textCounter];
         aboutText.classList.remove('about-hide');
         counter++;
         if (counter >= text.length) {
