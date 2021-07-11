@@ -3,6 +3,7 @@ const cName = document.getElementById('contact-name');
 const email = document.getElementById('contact-email');
 const message = document.getElementById('contact-message');
 
+// Code adapted from eamil lesson from code instutite
 function sendEmail(contactForm) {
     emailjs.send('gmail','codie',{
         "from_name": contactForm.name.value,

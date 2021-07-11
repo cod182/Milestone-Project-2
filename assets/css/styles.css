@@ -10,7 +10,7 @@ html, body {
       color: #212529;
   }
 
-  /* Dark Mode */
+/* Dark Mode */
 
 .dark-mode-switch {
     position:absolute;
@@ -59,7 +59,7 @@ html, body {
     padding: 5px;
 }
 
-  /* Colours */
+/* Colours */
 
 .green {
     color: #4fbc6f;
@@ -619,6 +619,7 @@ html, body {
 }
 
 /* Below for the weather forcast switching checkbox */
+/* Slider CSS by w3c as initial boilerplate*/
 .switch-weather {
     position: relative;
     display: inline-block;
