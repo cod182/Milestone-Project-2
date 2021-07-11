@@ -1,5 +1,6 @@
 const hereApiKey = 'cAo6Cjf5wlcux7gJjPODw_tNNN5lglP7Ayka-t9R7J4'; //Here Maps Api Key
 const openApiKey = '2e87b4183a4f602f8d20b6eca0cffef3'; //OpenWeather Api Key
+const pageTop = document.getElementById('top-of-page'); //Assign top top-of-page to pageTop
 const searchBox = document.getElementById('search-box'); //Assign the searchbox to searchBox
 let search = ''; //Gets the value of the search
 const greetSec = document.getElementById('greeting-box'); //Assign the greeting-box to GreetSec
@@ -101,6 +102,7 @@ function locateError(err) {
     undoMovePageAfterSearch(); //Reverses the classes that we changed
     firstTime = true;
     resetPage();
+    pageTop.scrollIntoView({behavior: "smooth"}); //Moves the window to tje top of the page
     swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning');
   };
 
@@ -115,9 +117,7 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
         getSearchData(event); //Run function to get search results
-        searchBox.scrollIntoView({behavior: "smooth"}); //Moves the window down so the searchBox is as the top
     }
-    
 });
 
 //Function to add and remove classed to prepare page for map and search results
@@ -130,6 +130,7 @@ function movePageAfterSearch(){
     locate.classList.remove('locate-before'); //Remove class from locate
     locate.classList.add('locate-after'); //Add class to locate
 };
+
 //Function to add and remove classed to undo the perperation of page for map and search results
 function undoMovePageAfterSearch() {
     searchBox.classList.add('search-box-before'); //Remove class from searchBox
@@ -139,7 +140,7 @@ function undoMovePageAfterSearch() {
     resultsContain.classList.remove('search-results-after'); // Adds the class to the search results section
     locate.classList.add('locate-before'); //Remove class from locate
     locate.classList.remove('locate-after'); //Add class to locate
-}
+};
 
 //gets the search term, preapares page and starts the funciton to get the Lat & Lang
 function getSearchData(){
@@ -149,19 +150,22 @@ function getSearchData(){
             movePageAfterSearch(); //Run function to add classed
             getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
             firstTime = false; //sets firstTime to false so it doesn't run again
+            searchBox.scrollIntoView({behavior: "smooth"}); //Moves the window down so the searchBox is as the top
         } else {
             movePageAfterSearch(); //Run function to add classed
             radiusArea.innerHTML = ``; //radiusArea set to empty
             getLatLng(search, getCoords); //runs the function to get the LatLng of the search term
+            searchBox.scrollIntoView({behavior: "smooth"}); //Moves the window down so the searchBox is as the top
+
         };
     } else { //If not search term is entered
         undoMovePageAfterSearch();
         resetPage();
         radiusArea.innerHTML = ``; //clears the radius area
         swal('No Search Entered','Please try again','warning'); //Message displayed if no search term is entered
+        pageTop.scrollIntoView({behavior: "smooth"}); //Moves the window to the top of the page
     };
 };
-
 
 // Get the Latitude and Londitude of the search
 function getLatLng(search, cb){
@@ -186,6 +190,7 @@ function getLatLng(search, cb){
         searchBox.value = ''; //sets the searchbox to empty
         console.error('There has been a problem, search term invalid:', error);
         swal('Search Term Invalid','Please try again','warning'); //pop up wanring displayed if search term is bad
+        pageTop.scrollIntoView({behavior: "smooth"}); //Moves the window to the top of the page
     });
 
 };
