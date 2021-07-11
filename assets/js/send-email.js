@@ -12,7 +12,7 @@ function sendEmail(contactForm) {
     })
     .then(
         function(response) {
-            console.log('SUCCESS',response)
+            console.log('SUCCESS',response);
             // document.getElementById('contact-submit').remove();
             document.getElementById('message-status').innerHTML =`<span class='green bold message-status'><em>Message Sent!</em> <i class="green fas fa-check-circle"></i></span>`;
             submitButton.classList.remove('btn-blue');
@@ -30,8 +30,8 @@ function sendEmail(contactForm) {
             }, 2000);
         },
         function(error) {
-            console.log('FAILED', error)
+            console.log('FAILED', error);
             document.getElementById('message-status').innerHTML =`<span class='red bold'><em>Error! Please try again.</em></span>`;
         });
     return false;
-};
+}

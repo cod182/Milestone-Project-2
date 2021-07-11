@@ -4,7 +4,7 @@ const searchBox = document.getElementById('search-box'); //Assign the searchbox 
 let search = ''; //Gets the value of the search
 const greetSec = document.getElementById('greeting-box'); //Assign the greeting-box to GreetSec
 const locate = document.getElementById('locate'); //Assign Geo Locate button to loate
-const mapContainer = document.getElementById('map-container') //Assign the map-container to MapContainer
+const mapContainer = document.getElementById('map-container'); //Assign the map-container to MapContainer
 let radius = '16093'; //Default number for the search radius
 const searchUpperContainer = document.getElementById('search-area-container');
 const resultsContain = document.getElementById('search-results');
@@ -23,7 +23,7 @@ let resultBuilding = []; //Where the results are stored as the HTML is built
 
 //Dark mode toggle
 darkToggle.addEventListener('click', () => { //listens for dark button clicked
-    darkMode = localStorage.getItem('darkMode')
+    darkMode = localStorage.getItem('darkMode');
     if(darkMode !== 'enabled') { //if body has a class
         enableDarkMode(); // add classes
     } else {    // if body has no class
@@ -61,7 +61,7 @@ if(darkMode === 'enabled') {
 };
 
 // Get location using geolocation and run a search based on resulting Lat/Lng
-locate.addEventListener('click', function(event){ //Event listener on the locate button
+locate.addEventListener('click', function(){ //Event listener on the locate button
     searchLatLng = []; //Set array to empty each time function run
     movePageAfterSearch(); //Run function to add classed
     firstTime = false;
@@ -101,7 +101,7 @@ function locateError(err) {
     undoMovePageAfterSearch(); //Reverses the classes that we changed
     firstTime = true;
     resetPage();
-    swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning')
+    swal('Location Problem', 'Cannot find location, please try again or use search box', 'warning');
   };
 
 
@@ -114,7 +114,7 @@ searchBox.addEventListener("keyup", function(event) { //Event listener to key up
         numOfResults = null;
         searchLatLng = []; //Set array to empty each time function run
         resultsContain.innerHTML = ""; //Set String empty each time function run
-        getSearchData(event) //Run function to get search results
+        getSearchData(event); //Run function to get search results
         searchBox.scrollIntoView({behavior: "smooth"}); //Moves the window down so the searchBox is as the top
     }
     
@@ -185,7 +185,7 @@ function getLatLng(search, cb){
         undoMovePageAfterSearch(); //Run function to Reverse added classes
         searchBox.value = ''; //sets the searchbox to empty
         console.error('There has been a problem, search term invalid:', error);
-        swal('Search Term Invalid','Please try again','warning') //pop up wanring displayed if search term is bad
+        swal('Search Term Invalid','Please try again','warning'); //pop up wanring displayed if search term is bad
     });
 
 };
@@ -246,7 +246,6 @@ function addMapEl(results) {
     });
 
     window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
-    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     const ui = H.ui.UI.createDefault(map, defaultLayers);
     
     iterateResults(results); //runs function to start adding results to the page
@@ -292,7 +291,7 @@ function addMapMarker(map, results, ui) {
         let markerBody = makeMarkerHTML(result); //Create the inner html of the marker
         locationMarker.setData(markerBody);
 
-        clickMapMarker(ui,map,locationMarker,lat,lng) //What happens when a marker is clicked
+        clickMapMarker(ui,map,locationMarker,lat,lng); //What happens when a marker is clicked
         
         map.addObject(locationMarker); //Add the marker to the map
     });
@@ -312,7 +311,7 @@ function adjustMarkerIcon(outerElement) {
             clonedElement.removeEventListener('mouseout', changeOpacityToOne);
         }
         });
-    return domIcon
+    return domIcon;
 };
 
 //Derease Opacity of evt
@@ -342,7 +341,7 @@ function makeMarkerHTML(result) {
             </div>
         </div> 
     </div>
-    `
+    `;
     return body;
 };
 
@@ -385,7 +384,7 @@ function noResultsFound(){
         </div>
     `;
 
-    return noResultsDiv 
+    return noResultsDiv;
 };
 
 //Gets the weather at the position of result
@@ -428,12 +427,12 @@ function createResultDiv(){
     let resultDiv = document.createElement('div'); //Create a new div called resultDiv
     resultDiv.classList.add('col-12'); //Adds the class to the div
     resultDiv.classList.add('result-box'); //Adds the class to the div
-    return resultDiv
+    return resultDiv;
 };
 
 //Create title section stored in title for the result
 function createResultTitleInfo(result, weatherNow) {
-    resultBuilding = []
+    resultBuilding = [];
     const currWeather = weatherNow.current.weather[0].description; // current weather at location
     const iconWeather = 'https://openweathermap.org/img/w/' + weatherNow.current.weather[0].icon + '.png'; //current weather icon at location
     const currTemp = getAbslouteValue(weatherNow.current.temp); //sets the temp to no decimal places
@@ -770,7 +769,7 @@ function createBodyMoreInfoButton(weatherArr) {
             </div>
 
     </div>
-    ` //Create the more info HTML and end of the body HTML
+    `; //Create the more info HTML and end of the body HTML
     weatherArr.push(bodyMoreInfoButton);//push into array
 };
 
@@ -836,12 +835,12 @@ function showHourlyWeather(elem, weatherHour, weatherDay) {
 //converts unix timecode to hours
 function convertUnixTimeToHour(unix) {
     
-            dateObj = new Date(unix * 1000);
+            let dateObj = new Date(unix * 1000);
 
-            hours = dateObj.getUTCHours(); // Get hours from the timestamp
-            minutes = dateObj.getUTCMinutes(); // Get minutes from the timestamp
+            let hours = dateObj.getUTCHours(); // Get hours from the timestamp
+            let minutes = dateObj.getUTCMinutes(); // Get minutes from the timestamp
 
-            hoursMin = hours.toString().padStart(2, '0') + ':' +
+            let hoursMin = hours.toString().padStart(2, '0') + ':' +
                 minutes.toString().padStart(2, '0'); //combine hours and minutes
             
                 return hoursMin;
@@ -851,7 +850,7 @@ function convertUnixTimeToDay(unix) {
         const milliseconds = unix * 1000;
         const dateObject = new Date(milliseconds);
 
-    return dateObject.toLocaleString("en-gb", {weekday: "long"})
+    return dateObject.toLocaleString("en-gb", {weekday: "long"});
 };
  
 // Gets the phone number if it exists, if it doesn't, shows no phone icon
@@ -872,7 +871,7 @@ function getPhone(result) {
 //Gets the hours the location is open, if none available, asks to call
 function getHours(result) {
     if(result.openingHours){
-        return result.openingHours[0].text
+        return result.openingHours[0].text;
     } else {
         return `<i class="fas fa-phone"></i><span class="result-data">- Call to confirm</span>`;
     }
@@ -922,7 +921,7 @@ function getAbslouteValue(temp) {
 function makeRadius() {
     if(firstRadius){ //If the first run, classed and ID's are applied and innerHTML created
         radiusArea.classList.add('row');
-        radiusArea.setAttribute('id','radius-container')
+        radiusArea.setAttribute('id','radius-container');
         firstRadius = false; //Set the variable to false
         makeRadiusHTML(radiusArea); //Create the inner HTML for radius Area
     } else{ //if not fist run, just creat the inner HTML for radius Area
@@ -992,7 +991,7 @@ function radiusUpdate(numRes,radiusSlide){
             resultsContain.innerHTML = ""; //Set String empty each time function run
             loading(); //Adds a loading animation until the page is populated
             radius = radiusSlide.value;
-            getSearchData(searchBox.value) //Run function to get search results
+            getSearchData(searchBox.value); //Run function to get search results
         }
     });
 };

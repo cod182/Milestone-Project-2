@@ -190,8 +190,10 @@ The code was validated using [W3C Markup Validation Service](https://validator.w
 - 404.html passed
 ### CSS3 
 The code was validated using [W3C CSS Validation Service](https://jigsaw.w3.org/css-validator/#validate_by_input)
-
 - styles.css passed
+### Javascript
+The code was validated using [JSHint](https://jshint.com/)
+- The validation passed with only unnessasary seamicolons noted/ I have chosen to use semicolons at the end of my functions after reading [this article](https://levelup.gitconnected.com/to-semicolon-or-not-to-semicolon-a2e337827bcb)
 
 ### Lighthouse Results
 - Home Page - Desktop
