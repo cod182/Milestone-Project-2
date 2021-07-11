@@ -222,6 +222,7 @@ function getResultsInArea(coords, cb) {
         cb(results); // Callback to run addReults function
         } else if (xhr.status === 400) {
             swal('400 - Bad Request','There has been a problem with your request, reloading page','warning');
+            pageTop.scrollIntoView({behavior: "smooth"}); //Moves the window to the top of the page
             setTimeout(function(){ 
                 window.location.reload(true);
             }, 1500);
