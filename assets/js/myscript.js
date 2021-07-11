@@ -246,6 +246,7 @@ function addMapEl(results) {
     });
 
     window.addEventListener('resize', () => map.getViewPort().resize()); //Resize map when window resized
+    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     const ui = H.ui.UI.createDefault(map, defaultLayers);
     
     iterateResults(results); //runs function to start adding results to the page
