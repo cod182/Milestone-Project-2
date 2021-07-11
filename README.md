@@ -264,7 +264,7 @@ The site was the made avaiable at the above url.
 - Alert boxes powered by sweetalert
 - HereMaps used for mapping a searching
 - OpenWeatherApi used for weather results
-- Help with fetch provided by 
+- Help with fetch provided by [Mozilla](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 - Simple slider taken from w3Schools and manipulated
 ## This project is for educational purposes only
 
