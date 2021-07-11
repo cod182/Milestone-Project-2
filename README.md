@@ -218,6 +218,8 @@ Testing process has been logged on a seperate readme file file found here: [Test
     - Solution: added word-wrap:breakwork to class of website address
 - Bug: Marker text was white, causing it to be invisible
     - Solution: Added class to marker box, use specificity to set p tags and a tags to black
+- Bug: On mobile or displays with less height, it was hard to scroll down as the map would zoom.
+    - Solution: Page automatically reposition on search
 - Bug: Contact reason box extended out of the modal
     - Solution: Changed width to 100% to match other. Also matched height to other input boxes
 - Bug: Weather in result hiding before it should
